@@ -1,0 +1,100 @@
+#logo{
+}
+
+/*   Profile part   */
+.profile-head {
+    transform: translateY(5rem)
+}
+
+.cover {
+    background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
+    background-size: cover;
+    background-repeat: no-repeat
+}
+
+body {
+    background: #ffffff;
+}
+
+#profileBody {
+	background: linear-gradient(to right, #e96443, #904e95);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.button:hover {
+	background-color: black;
+	color: white;
+}
+
+#total-orders{
+	background-color: #4cb4c7;
+}
+
+#orders-delivered{
+	background-color: #7abecc;
+}
+
+#orders-pending{
+	background-color: #7CD1C0;
+}
+
+.Orders-table {
+	padding: 0px 0px 0px 0px;
+	background-color: #FFE4E1;
+	outline-color: #FFE4E1;
+}
+
+#profile-img {
+	border-radius: 50%;
+}
+
+table, th, td {
+	border: 1px solid black;
+	padding: 2px;
+}
+
+table { 
+	border-spacing: 10px;
+	border-collapse: separate;
+}
+
+/*   Explore Complaints   */
+
+.ratings i {
+    font-size: 16px;
+    color: red
+}
+
+.strike-text {
+    color: red;
+    text-decoration: line-through
+}
+
+.product-image {
+    width: 100%
+}
+
+.dot {
+    height: 7px;
+    width: 7px;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-top: 3px;
+    background-color: blue;
+    border-radius: 50%;
+    display: inline-block
+}
+
+.spec-1 {
+    color: #938787;
+    font-size: 15px
+}
+
+h5 {
+    font-weight: 400
+}
+
+.para {
+    font-size: 16px
+}

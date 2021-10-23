@@ -1,0 +1,76 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<br>
+<div class="Card-Block">
+	<div class="row">
+		<div class="col">
+			<div class="card-body bg-dark text-light">
+				<h5>User : {{profile.user_name}}</h5>
+				<hr>
+				<h5>Contact me through : </h5>
+				<b>Phone : {{profile.phone}}</b><br>
+				<b>Email : {{profile.email}}</b><br>
+				<b>Other : {{profile.other}}</b><br>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-body bg-dark text-light">
+				<div class="Inside-card">
+					<h5>Donations Made : </h5>
+					<hr>
+					<h1 style="text-align:center; padding:10px">{{donations_made_count}}</h1>
+				</div>
+			</div>
+		</div>
+
+		<div class="col">
+			<div class="card-body bg-dark text-light">
+				<div class="Inside-card">
+					<h5>Donations Recieved : </h5>
+					<hr>
+					<h1 style="text-align:center; padding:10px">{{donations_received_count}}</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+
+<a href = "">
+	<button style="background-color: lightskyblue; height: 50px; padding: 5px; border-radius: 5px; 
+		  font-weight: 700px; margin-left: 12px; width: 1500px;">
+		Create Donation Request
+	</button>
+</a>
+
+<br>
+
+<div class="Orders-table card card-body border px-3" style="margin-top: 25px;">
+	<table class="table table-sm table-bordered" style="border: 1px solid black; background-color: white;" 
+	cellspacing="3" cellpadding="3">
+		<tr class="py-5">
+			<th><span style="color: #778899;">From</span>/<span style="color: #B0C4DE;">To</span></th>
+			<th>Amount</th>
+			<th>Note</th>
+		</tr>
+		{% for donation in all_donations %}
+		{% if donation.from_user.user == user %}
+		<tr class="table-hover" style="background-color: #98FB98;">
+			<td>To <a href="">{{donation.to_user}}</a></td>
+			<td>{{donation.amount}}</td>
+			<td>{{donation.note}}</td>
+		</tr>
+		{% else %}
+		<tr class="table-hover" style="background-color: #E0FFFF;">
+			<td>From <a href="">{{donation.from_user}}</a></td>
+			<td>{{donation.amount}}</td>
+			<td>{{donation.note}}</td>
+		</tr>
+		{% endif %}
+		{% endfor %}
+	</table>
+</div>
+
+{% endblock %}

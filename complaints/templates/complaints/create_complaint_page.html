@@ -1,0 +1,29 @@
+{% load static %}
+{% load widget_tweaks %}
+
+{% include 'accounts/main.html' %}
+
+{% block content %}
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group col-md-5">
+        <label for="title">Title : </label><br>
+        {% render_field form.title class="form-control" name="title" type="text" %}
+    </div>
+    <div class="form-group col-md-5">
+        <label for="goal">Goal : </label><br>
+        {% render_field form.goal class="form-control" name="goal" type="text" %}
+    </div>
+    <div class="form-group col-md-5">
+        <label for="description">Description : </label><br>
+        {% render_field form.description class="form-control" name="description" type="text" %}
+    </div>
+    <div class="form-group col-md-5">
+        <label for="request_image">Request_Image : </label><br>
+        {% render_field form.request_image name="request_image" type="file" %}
+    </div>
+    <span style="padding-left: 15px;"><button type="submit">Upload</button></span>
+</form>
+
+{% endblock %}

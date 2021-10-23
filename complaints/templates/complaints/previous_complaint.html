@@ -1,0 +1,36 @@
+{% load static %}
+{% include 'accounts/main.html' %}
+
+{% block content %}
+
+<h3 style="text-align: center;">{{profile}}'s Request History</h3>
+<h5 style="text-align: center;">(Active at the top, unactive in grey)</h5>
+
+{% for donation in donation_requests %}
+
+{% if donation.status == 'active' %}
+<div class="card" style="width: 400px; height: 590px; margin: 30px 0px 0px 30px; border-color: black;">
+{% else %}
+<div class="card" style="width: 400px; height: 540px; margin: 30px 0px 0px 30px; border-color: black; background-color: grey;">
+{% endif %}
+    <img class="card-img-top" 
+    src="{% static 'images/' %}{{donation.request_image}}" 
+    height="200px" width="300">
+    <div class="card-title" style="padding: 20px 0px 0px 20px;">
+        <h3>{{donation.title}}</h3>
+        <h5>{{donation.user}}</h5>
+    </div>
+    <div class="card-body" style="padding-top: 0px;">
+        <p class="card-text">{{donations_short_description.donation}}</p>
+        <p class="card-text">{{donation.short_description}}....</p>
+        <p class="card-text">Amount Received : {{donation.amount_received}}</p>
+        <p class="card-text">Goal : {{donation.goal}}</p>
+        {% if donation.status == 'active' %}
+        <a href="{% url 'transactions:donation-page' donation.id %}" class="btn btn-primary">Donate</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
