@@ -4,6 +4,7 @@ from user_auth.decorators import auth_or_not
 from accounts.models import *
 from .forms import ComplaintForm
 from PIL import Image
+from taggit.models import Tag
 import random
 
 # Create your views here.

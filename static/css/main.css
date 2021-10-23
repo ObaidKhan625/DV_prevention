@@ -13,11 +13,11 @@
 }
 
 body {
-    background: #ffffff;
+    background: #FFFAF0;
 }
 
 #profileBody {
-	background: linear-gradient(to right, #e96443, #904e95);
+	background-color: #FFFAF0;
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -61,29 +61,8 @@ table {
 
 /*   Explore Complaints   */
 
-.ratings i {
-    font-size: 16px;
-    color: red
-}
-
-.strike-text {
-    color: red;
-    text-decoration: line-through
-}
-
 .product-image {
     width: 100%
-}
-
-.dot {
-    height: 7px;
-    width: 7px;
-    margin-left: 6px;
-    margin-right: 6px;
-    margin-top: 3px;
-    background-color: blue;
-    border-radius: 50%;
-    display: inline-block
 }
 
 .spec-1 {

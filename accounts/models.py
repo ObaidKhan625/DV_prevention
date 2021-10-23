@@ -1,7 +1,7 @@
 from django.db import models
-import random
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+import random
 # Create your models here.
 
 class User(AbstractUser):
@@ -17,8 +17,8 @@ class Complaint(models.Model):
 	description = models.TextField(null=True)
 	updates = models.TextField(default="", blank=True)
 	status = models.CharField(max_length=10, default='active')
-	short_description = models.CharField(max_length=50, null=True, blank=True)
-	request_image = models.ImageField(null=True, upload_to='customers')
+	request_image = models.ImageField(null=True, blank=True, upload_to='complaints')
+	place = models.CharField(max_length=100, null=True)
 	under_investigation_by = models.CharField(max_length=1000, null=True, blank=True)
 
 	def __str__(self):

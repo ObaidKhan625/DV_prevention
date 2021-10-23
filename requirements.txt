@@ -1,0 +1,4 @@
+django
+django-widget-tweaks
+PILLOW
+django-taggit
