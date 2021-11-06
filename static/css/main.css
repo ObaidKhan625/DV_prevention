@@ -77,3 +77,120 @@ h5 {
 .para {
     font-size: 16px
 }
+
+/* Complaint Detail */
+
+
+body {
+    background: #ffc107;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+#complaint-detail .container {
+    background: #fff !important;
+    border: none;
+    border-radius: none;
+}
+
+#complaint-detail .abc {
+    padding-left: 40px
+}
+
+#complaint-detail .pqr {
+    padding-right: 70px;
+    padding-top: 14px
+}
+
+#complaint-detail .para {
+    float: right;
+    margin-right: 0;
+    padding-left: 80%;
+    top: 0
+}
+
+#complaint-detail .fa-star {
+    color: yellow
+}
+
+#complaint-detail li {
+    list-style: none;
+    line-height: 50px;
+    color: #000
+}
+
+#complaint-detail .col-md-2 {
+    padding-bottom: 20px;
+    font-weight: bold
+}
+
+#complaint-detail .col-md-2 a {
+    text-decoration: none;
+    color: #000
+}
+
+#complaint-detail .col-md-2.mio {
+    font-size: 12px;
+    padding-top: 7px
+}
+
+#complaint-detail .des::after {
+    content: '.';
+    font-size: 0;
+    display: block;
+    border-radius: 20px;
+    height: 6px;
+    width: 55%;
+    background: yellow;
+    margin: 14px 0
+}
+
+#complaint-detail .r4 {
+    padding-left: 25px
+}
+
+#complaint-detail .btn-outline-warning {
+    border-radius: 0;
+    border: 2px solid yellow;
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    width: 70%
+}
+
+@media screen and (max-width: 620px) {
+    #complaint-detail .container {
+        width: 98%;
+        display: flex;
+        flex-flow: column;
+        text-align: center
+    }
+
+    #complaint-detail .des::after {
+        content: '.';
+        font-size: 0;
+        display: block;
+        border-radius: 20px;
+        height: 6px;
+        width: 35%;
+        background: yellow;
+        margin: 10px auto
+    }
+
+    #complaint-detail .pqr {
+        text-align: center;
+        margin: 0 30px
+    }
+
+    #complaint-detail .para {
+        text-align: center;
+        padding-left: 90px;
+        padding-top: 10px
+    }
+
+    #complaint-detail .klo {
+        display: flex;
+        text-align: center;
+        margin: 0 auto;
+        margin-right: 40px
+    }
+}

@@ -1,0 +1,75 @@
+{% load static %}
+{% include 'accounts/main.html' %}
+
+{% block content %}
+<div id="complaint-detail">
+	<div class="container py-4 my-4 mx-auto d-flex flex-column">
+	    <div class="header">
+	        <div class="row r1">
+	            <div class="col-md-11">
+	                <h1>{{complaint.complaint_title}}</h1>
+	            </div>
+	            <div class="col-md">
+	                <p class="my-5">{{complaint.complaint_filer}}</p>
+	            </div>
+	            <!--<div class="col-md-3 text-right pqr"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+	            	<i class="fa fa-star"></i><i class="fa fa-star"></i></div>-->
+	        </div>
+	    </div>
+	    <div class="container-body mt-4">
+	        <div class="row r3">
+	            <div class="col-md-5 p-0 pl-3 klo">
+	                {{complaint.complaint_description}}
+	            </div>
+	            <div class="col-md-7"> <img src="{% static 'images/' %}{{complaint.complaint_request_image}}" width="100%" height="100%"> </div>
+	        </div>
+	    </div>
+	    <div class="footer d-flex flex-column mt-5">
+	        <div class="row r4">
+	            <div class="col-md-2 myt des"><a href="#">Updates</a></div>
+	            <div class="col-md-2 myt "><a href="#">Under Investigation By</a></div>
+	            <div class="col-md-2 mio offset-md-4"><a href="#">ADD TO CART</a></div>
+	            <div class="col-md-2 myt "><button type="button" class="btn btn-outline-warning"><a href="#">BUY NOW</a></button></div>
+	        </div>
+	    </div>
+		<div style="padding-left: 25px;">
+			<h3>Updates : </h3>
+			{% for update in updates %}
+			{{update.message_content}}
+			<br />
+			{% endfor %}
+			{% if request.user == complaint.complaint_filer %}
+			<div class="form-group">
+				<form action="/complaints/{{complaint.id}}/update" method="POST">
+					{% csrf_token %}
+					<div style="width: 300px; height: 90px">
+						<label for="update-add"><b>Add Update : </b></label>
+						<input id="update-add" name="update-add" type="text" class="form-control" />
+					</div>
+					<input type="submit" name="submit" />
+				</form>
+			</div>
+			{% endif %}
+
+			<h3>Comments : </h3>
+			{% for comment in comments %}
+			{{comment.message_content}}
+			<br />
+			{% endfor %}
+			{% if request.user != complaint.complaint_filer %}
+			<div class="form-group">
+				<form action="/complaints/{{complaint.id}}/comment" method="POST">
+					{% csrf_token %}
+					<div style="width: 300px; height: 90px">
+						<label for="comment-add"><b>Add Comment : </b></label>
+						<input id="comment-add" name="comment-add" type="text" class="form-control" />
+					</div>
+					<input type="submit" name="submit" />
+				</form>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}

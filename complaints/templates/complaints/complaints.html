@@ -9,7 +9,7 @@
             {% for complaint in complaints %}
             <div class="row p-2 bg-white border rounded">
                 <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" 
-                    src="{% static 'images/' %}{{complaint.request_image}}"></div>
+                    src="{% static 'images/' %}{{complaint.complaint_request_image}}"></div>
                 <div class="col-md-6 mt-1">
                     <h5>{{complaint.title}}</h5>
                     <div class="d-flex flex-row">
@@ -27,7 +27,9 @@
                         <h4 class="mr-1">{{complaint.place}}</h4>
                     </div>
                     <h6 class="text-success">Under investigation by:</h6>
-                    <div class="d-flex flex-column mt-4"><button class="btn btn-primary btn-sm" type="button">Details</button></div>
+                    <a href="{% url 'complaints:show-complaint-detail' complaint.id %}">
+                        <div class="d-flex flex-column mt-4"><button class="btn btn-primary btn-sm" type="button">Details</button></div>
+                    </a>
                 </div>
             </div>
             {% endfor %}

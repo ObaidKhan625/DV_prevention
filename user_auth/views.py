@@ -34,7 +34,7 @@ def loginPage(request):
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			login(request, user)
-			return redirect(reverse('accounts:user-dashboard', kwargs={'current_user_id':request.user.id, 'user_id':request.user.id}))
+			return redirect('complaints:explore-complaints')
 		else:
 			messages.info(request, 'Incorrect Username and Password combination')
 	context = {}
