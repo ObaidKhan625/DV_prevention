@@ -25,7 +25,8 @@
       </li>
     </ul>
     </div>
-    <a href="">
-    <span id="nav-msg" style="">{{request.user}}</span></a>
+    <a href="{% url 'accounts:profile-view' request.user.id %}">
+    <span id="nav-msg" style="color: white;">{{request.user}}</span>
+    </a>
     <a href="{% url 'user_auth:logout' %}"><span id="nav-msg" class="btn btn-info">Logout</span></a>
 </nav>

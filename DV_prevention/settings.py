@@ -129,9 +129,15 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
 
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+"""
 STATICFILES_DIRS = [
-      BASE_DIR/"static"
+      os.path.join(BASE_DIR, "static")
 ]
+"""
+
+STATIC_ROOT = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
@@ -139,3 +145,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+GOOGLE_API_KEY = "AIzaSyA3lKYIp_7z-ifkqdpG9RBgXnF1o12UgNY"
+
+RECAPTCHA_KEY = "6LfSxRwdAAAAAPeY7-3Gs3X1gFqFyVIUdlN50i0j"
+
+RECAPTCHA_SECRET_KEY = "6LfSxRwdAAAAAHEe7kQ3mqu68KnAC6DYzEXyX53V"
+
+BASE_COUNTRY = "IN"

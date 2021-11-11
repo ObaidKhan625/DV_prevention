@@ -92,10 +92,6 @@ body {
     border-radius: none;
 }
 
-#complaint-detail .abc {
-    padding-left: 40px
-}
-
 #complaint-detail .pqr {
     padding-right: 70px;
     padding-top: 14px
@@ -106,16 +102,6 @@ body {
     margin-right: 0;
     padding-left: 80%;
     top: 0
-}
-
-#complaint-detail .fa-star {
-    color: yellow
-}
-
-#complaint-detail li {
-    list-style: none;
-    line-height: 50px;
-    color: #000
 }
 
 #complaint-detail .col-md-2 {

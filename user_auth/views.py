@@ -1,20 +1,20 @@
 from .decorators import auth_or_not
 from .forms import CreateUserForm
-from django.shortcuts import render, redirect
-from accounts.models import User
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from accounts.models import User
 # Create your views here.
 
 @auth_or_not(0)
 def registerPage(request):
 	form = CreateUserForm()
 	if request.method == 'POST':
+		return redirect('user_auth:login')
 		form = CreateUserForm(request.POST)
 		if form.is_valid():
 			user = form.save()

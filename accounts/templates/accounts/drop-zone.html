@@ -1,0 +1,35 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+<form action="upload/" class="dropzone" method="POST" id="myGreatDropzone">
+    {% csrf_token %}
+    <div class="fallback">
+        <input name="file" type="file" multiple/>
+    </div>
+    <button type="submit" id="button" class="btn btn-primary">Submit</button>
+</form>
+<script>
+Dropzone.options.myGreatDropzone = { // camelized version of the `id`
+    autoProcessQueue: false,
+    maxFilesize: 25, // MB
+    init: function () {
+        var myDropzone = this;
+
+        // Update selector to match your button
+        $("#button").click(function (e) {
+            e.preventDefault();
+            myDropzone.processQueue();
+        });
+
+        this.on('sending', function(file, xhr, formData) {
+            // Append all form inputs to the formData Dropzone will POST
+            var data = $('#myGreatDropzone').serializeArray();
+            $.each(data, function(key, el) {
+                formData.append(el.name, el.value);
+            });
+        });
+    }
+};
+</script>
+
+{% endblock %}
