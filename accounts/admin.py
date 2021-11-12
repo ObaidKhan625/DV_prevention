@@ -4,6 +4,4 @@ from .models import *
 # Register your models here.
 
 admin.site.register(User)
-admin.site.register(Complaint)
-admin.site.register(Message)
-admin.site.register(User_Documents)
+admin.site.register(User_Document)

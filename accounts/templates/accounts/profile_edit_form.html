@@ -1,0 +1,37 @@
+{% load static %}
+{% load widget_tweaks %}
+
+{% include 'accounts/main.html' %}
+
+{% block content %}
+
+<div class="Card-Block" style="height: 590px; width: 1300px; margin: auto; margin-top: 50px; border: none;">
+    <div class="row">
+        <div class="card col">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row" style="margin: 40px 0px 0px 40px;">
+                    <div class="form-group col-md-5">
+                        <label for="email">E-mail : </label><br>
+                        {% render_field form.email class="form-control" name="email" value=profile.email type="text" %}
+                    </div>
+                    <div class="form-group col-md-5" style="padding-left: 50px;">
+                        <label for="user_description">Description : </label><br>
+                        {% render_field form.user_description class="form-control" name="user_description" value=profile.user_description type="text" %}
+                    </div>
+                </div>
+                <div class="form-row" style="margin: 40px 0px 0px 40px;">
+                    <div class="form-group col-md-5">
+                        <label for="user_profile_image">Upload New Photo : </label><br>
+                        {% render_field form.user_profile_image name="user_profile_image" value=profile.user_profile_image type="file" %}
+                    </div>
+                </div>
+                <div style="margin: 40px 0px 0px 42px;">
+                    <input type="submit" name="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

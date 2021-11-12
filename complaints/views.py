@@ -1,8 +1,9 @@
+from .forms import ComplaintForm
+from .models import *
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from user_auth.decorators import auth_or_not
-from accounts.models import *
-from .forms import ComplaintForm
+from accounts.models import User
 from PIL import Image
 from taggit.models import Tag
 import random

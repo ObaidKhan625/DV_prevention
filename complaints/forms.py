@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from accounts.models import Complaint
+from .models import Complaint
 
 class ComplaintForm(ModelForm):
 	class Meta:
