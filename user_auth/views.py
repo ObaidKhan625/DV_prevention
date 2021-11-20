@@ -9,12 +9,13 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from accounts.models import User
 # Create your views here.
+from django.views.decorators.csrf import csrf_protect
 
+@csrf_protect
 @auth_or_not(0)
 def registerPage(request):
 	form = CreateUserForm()
 	if request.method == 'POST':
-		return redirect('user_auth:login')
 		form = CreateUserForm(request.POST)
 		if form.is_valid():
 			user = form.save()
@@ -26,6 +27,7 @@ def registerPage(request):
 	context = {'form':form}
 	return render(request, 'user_auth/register.html', context)
 
+@csrf_protect
 @auth_or_not(0)
 def loginPage(request):
 	if request.method == "POST":

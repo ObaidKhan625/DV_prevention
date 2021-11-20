@@ -4,7 +4,7 @@ from .models import User, User_Document
 class User_Documents_Form(forms.ModelForm):
 	class Meta:
 		model = User_Document
-		fields = ['user_files']
+		fields = ['user_file']
 
 class UpdateUserForm(forms.ModelForm):
 	class Meta:

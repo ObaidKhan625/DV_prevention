@@ -13,7 +13,8 @@ from user_auth.decorators import auth_or_not
 @auth_or_not(1)
 def profileView(request, current_user_id, user_id = None):
 	profile = User.objects.get(username = request.user)
-	context = {'profile':profile}
+	user_documents = User_Document.objects.filter(user_name = profile)
+	context = {'profile':profile, 'user_documents':user_documents}
 	return render(request, 'accounts/profile.html', context)
 
 @login_required(login_url='user_auth:login')
@@ -40,7 +41,10 @@ def drop_zone_file(request):
 def file_upload_view(request):
 	if request.method == "POST":
 		my_file = request.FILES.get('file')
-		print(my_file)
-		User_Document.objects.create(user_name = request.user, user_files = my_file)
-		return JsonResponse({'post':'true'})
+		if(str(my_file).endswith('jpg') or str(my_file).endswith('jpeg') or str(my_file).endswith('jfif') or str(my_file).endswith('pjpeg') or str(my_file).endswith('pjp') or str(my_file).endswith('png')):
+			user_document = User_Document.objects.create(user_name = request.user, user_file = my_file, 
+			user_file_thumbnail = my_file)
+		else:
+			user_document = User_Document.objects.create(user_name = request.user, user_file = my_file)
+		return redirect('/')
 	return JsonResponse({'post':'false'})
