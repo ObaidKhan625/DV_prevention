@@ -1,5 +1,5 @@
 from .forms import UpdateUserForm
-from .models import User, User_Document
+from .models import User, User_Document, Verification
 from django.shortcuts import render, reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
@@ -11,15 +11,16 @@ from user_auth.decorators import auth_or_not
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
-def profileView(request, current_user_id, user_id = None):
-	profile = User.objects.get(username = request.user)
+def profileView(request, profile_id):
+	profile = User.objects.get(id = profile_id)
+	verifications_count = Verification.objects.filter(verified_user = profile).count()
 	user_documents = User_Document.objects.filter(user_name = profile)
-	context = {'profile':profile, 'user_documents':user_documents}
+	context = {'profile':profile, 'user_documents':user_documents, 'verifications_count':verifications_count}
 	return render(request, 'accounts/profile.html', context)
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
-def profileEdit(request, current_user_id, user_id = None):
+def profileEdit(request):
 	profile = User.objects.get(username = request.user)
 	form = UpdateUserForm()
 	if request.method == "POST":
@@ -48,3 +49,14 @@ def file_upload_view(request):
 			user_document = User_Document.objects.create(user_name = request.user, user_file = my_file)
 		return redirect('/')
 	return JsonResponse({'post':'false'})
+
+@login_required(login_url='user_auth:login')
+@auth_or_not(1)
+def verifyUser(request, profile_id):
+	print(request.POST.get('profile_id'))
+	verified_user = User.objects.get(id = profile_id)
+	if(Verification.objects.filter(verified_user = verified_user, verified_by = request.user).exists()):
+		return JsonResponse({'verification_post':False})
+	else:
+		Verification.objects.create(verified_user = verified_user, verified_by = request.user)
+		return JsonResponse({'verification_post':True})

@@ -22,3 +22,10 @@ class User_Document(models.Model):
 	
 	def __str__(self):
 		return str(self.user_file)
+
+class Verification(models.Model):
+	verified_user = models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name = 'verified_user')
+	verified_by = models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name = 'verified_by')
+
+	def __str__(self):
+		return str(self.verified_user) + ' verified by ' + str(self.verified_by)

@@ -17,9 +17,12 @@
             <h5 class="card-title">Verified by</h5>
           </div>
           <div class="card-body">
-            <h3 class="card-title">0</h3>
+            <h3 class="card-title verified-count-{{profile.id}}">{{verifications_count}}</h3>
           </div>
       </div>
+      {% if request.user.id != profile.id %}
+      <button class="btn btn-success verified-count" data-profile="{{profile.id}}">+</button>
+      {% endif %}
     </div>
   
     <div class="col-md">
@@ -33,3 +36,25 @@
       </div>
     </div>
 </div>
+
+<script>
+  $('.verified-count').on('click', function() {
+    var profile_id = $(this).data('profile');
+    $.ajax({
+      url: "{% url 'accounts:verify-user' profile.id%}",
+      type: "post",
+      data: {
+        profile_id: profile_id,
+        csrfmiddlewaretoken: "{{csrf_token}}",
+      },
+      dataType: 'json',
+      success: function(response) {
+        var previous_verified_count = $('.verified-count-'+profile_id).text();
+        console.log(previous_verified_count);
+        if(response['verification_post'] == true) {
+          $('.verified-count-'+profile_id).text(parseInt(previous_verified_count)+1);
+        }
+      }
+    });
+  });
+</script>
