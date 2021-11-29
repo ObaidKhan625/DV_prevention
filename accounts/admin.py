@@ -6,3 +6,5 @@ from .models import *
 admin.site.register(User)
 admin.site.register(User_Document)
 admin.site.register(Verification)
+admin.site.register(Contact_Request)
+admin.site.register(Contact_Permission)

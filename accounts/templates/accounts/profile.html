@@ -22,7 +22,17 @@
                             <p class="small mb-4"> 
                                 <i class="fa fa-map-marker-alt mr-2"></i>{{profile.user_role}}
                             </p>
+                            {% if request.user.id != profile.id %}
+                            <button class="btn btn-success request-contact-info" data-profile="{{profile.id}}" style="position: relative;">
+                                Request Contact Info
+                            </button>
+                            {% endif %}
                         </div>
+                        {% if profile == request.user or request.user in contact_permitted_users %}
+                        {{profile.email}}
+                        {{profile.user_phone}}
+                        {{profile.user_other}}
+                        {% endif %}
                     </div>
                 </div>
                 <div class="bg-light d-flex text-center pl-4 pr-4" style="padding-top: 70px;">
@@ -51,4 +61,20 @@
         </div>
     </div>
 </div>
+
+<script>
+$('.request-contact-info').on('click', function() {
+    var profile_id = $(this).data('profile');
+    $.ajax({
+    url: "{% url 'accounts:request-contact-info' profile.id%}",
+    type: "post",
+    data: {
+        profile_id: profile_id,
+        csrfmiddlewaretoken: "{{csrf_token}}",
+    },
+    dataType: 'json',
+    });
+});
+</script>
+
 {% endblock %}
