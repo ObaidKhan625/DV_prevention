@@ -21,7 +21,11 @@
       <a class="nav-link" href="{% url 'complaints:create-complaint' request.user.id %}">Create Complaint</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:show-contact-requests' %}">Contact Requests</a>
+        {% if request.user.user_role == 'Normal user/Victim' %}
+        <a class="nav-link" href="{% url 'user_requests:show-contact-requests' %}">Contact Requests</a>
+        {% else  %}
+        <a class="nav-link" href="{% url 'user_requests:show-complaint-requests' %}">Complaint Requests</a>
+        {% endif %}
       </li>
       <li class="nav-item">
         <a class="nav-link" href="">Complaint status</a>

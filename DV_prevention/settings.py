@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'accounts',
     'complaints',
     'user_auth',
+    'user_requests',
 ]
 
 MIDDLEWARE = [

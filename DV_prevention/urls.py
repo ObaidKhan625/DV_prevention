@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(('user_auth.urls', 'user_auth'), namespace='user_auth')),
     path('', include(('accounts.urls', 'accounts'), namespace='accounts')),
+    path('', include(('user_requests.urls', 'user_requests'), namespace='user_requests')),
     path('complaints/', include(('complaints.urls', 'complaints'), namespace='complaints')),
 ]
 
