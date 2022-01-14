@@ -48,9 +48,11 @@
                     </div>-->
                 </div>
                 <div class="py-4 px-4">
+                    {% if profile == request.user %}
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <h5 class="mb-0">Identification Proof</h5><a href="{% url 'accounts:file-drop-zone-view' %}" class="btn btn-info">+</a>
                     </div>
+                    {% endif %}
                     <div class="row bg-dark">
                         {% for user_document in user_documents %}
                         <div class="col-lg-2 mb-2 mt-2 pr-lg-1"><img src="{% static 'images/' %}{{user_document.user_file_thumbnail}}" alt="" class="img-fluid rounded shadow-sm"></div>
@@ -66,7 +68,7 @@
 $('.request-contact-info').on('click', function() {
     var profile_id = $(this).data('profile');
     $.ajax({
-    url: "{% url 'accounts:request-contact-info' profile.id%}",
+    url: "{% url 'user_requests:request-contact-info' profile.id%}",
     type: "post",
     data: {
         profile_id: profile_id,

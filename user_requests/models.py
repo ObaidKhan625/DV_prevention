@@ -11,6 +11,13 @@ class Verification(models.Model):
 	def __str__(self):
 		return str(self.verified_user) + ' verified by ' + str(self.verified_by)
 
+class Report(models.Model):
+	reported_user = 	models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name = 'reported_user')
+	reported_by = 		models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name = 'reported_by')
+
+	def __str__(self):
+		return str(self.reported_user) + ' reported by ' + str(self.reported_by)
+
 class Contact_Request(models.Model):
 	requested_by = 		models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name = 'contact_requested_by')
 	requested_user = 	models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name = 'contact_requested_user')

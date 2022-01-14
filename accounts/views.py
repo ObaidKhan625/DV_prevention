@@ -5,16 +5,17 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
 from user_auth.decorators import auth_or_not
+from user_requests.models import Verification, Contact_Permission
 
 # Create your views here.
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
-def profileView(request, profile_id):
+def profileView(request, profile_slug):
 	"""
 	View the profile
 	"""
-	profile = User.objects.get(id = profile_id)
+	profile = User.objects.get(slug = profile_slug)
 	verifications_count = Verification.objects.filter(verified_user = profile).count()
 	user_documents = User_Document.objects.filter(user_name = profile)
 	contact_permitted_instances = Contact_Permission.objects.filter(permitted_user = request.user)

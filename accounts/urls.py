@@ -5,10 +5,10 @@ from django.conf.urls.static import static
 app_name = 'accounts'
 
 urlpatterns = [
-	path('profile-view/<str:profile_id>/', views.profileView, name = 'profile-view'),
+	path('profile-view/<str:profile_slug>/', views.profileView, name = 'profile-view'),
 	path('file-drop-zone/', views.drop_zone_file, name = 'file-drop-zone-view'),
 	path('file-drop-zone/upload/', views.file_upload_view, name = 'file-drop-upload-upload-view'),
-	path('profile-view/edit-profile/', views.profileEdit, name = 'profile-edit'),
+	path('edit-profile/', views.profileEdit, name = 'profile-edit'),
 ]
 
 if settings.DEBUG:

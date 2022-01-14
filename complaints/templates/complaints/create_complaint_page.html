@@ -5,6 +5,8 @@
 
 {% block content %}
 
+<link rel="stylesheet" href="/static/css/tagsinput.css" />
+
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group col-md-5">
@@ -23,7 +25,16 @@
         <label for="request_image">Request_Image : </label><br>
         {% render_field form.complaint_request_image name="complaint_request_image" type="file" %}
     </div>
+    <div class="form-group col-md-5">
+        <label>Tags</label>
+        <input type="text" data-role="tagsinput" class="form-control" name="tags">
+    </div>
     <span style="padding-left: 15px;"><button type="submit">Upload</button></span>
 </form>
+<script src="/static/js/tagsinput.js"></script>
+<script>
+$("#post-form").submit(function(e){
+    e.preventDefault();
+    });</script>
 
 {% endblock %}

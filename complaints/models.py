@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User
+from taggit.managers import TaggableManager
 
 # Create your models here.
 class Complaint(models.Model):
@@ -10,6 +11,8 @@ class Complaint(models.Model):
 	complaint_request_image = 			models.ImageField(null = True, blank = True, upload_to = 'complaints', default = 'complaints/default-image.jpg')
 	complaint_place = 					models.CharField(max_length = 1000, null = True)
 	complaint_under_investigation_by = 	models.CharField(max_length = 1000, null = True, blank = True)
+	slug = models.SlugField(unique=True, max_length=100)
+	tags = TaggableManager()
 
 	def __str__(self):
 		return self.complaint_title

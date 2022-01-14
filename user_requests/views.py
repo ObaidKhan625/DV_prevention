@@ -22,6 +22,19 @@ def verifyUser(request, profile_id):
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
+def reportUser(request, profile_id):
+	"""
+	Report the identity of a User
+	"""
+	reported_user = User.objects.get(id = profile_id)
+	if(Report.objects.filter(reported_user = reported_user, reported_by = request.user).exists()):
+		return JsonResponse({'report_post':False})
+	else:
+		Report.objects.create(reported_user = reported_user, reported_by = request.user)
+		return JsonResponse({'report_post':True})
+
+@login_required(login_url='user_auth:login')
+@auth_or_not(1)
 def requestContactInfo(request, profile_id):
 	"""
 	Request a User to view their contact info

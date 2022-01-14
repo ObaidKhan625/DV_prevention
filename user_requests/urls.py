@@ -6,6 +6,7 @@ app_name = 'user_requests'
 
 urlpatterns = [
 	path('verify-user/<str:profile_id>/', views.verifyUser,name = 'verify-user'),
+	path('report-user/<str:profile_id>/', views.reportUser,name = 'report-user'),
 	path('request-contact-info/<str:profile_id>/', views.requestContactInfo,name = 'request-contact-info'),
 	path('request-complaint/<str:profile_id>/<str:complaint_id>/', views.requestComplaint,name = 'request-complaint'),
 	path('show-contact-requests/', views.showContactRequests, name = 'show-contact-requests'),
