@@ -10,10 +10,11 @@ class User(AbstractUser):
 		('NGO/Activist/Mod', 'NGO/Activist/Mod'),
 	)
 	user_phone = 				models.CharField(max_length = 200, unique = True, null = True, blank = True)
-	user_other =  				models.TextField(max_length = 200, null = True, blank = True)
+	user_other =  				models.TextField(null = True, blank = True)
 	user_profile_image =  		models.ImageField(null = True, upload_to = 'profiles', default = 'profiles/default-image.jpg')
 	user_role = 				models.CharField(max_length = 50, null = True, choices = role_choices)
 	user_description = 			models.TextField(null = True, blank = True)
+	user_address = 				models.CharField(max_length = 100, null = True, blank = True)
 	slug = 						models.SlugField(unique=True, max_length=100, default='some string')
 
 	def save(self, *args, **kwargs):

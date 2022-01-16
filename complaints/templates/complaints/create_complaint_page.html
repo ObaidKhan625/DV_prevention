@@ -6,31 +6,36 @@
 {% block content %}
 
 <link rel="stylesheet" href="/static/css/tagsinput.css" />
-
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-group col-md-5">
-        <label for="title">Title : </label><br>
-        {% render_field form.complaint_title class="form-control" name="complaint_title" type="text" %}
-    </div>
-    <div class="form-group col-md-5">
-        <label for="place">Place : </label><br>
-        {% render_field form.complaint_place class="form-control" name="complaint_place" type="text" %}
-    </div>
-    <div class="form-group col-md-5">
-        <label for="description">Description : </label><br>
-        {% render_field form.complaint_description class="form-control" name="complaint_description" type="text" %}
-    </div>
-    <div class="form-group col-md-5">
-        <label for="request_image">Request_Image : </label><br>
-        {% render_field form.complaint_request_image name="complaint_request_image" type="file" %}
-    </div>
-    <div class="form-group col-md-5">
-        <label>Tags</label>
-        <input type="text" data-role="tagsinput" class="form-control" name="tags">
-    </div>
-    <span style="padding-left: 15px;"><button type="submit">Upload</button></span>
-</form>
+<div class="pt-5 pb-5" style="margin: auto; width: 50%;">
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
+            <label for="title">Title : </label><br>
+            {% render_field form.complaint_title class="form-control" name="complaint_title" type="text" %}
+        </div>
+        <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
+            <label for="place">Place : </label><br>
+            {% render_field form.complaint_place class="form-control" name="complaint_place" type="text" %}
+        </div>
+        <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
+            <label for="description">Description : </label><br>
+            {% render_field form.complaint_description class="form-control" name="complaint_description" type="text" %}
+        </div>
+        <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
+            <label for="request_image">Request_Image : </label><br>
+            {% render_field form.complaint_request_image name="complaint_request_image" type="file" %}
+        </div>
+        <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
+            <label>Tags</label>
+            {% render_field form.tags class="form-control" name="tags" data-role="tagsinput" type="text" %}
+        </div>
+        <span style="padding-left: 15px;"></span><button type="submit" id="submit" name="submit" class="btn btn-primary">Update</button>
+        </span>
+        <!--
+            <span style="padding-left: 15px;"><button type="submit">Upload</button></span>
+        -->
+    </form>
+</div>
 <script src="/static/js/tagsinput.js"></script>
 <script>
 $("#post-form").submit(function(e){

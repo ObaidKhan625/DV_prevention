@@ -14,6 +14,8 @@ def verifyUser(request, profile_id):
 	Verify the identity of a User
 	"""
 	verified_user = User.objects.get(id = profile_id)
+	if(verified_user == request.user):
+		return
 	if(Verification.objects.filter(verified_user = verified_user, verified_by = request.user).exists()):
 		return JsonResponse({'verification_post':False})
 	else:
@@ -27,6 +29,8 @@ def reportUser(request, profile_id):
 	Report the identity of a User
 	"""
 	reported_user = User.objects.get(id = profile_id)
+	if(reported_user == request.user):
+		return
 	if(Report.objects.filter(reported_user = reported_user, reported_by = request.user).exists()):
 		return JsonResponse({'report_post':False})
 	else:
