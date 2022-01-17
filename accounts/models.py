@@ -24,7 +24,6 @@ class User(AbstractUser):
 class User_Document(models.Model):
 	user_name = 			models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name = 'user_documents')
 	user_file = 			models.ImageField(null = True, upload_to = 'identity')
-	user_file_thumbnail = 	models.ImageField(null = True, upload_to = 'profiles', default = 'profiles/default-image.jpg')
 	
 	def __str__(self):
 		return str(self.user_file)

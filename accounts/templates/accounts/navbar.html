@@ -166,7 +166,7 @@
   <i class="fas fa-bars text-white"></i>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ml-auto" id="navbar-menu">
           <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
           <li class="nav-item">
               <a class="nav-link" href="{% url 'complaints:explore-complaints' %}"><i class="fas fa-tachometer-alt"></i>Explore</a>
@@ -239,13 +239,22 @@ $(".navbar-toggler").click(function(){
 jQuery(document).ready(function($){
 	// Get current path and find target link
 	var path = window.location.pathname.split("/").pop();
-
-	// Account for home page with empty path
-	if ( path == '' ) {
-		path = 'index.html';
-	}
-
 	var target = $('#navbarSupportedContent ul li a[href="'+path+'"]');
+	
+	/*var header = document.getElementById("navbar-menu");
+	var btns = header.getElementsByClassName("nav-item");
+	console.log(btns);
+	currSection = window.location.href.split('/')[3]
+	console.log(currSection);
+
+	for (var i = 0; i < btns.length; i++) {
+		btns[i].addEventListener("click", function() {
+			var current = document.getElementsByClassName("active");
+			current[0].className = current[0].className.replace(" active", "");
+			this.className += " active";
+		});
+	}*/
+	
 	// Add active class to target link
 	target.parent().addClass('active');
 });

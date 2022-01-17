@@ -21,12 +21,18 @@ def profileView(request, profile_slug):
 	user_documents = User_Document.objects.filter(user_name = profile)
 	contact_permitted_instances = Contact_Permission.objects.filter(permitted_user = request.user)
 	contact_request_sent = Contact_Request.objects.filter(requested_by = request.user, requested_user = profile).exists()
+	
+	permitted_user = Contact_Permission.objects.filter(permitted_user = request.user, permitted_by = profile).exists()
+	if profile.user_role == 'NGO/Activist/Mod' or profile == request.user:
+		permitted_user = True
+	
 	contact_permitted_users = []
 	for i in contact_permitted_instances:
 		contact_permitted_users.append(i.permitted_user)
+	
 	context = {'profile':profile, 'user_documents':user_documents, 'verifications_count':verifications_count,
 	'contact_permitted_users':contact_permitted_users, 'contact_request_sent':contact_request_sent, 
-	'report_count':report_count}
+	'report_count':report_count, 'permitted_user':permitted_user}
 	return render(request, 'accounts/profile.html', context)
 
 @login_required(login_url='user_auth:login')
@@ -40,11 +46,8 @@ def profileEdit(request):
 
 	if request.method == "POST":
 		form = UpdateUserForm(request.POST, request.FILES, instance=profile)
-		print(request.POST.get('email'))
-		print(request.POST.get('username'))
 		if form.is_valid():
-			#form.save()
-			a = 1
+			form.save()
 		return redirect('/')
 	context = {'profile':profile, 'form':form}
 	return render(request, 'accounts/profile_edit_form.html', context)
@@ -64,9 +67,8 @@ def file_upload_view(request):
 	if request.method == "POST":
 		my_file = request.FILES.get('file')
 		if(str(my_file).endswith('jpg') or str(my_file).endswith('jpeg') or str(my_file).endswith('jfif') or str(my_file).endswith('pjpeg') or str(my_file).endswith('pjp') or str(my_file).endswith('png')):
-			user_document = User_Document.objects.create(user_name = request.user, user_file = my_file, 
-			user_file_thumbnail = my_file)
-		else:
 			user_document = User_Document.objects.create(user_name = request.user, user_file = my_file)
+		else:
+			pass
 		return redirect('/')
 	return JsonResponse({'post':'false'})

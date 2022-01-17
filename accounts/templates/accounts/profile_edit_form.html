@@ -15,12 +15,12 @@
                             <div class="user-avatar">
                                 <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin">
                             </div>
-                            <h5 class="user-name">Yuki Hayashi</h5>
-                            <h6 class="user-email">yuki@Maxwell.com</h6>
+                            <h5 class="user-name">{{user.username}}</h5>
+                            <h6 class="user-email">{{user.email}}</h6>
                         </div>
                         <div class="about">
-                            <h5>About</h5>
-                            <p>I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful and human experiences.</p>
+                            <h5>Description</h5>
+                            <p>{{user.user_description}}</p>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="username">Full Name</label>
-                                    {% render_field form.username class="form-control" name="username" placeholder="Enter username" type="text" %}
+                                    {% render_field form.username class="form-control" name="username" value=profile.username type="text" %}
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -50,13 +50,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="user_phone">Phone</label>
-                                    {% render_field form.user_phone class="form-control" name="user_phone" placeholder="Enter phone" type="text" %}
+                                    {% render_field form.user_phone class="form-control" name="user_phone" value=profile.user_phone type="text" %}
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="user_address">Address</label>
-                                    {% render_field form.user_address class="form-control" name="user_address" placeholder="Enter address" type="text" %}
+                                    {% render_field form.user_address class="form-control" name="user_address" value=profile.user_address type="text" %}
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="user_description">Your description</label>
-                                    <textarea class="form-control" rows="10" name="user_description" id="user_description" placeholder="Your description"></textarea>
+                                    <textarea class="form-control" rows="10" name="user_description" id="user_description">{{user.user_description}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -77,8 +77,8 @@
                             </div>
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label>Other info</label>
-                                    <textarea class="form-control" rows="10" id="user_other" placeholder="Other"></textarea>
+                                    <label for="user_other">Other info</label>
+                                    <textarea class="form-control" rows="10" name="user_other" id="user_other">{{user.user_other}}</textarea>
                                 </div>
                             </div>
                         </div>

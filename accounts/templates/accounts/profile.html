@@ -14,8 +14,13 @@
                     <div class="photo-container">
                     <img src="https://images.unsplash.com/photo-1549669944-ca3e8b576248?ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80" alt="">
                     </div>
+                    {% if permitted_user == True %}
                     <h3 class="title">{{profile.username}}</h3>
                     <p class="category">{{profile.user_role}}</p>
+                    {% else %}
+                    <h3 class="title">Permission Not Availible</h3>
+                    <p class="category">Permission Not Availible</p>
+                    {% endif %}
                     <div class="content">
                     <div class="social-description">
                         <h2>0</h2>
@@ -47,81 +52,94 @@
                 </div>
                 <h3 class="title">Contacts</h3>
                 <h5 class="description">
+                    {% if permitted_user == True %}
                     <div>{{user.email}}</div>
                     <div>{{user.user_phone}}</div>
                     <div>{{user.user_other}}</div>
+                    {% else %}
+                    <div>Permission Not Availible</div>
+                    <div>Permission Not Availible</div>
+                    <div>Permission Not Availible</div>
+                    {% endif %}
                 </h5>
                 <h3 class="title pt-0">About me</h3>
+                {% if permitted_user == True %}
                 <h5 class="description">{{user.user_description}}</h5>
+                {% else %}
+                <h5 class="description">Permission Not Availible</h5>
+                {% endif %}
+                {% if profile.user_role == 'NGO/Activist/Mod' %}
                 <div class="row">
                 <div class="col-md-6 ml-auto mr-auto">
-                    <h4 class="title text-center">Wall</h4>
+                    <h4 class="title text-center">Verification Docs</h4>
                     <div class="nav-align-center">
                     <ul class="nav nav-pills nav-pills-primary nav-pills-just-icons" role="tablist">
-                        <li class="nav-item">
+                        <!--<li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#profile" role="tablist">
                             <i class="now-ui-icons design_image"></i>
                         </a>
-                        </li>
+                        </li>-->
                         <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#home" role="tablist">
-                            <i class="now-ui-icons location_world"></i>
+                        <a class="nav-link active" href="{% url 'accounts:file-drop-zone-view' %}">
+                            <i class="now-ui-icons fa fa-plus"><h1>+</h1></i>
                         </a>
                         </li>
-                        <li class="nav-item">
+                        <!--<li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#messages" role="tablist">
                             <i class="now-ui-icons sport_user-run"></i>
                         </a>
-                        </li>
+                        </li>-->
                     </ul>
-                    </div>
+                </div>
                 </div>
                 <div class="tab-content gallery">
                     <div class="tab-pane active" id="home" role="tabpanel">
                     <div class="col-md-10 ml-auto mr-auto">
                         <div class="row collections">
-                        <div class="col-md-6">
-                            <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                            <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                        </div>
-                        <div class="col-md-6">
-                            <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                            <img src="https://images.unsplash.com/photo-1550226891-ef816aed4a98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                        </div>
+                            {% for document in user_documents %}
+                            <div class="col-md-6">
+                                <a href="{% static 'images/' %}{{document}}" download>
+                                    <img src="{% static 'images/' %}{{document}}" alt="" class="img-raised" height=90% width=90%>
+                                </a>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                     </div>
+                    <!--
                     <div class="tab-pane" id="profile" role="tabpanel">
                     <div class="col-md-10 ml-auto mr-auto">
                         <div class="row collections">
-                        <div class="col-md-6">
-                            <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" class="img-raised">
-                            <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                        </div>
-                        <div class="col-md-6">
-                            <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                            <img src="https://images.unsplash.com/photo-1489171078254-c3365d6e359f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=889&q=80" alt="" class="img-raised">
-                        </div>
+                            <div class="col-md-6">
+                                <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" class="img-raised">
+                                <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
+                            </div>
+                            <div class="col-md-6">
+                                <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
+                                <img src="https://images.unsplash.com/photo-1489171078254-c3365d6e359f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=889&q=80" alt="" class="img-raised">
+                            </div>
                         </div>
                     </div>
                     </div>
                     <div class="tab-pane" id="messages" role="tabpanel">
                     <div class="col-md-10 ml-auto mr-auto">
                         <div class="row collections">
-                        <div class="col-md-6">
-                            <img src="https://images.unsplash.com/photo-1527694224012-be005121c774?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="" class="img-raised">
-                            <img src="https://images.unsplash.com/photo-1468174482686-1047396f13b3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                        </div>
-                        <div class="col-md-6">
-                            <img src="https://images.unsplash.com/photo-1506377295352-e3154d43ea9e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="" class="img-raised">
-                            <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=753&q=80"
-                                class="img-raised">
-                        </div>
+                            <div class="col-md-6">
+                                <img src="https://images.unsplash.com/photo-1527694224012-be005121c774?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="" class="img-raised">
+                                <img src="https://images.unsplash.com/photo-1468174482686-1047396f13b3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
+                            </div>
+                            <div class="col-md-6">
+                                <img src="https://images.unsplash.com/photo-1506377295352-e3154d43ea9e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="" class="img-raised">
+                                <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=753&q=80"
+                                    class="img-raised">
+                            </div>
                         </div>
                     </div>
                     </div>
+                    -->
                 </div>
             </div>
+            {% endif %}
         </div>
         </div>
     </div>

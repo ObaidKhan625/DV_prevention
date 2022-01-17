@@ -11,7 +11,6 @@ class UpdateUserForm(forms.ModelForm):
 		model = User
 		fields = ['username', 'user_phone', 'user_other', 'email', 'user_description', 'user_profile_image', 'user_address']
 
-	"""
 	def save(self, commit=True):
 		user = super(UpdateUserForm, self).save(commit = False)
 		user.email = self.cleaned_data['email']
@@ -23,7 +22,6 @@ class UpdateUserForm(forms.ModelForm):
 			return user.save()
 		else:
 			return user
-	"""
 
 """
 def clean_email(self):
