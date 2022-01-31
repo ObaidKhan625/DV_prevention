@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'taggit',
     'widget_tweaks',
     'accounts',
+    'addresses',
     'complaints',
     'user_auth',
     'user_requests',

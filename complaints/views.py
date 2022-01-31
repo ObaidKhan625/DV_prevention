@@ -22,7 +22,10 @@ def complaint_detail_components(request, complaint_slug):
 	#print(tag)
 	updates = Message.objects.filter(message_type = "update", message_complaint = complaint)
 	comments = Message.objects.filter(message_type = "comment", message_complaint = complaint)
-	return {'complaint':complaint, 'updates':updates, 'comments':comments}
+	total_updates = len(updates)
+	total_comments = len(comments)
+	return {'complaint':complaint, 'updates':updates, 'comments':comments, 'total_updates':total_updates, 
+	'total_comments':total_comments, 'current_complaint_link':"http://127.0.0.1:8000/complaints/"+complaint.slug}
 
 def exploreComplaints(request):
 	"""
@@ -89,26 +92,23 @@ def tagged(request, slug):
 
 @login_required(login_url='user-auth:login')
 @auth_or_not(1)
-def addMessage(request, complaint_id, message_type):
+def addMessage(request, complaint_slug, message_type):
 	"""
 	Add comment/update to complaint
 	"""
 	if request.method == "POST":
 		message_content = None
-		complaint = Complaint.objects.get(id = complaint_id)
+		complaint = Complaint.objects.get(slug = complaint_slug)
 		if message_type == "update":
 			message_content = request.POST.get('update-add')
 		else:
 			message_content = request.POST.get('comment-add')
+		print('hey', request.POST.get('comment-add'))
 
 		if len(message_content) == 0:
-			context = complaint_detail_components(request, complaint_id)
+			context = complaint_detail_components(request, complaint_slug)
 			return render(request, 'complaints/complaint_detail.html', context)
 		Message.objects.create(message_user = request.user, message_complaint = complaint, 
 		message_type = message_type, message_content = message_content)
 
-		context = complaint_detail_components(request, complaint_id)
-		return render(request, 'complaints/complaint_detail.html', context)
-	else:
-		context = complaint_detail_components(request, complaint_id)
-		return render(request, 'complaints/complaint_detail.html', context)
+	return redirect('complaints:show-complaint-detail', complaint_slug = complaint.slug)

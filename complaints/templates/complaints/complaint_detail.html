@@ -36,12 +36,21 @@
 								<a href="#" class="round-black-btn">Request Contact</a>
 	        				</div>
 							<div class="col-md-6">
-								<a href="#" class="round-black-btn">Share</a>
+								<div id="fb-root"></div>
+								<!-- Your share button code -->
+								<button class="round-black-btn"></button>
+								<!--<button class="fb-share-button round-black-btn"
+								data-href='{{current_complaint_link}}' data-layout="button_count">
+								</button>-->
 	        				</div>
 	        			</div>
 	        			<div class="row">
-							<div class="col-md-6">
-								<a href="#" class="round-black-btn">Share</a>
+							<div class="col">
+								{% if profile != request.user and not investigastion_ongoing_by_curr %}
+								<button data-profile="{{complaint.id}}" class="round-black-btn investigate">Investigate</button>
+								{% elif investigastion_ongoing_by_curr %}
+								<button class="round-black-btn under-investigation">Under Investigation</button>
+								{% endif %}
 	        				</div>
 	        			</div>
 						<div class="row">
@@ -55,15 +64,14 @@
 	        <div class="product-info-tabs">
 		        <ul class="nav nav-tabs" id="myTab" role="tablist">
 				  	<li class="nav-item">
-				    	<a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Updates (0)</a>
+				    	<a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Updates ({{total_updates}})</a>
 				  	</li>
 				  	<li class="nav-item">
-				    	<a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Reviews (0)</a>
+				    	<a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Comments ({{total_comments}})</a>
 				  	</li>
 				</ul>
 				<div class="tab-content" id="myTabContent">
 				  	<div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-
 						<!--<div class="form-group">
 							<form action="/complaints/{{complaint.id}}/update" method="POST">
 								{% csrf_token %}
@@ -74,44 +82,85 @@
 								<input type="submit" name="submit" />
 							</form>
 						</div>-->
-
-						<div class="form-group">
+						{% if request.user == complaint.complaint_filer %}
+						<form action="update/" method="POST" enctype="multipart/form-data" class="review-form">
+							{% csrf_token %}
+		        			<div class="form-group">
+			        			<label for="update-add">Your message</label>
+			        			<textarea class="form-control" rows="10" name="update-add" id="update-add"></textarea>
+			        		</div>
+							<button class="round-black-btn">Submit Update</button>
+			        	</form>
+						{% endif %}
+						<div class="review-heading mt-5">UPDATES</div>
+						{% for i in updates %}
+						<p class="mb-3">{{i.message_user}}</p>
+						<p class="mb-20">{{i.message_content}}</p>
+						{% endfor %}
+						<!--<div class="form-group">
 							{% if request.user == complaint.complaint_filer %}
 							<form action="/complaints/{{complaint.id}}/update" method="POST" id="update-form"></form>
 								{% csrf_token %}
-								<label><b>Add Update : </b></label>
+								<label><b>Add Update : </b></label>-->
 								<!--<div style="width: 300px; height: 90px">
 									<label for="update-add"><b>Add Update : </b></label>
 									<input id="update-add" name="update-add" type="text" class="form-control"/>
 								</div>-->
-								<textarea class="form-control" rows="10" form="update-form" id="update-add" name="update-add">Enter text here...</textarea>
-								<input type="submit" name="submit" class="round-black-btn"/>
+								<!--<textarea class="form-control" rows="10" form="update-form" id="update-add" name="update-add">Enter text here...</textarea>
+								<input type="submit" name="submit" class="round-black-btn"/>-->
 								<!--<button class="round-black-btn">Submit Update</button>-->
-							</form>
+							<!--</form>
 							{% endif %}
-						</div>
-						
-						<div class="review-heading mt-5">UPDATES</div>
+						</div>-->
+						{% if total_updates == 0 %}
 						<p class="mb-20">There are no updates yet.</p>
-				  	</div>
-				  	<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
-				  		<form class="review-form">
-		        			<div class="form-group">
-			        			<label>Your message</label>
-			        			<textarea class="form-control" rows="10"></textarea>
-			        		</div>
-							<button class="round-black-btn">Submit Comment</button>
-			        	</form>
-						<div class="review-heading mt-5">COMMENTS</div>
-						<p class="mb-20">There are no comments yet.</p>
-				  	</div>
+						{% endif %}
+						<!-- Contenedor Principal -->
+						
+						<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+							<form action="comment/" method="POST" enctype="multipart/form-data" class="review-form">
+							  {% csrf_token %}
+							  <div class="form-group">
+								  <label for="comment-add">Your message</label>
+								  <textarea class="form-control" rows="10" name="comment-add" id="comment-add"></textarea>
+							  </div>
+							  <button class="round-black-btn">Submit Comment</button>
+						  </form>
+						  <div class="review-heading mt-5">COMMENTS</div>
+						  {% for i in comments %}
+						  <p class="mb-3">{{i.message_user}}</p>
+						  <p class="mb-20" style="word-wrap: break-word">{{i.message_content}}</p>
+						  {% endfor %}
+						  {% if total_comments == 0 %}
+						  <p class="mb-20">There are no comments yet.</p>
+						  {% endif %}
+						</div>
 				</div>
 			</div>
 			
 		</div>
 	</div>
 
-	
+	<script>
+		$('.investigate').on('click', function() {
+        var complaint_id = $(this).data('complaint');
+        $.ajax({
+        url: "",
+        type: "post",
+        data: {
+            complaint_id: complaint_id,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+        },
+        dataType: 'json',
+        });
+        /*var element = document.getElementsByClassName("request-contact-info");
+        console.log(element);
+        element.className += " request-sent-button";
+        console.log(element);
+        element.classList.add("request-sent-button");*/
+    });
+	</script>
+
 <style>
 	.pd-wrap {
 	padding: 40px 0;
@@ -462,6 +511,9 @@
 		});
 </script>
 
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
