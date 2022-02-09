@@ -161,34 +161,37 @@
 }
 </style>
 <nav class="navbar navbar-expand-custom navbar-mainbg">
-  <a class="navbar-brand navbar-logo" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-  <i class="fas fa-bars text-white"></i>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto" id="navbar-menu">
-          <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'complaints:explore-complaints' %}"><i class="fas fa-tachometer-alt"></i>Explore</a>
-          </li>
-          <li class="nav-item active">
-              <a class="nav-link" href=""><i class="far fa-address-book"></i>Request History</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'complaints:create-complaint' %}"><i class="far fa-clone"></i>Create Complaint</a>
-          </li>
-          <li class="nav-item">
-            {% if request.user.user_role == 'Normal user/Victim' %}
-            <a class="nav-link" href="{% url 'user_requests:show-contact-requests' %}">Contact Requests</a>
-            {% else  %}
-            <a class="nav-link" href="{% url 'user_requests:show-complaint-requests' %}">Complaint Requests</a>
-            {% endif %}
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Complaint status</a>
-          </li>
-      </ul>
-  </div>
+	<a class="navbar-brand navbar-logo" href="#">Navbar</a>
+	<button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<i class="fas fa-bars text-white"></i>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav ml-auto" id="navbar-menu">
+			<div class="hori-selector">
+				<div class="left"></div>
+				<div class="right"></div>
+			</div>
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'complaints:explore-complaints' %}"><i class="fas fa-tachometer-alt"></i>Explore</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="javascript:void(0);"><i class="far fa-address-book"></i>Request History</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'complaints:create-complaint' %}"><i class="far fa-clone"></i>Create Complaint</a>
+			</li>
+			<li class="nav-item">
+				{% if request.user.user_role == 'Normal user/Victim' %}
+				<a class="nav-link" href="{% url 'user_requests:show-contact-requests' %}">Contact Requests</a>
+				{% else  %}
+				<a class="nav-link" href="{% url 'user_requests:show-complaint-requests' %}">Complaint Requests</a>
+				{% endif %}
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Complaint status</a>
+			</li>
+		</ul>
+	</div>
 </nav>
 
 <script>
@@ -240,22 +243,28 @@ jQuery(document).ready(function($){
 	// Get current path and find target link
 	var path = window.location.pathname.split("/").pop();
 	var target = $('#navbarSupportedContent ul li a[href="'+path+'"]');
-	
-	/*var header = document.getElementById("navbar-menu");
+	var header = document.getElementById("navbar-menu");
 	var btns = header.getElementsByClassName("nav-item");
-	console.log(btns);
-	currSection = window.location.href.split('/')[3]
-	console.log(currSection);
+	var window_link_list = window.location.href.split('/');
+	if(window_link_list.length === 5 && window_link_list[3] === "complaints") {
+		btns[0].className += " active";
+	}
+	else if(window_link_list.length === 6 && window_link_list[3] === "complaints") {
+		btns[2].className += " active";
+	}
+	else if(window_link_list.length === 5 && window_link_list[3] === "show-complaint-requests") {
+		btns[3].className += " active";
+	}
 
-	for (var i = 0; i < btns.length; i++) {
-		btns[i].addEventListener("click", function() {
-			var current = document.getElementsByClassName("active");
-			current[0].className = current[0].className.replace(" active", "");
-			this.className += " active";
-		});
-	}*/
+	// for (var i = 0; i < btns.length; i++) {
+	// 	btns[i].addEventListener("click", function() {
+	// 		var current = document.getElementsByClassName("active");
+	// 		// current[0].className = current[0].className.replace(" active", "");
+	// 		this.className += " active";
+	// 	});
+	// }
 	
 	// Add active class to target link
-	target.parent().addClass('active');
+	// target.parent().addClass('active');
 });
 </script>
