@@ -44,6 +44,7 @@ def requestContactInfo(request, profile_id):
 	Request a User to view their contact info
 	"""
 	requested_user = User.objects.get(id = profile_id)
+	print("Hey")
 	if(Contact_Request.objects.filter(requested_user = requested_user, requested_by = request.user).exists()):
 		return JsonResponse({'request_post':False})
 	else:

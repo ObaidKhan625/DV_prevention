@@ -291,52 +291,53 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
-  .tagh {
-    display: inline-block;
+
+#cropped-description {
+  overflow:hidden; height: 200px; text-overflow:ellipsis;
 }
+
+#cropped-tags {
+  overflow:hidden; 
+  white-space:nowrap; 
+  text-overflow:ellipsis;
+}
+
 </style>
 
 <div class="container mt-5 mb-5">
-<section class="blog-area">
+  <section class="blog-area">
     <div class="container">
-        <div class="heading">
-            <h2>Latest Blogs</h2>
-        </div>
-        <div class="blogs">
-			{% for complaint in complaints %}
-            <div class="blogs-item hvr-float-shadow wow fadeInLeft" data-wow-delay="0.5s">
-              <div class="blog-img photo">
-                    <a href="{% url 'complaints:show-complaint-detail' complaint.slug %}"><img src="{% static 'images/' %}{{complaint.complaint_request_image}}" alt="" class="img-fluid"></a>
-                    <p class="blog-time">
-                        <span class="blog-date">25</span>
-                        <span class="blog-month">May</span>
-                    </p>
-                </div>
-				<!--<div class="meta">
-					<div class="photo" style="background-image: url(https://storage.googleapis.com/chydlx/codepen/blog-cards/image-1.jpg)"></div>
-					<ul class="details">
-						<li class="author"><a href="#">{{complaint.complaint_filer}}</a></li>
-						<li class="date">Aug. 24, 2015</li>
-						<li class="tags">{{complaint.complaint_place}}</li>
-					</ul>
-				</div>-->
-                <div class="blog-detail">
-                    <h4><a href="javascript:;">{{complaint.complaint_title}}</a></h4>
-                    <ul class="scrolling-wrapper">
-                      {% for tag in complaint.tags.all %}
-                      <li class="tagh"><a href="javascript:;">#{{ tag }}</a></li>
-                      {% endfor %}
-                    </ul>
-                    <p class="scrolling-wrapper">{{complaint.complaint_description}}</p>
-                </div>
+      <div class="heading">
+      <h2>Complaints</h2>
+      </div>
+      <div class="blogs">
+        <div class="row">
+        {% for complaint in complaints %}
+          <div class="blogs-item hvr-float-shadow wow fadeInLeft h-100 mb-5" data-wow-delay="0.5s">
+            <div class="blog-img photo">
+              <a href="{% url 'complaints:show-complaint-detail' complaint.slug %}"><img src="{% static 'images/' %}{{complaint.complaint_request_image}}" alt="" class="img-fluid"></a>
+              <p class="blog-time">
+              <span class="blog-date">25</span>
+              <span class="blog-month">May</span>
+              </p>
             </div>
-        </div>
-		{% endfor %}
-        
+            <div class="blog-detail">
+              <h4><a href="javascript:;">{{complaint.complaint_title}}</a></h4>
+              <ul class="scrolling-wrapper" id="cropped-tags">
+                {% for tag in complaint.tags.all %}
+                <li><a href="javascript:;">#{{ tag }}</a></li>
+                {% endfor %}
+              </ul>
+              <p class="scrolling-wrapper" id="cropped-description">{{complaint.complaint_description}}</p>...
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
-</section>
+  </section>
+</div>
 <!--blog-area end-->
-    <div class="d-flex justify-content-center row">
+    <!--<div class="d-flex justify-content-center row">
         <div class="col-md-10">
             {% for complaint in complaints %}
             <div class="blog-card">
@@ -364,9 +365,10 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
               </div>
             </div>
             {% endfor %}
+            </div>
         </div>
     </div>
-</div>
+</div>-->
 
 {% endblock %}
 

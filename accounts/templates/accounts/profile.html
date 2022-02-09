@@ -8,11 +8,15 @@
     <div class="container">
         <div class="wrapper">
             <div class="page-header clear-filter" filter-color="orange">
-                <div class="page-header-image" data-parallax="true" style="background-image:url('https://images.unsplash.com/photo-1557053819-aa6046add523?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=889&q=80');">
+                <div class="page-header-image" data-parallax="true" style="background-image:url({% static 'images/' %}{{profile.user_profile_image}});">
                 </div>
                 <div class="container">
                     <div class="photo-container">
-                    <img src="https://images.unsplash.com/photo-1549669944-ca3e8b576248?ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80" alt="">
+                    {% if profile.user_role == 'NGO/Activist/Mod' %}
+                    <img src="{% static 'images/profile_backgrounds/activists_background.jpg' %}" height="110%" width="140%">
+                    {% else %}
+                    <img src="{% static 'images/profile_backgrounds/normal_users_background.jpg' %}" height="120%" width="140%">
+                    {% endif %}
                     </div>
                     {% if permitted_user == True %}
                     <h3 class="title">{{profile.username}}</h3>
@@ -74,21 +78,11 @@
                     <h4 class="title text-center">Verification Docs</h4>
                     <div class="nav-align-center">
                     <ul class="nav nav-pills nav-pills-primary nav-pills-just-icons" role="tablist">
-                        <!--<li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#profile" role="tablist">
-                            <i class="now-ui-icons design_image"></i>
-                        </a>
-                        </li>-->
                         <li class="nav-item">
                         <a class="nav-link active" href="{% url 'accounts:file-drop-zone-view' %}">
-                            <i class="now-ui-icons fa fa-plus"><h1>+</h1></i>
+                            <i class="fa fa-plus"></i>
                         </a>
                         </li>
-                        <!--<li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#messages" role="tablist">
-                            <i class="now-ui-icons sport_user-run"></i>
-                        </a>
-                        </li>-->
                     </ul>
                 </div>
                 </div>

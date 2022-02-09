@@ -19,7 +19,7 @@
 						</div>
 					</div>
 					{% for tag in complaint.tags.all %}
-					<div class="btn btn-danger" style="height: 30px; padding: 1px;">#{{ tag }}</div>
+					<div class="btn btn-danger mb-3" style="height: 40px; padding: 5px;">#{{ tag }}</div>
 					{% endfor %}
 	        	</div>
 	        	<div class="col-md-6">
@@ -33,18 +33,38 @@
 	        			<p>{{complaint.complaint_description}}</p>
 	        			<div class="row">
 	        				<div class="col-md-6">
-								<a href="#" class="round-black-btn">Request Contact</a>
-	        				</div>
-							<div class="col-md-6">
-								<div id="fb-root"></div>
-								<!-- Your share button code -->
-								<button class="round-black-btn"></button>
-								<!--<button class="fb-share-button round-black-btn"
-								data-href='{{current_complaint_link}}' data-layout="button_count">
-								</button>-->
+								<a href="{% url 'accounts:profile-view' complaint.complaint_filer %}" class="round-black-btn">Request Contact</a>
 	        				</div>
 	        			</div>
-	        			<div class="row">
+						<div class="row">
+							<div class="col">
+								<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+									  <div class="modal-content">
+										<div class="modal-header">
+										  <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+										  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										  </button>
+										</div>
+										<div class="modal-body">
+										  ...
+										</div>
+										<div class="modal-footer">
+										  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										  <button type="button" class="btn btn-primary">Save changes</button>
+										</div>
+									  </div>
+									</div>
+								  </div>
+									<!-- https://wa.me/?text=https://myanimelist.net/anime/48583/Shingeki_no_Kyojin__The_Final_Season_Part_2 -->
+									<button type="button" class="round-black-btn" data-toggle="modal" data-target="#exampleModalCenter">
+										Launch demo modal
+									</button>
+								</a>
+							</div>
+						</div>
+						<div class="row">
 							<div class="col">
 								{% if profile != request.user and not investigastion_ongoing_by_curr %}
 								<button data-profile="{{complaint.id}}" class="round-black-btn investigate">Investigate</button>
@@ -72,16 +92,6 @@
 				</ul>
 				<div class="tab-content" id="myTabContent">
 				  	<div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-						<!--<div class="form-group">
-							<form action="/complaints/{{complaint.id}}/update" method="POST">
-								{% csrf_token %}
-								<div style="width: 300px; height: 90px">
-									<label for="update-add"><b>Add Update : </b></label>
-									<input id="update-add" name="update-add" type="text" class="form-control" />
-								</div>
-								<input type="submit" name="submit" />
-							</form>
-						</div>-->
 						{% if request.user == complaint.complaint_filer %}
 						<form action="update/" method="POST" enctype="multipart/form-data" class="review-form">
 							{% csrf_token %}
@@ -97,49 +107,33 @@
 						<p class="mb-3">{{i.message_user}}</p>
 						<p class="mb-20">{{i.message_content}}</p>
 						{% endfor %}
-						<!--<div class="form-group">
-							{% if request.user == complaint.complaint_filer %}
-							<form action="/complaints/{{complaint.id}}/update" method="POST" id="update-form"></form>
-								{% csrf_token %}
-								<label><b>Add Update : </b></label>-->
-								<!--<div style="width: 300px; height: 90px">
-									<label for="update-add"><b>Add Update : </b></label>
-									<input id="update-add" name="update-add" type="text" class="form-control"/>
-								</div>-->
-								<!--<textarea class="form-control" rows="10" form="update-form" id="update-add" name="update-add">Enter text here...</textarea>
-								<input type="submit" name="submit" class="round-black-btn"/>-->
-								<!--<button class="round-black-btn">Submit Update</button>-->
-							<!--</form>
-							{% endif %}
-						</div>-->
 						{% if total_updates == 0 %}
 						<p class="mb-20">There are no updates yet.</p>
 						{% endif %}
-						<!-- Contenedor Principal -->
-						
-						<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
-							<form action="comment/" method="POST" enctype="multipart/form-data" class="review-form">
-							  {% csrf_token %}
-							  <div class="form-group">
-								  <label for="comment-add">Your message</label>
-								  <textarea class="form-control" rows="10" name="comment-add" id="comment-add"></textarea>
-							  </div>
-							  <button class="round-black-btn">Submit Comment</button>
-						  </form>
-						  <div class="review-heading mt-5">COMMENTS</div>
-						  {% for i in comments %}
-						  <p class="mb-3">{{i.message_user}}</p>
-						  <p class="mb-20" style="word-wrap: break-word">{{i.message_content}}</p>
-						  {% endfor %}
-						  {% if total_comments == 0 %}
-						  <p class="mb-20">There are no comments yet.</p>
-						  {% endif %}
-						</div>
+					</div>
+					<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+						{% if request.user != complaint.complaint_filer %}
+						<form action="comment/" method="POST" enctype="multipart/form-data" class="review-form">
+							{% csrf_token %}
+							<div class="form-group">
+								<label for="comment-add">Your message</label>
+								<textarea class="form-control" rows="10" name="comment-add" id="comment-add"></textarea>
+							</div>
+							<button class="round-black-btn">Submit Comment</button>
+						</form>
+						{% endif %}
+						<div class="review-heading mt-5">COMMENTS</div>
+						{% for i in comments %}
+						<p class="mb-3">{{i.message_user}}</p>
+						<p class="mb-20" style="word-wrap: break-word">{{i.message_content}}</p>
+						{% endfor %}
+						{% if total_comments == 0 %}
+						<p class="mb-20">There are no comments yet.</p>
+						{% endif %}
+					</div>
 				</div>
 			</div>
-			
 		</div>
-	</div>
 
 	<script>
 		$('.investigate').on('click', function() {
