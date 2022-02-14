@@ -11,7 +11,7 @@ class Complaint(models.Model):
 	complaint_request_image = 			models.ImageField(null = True, blank = True, upload_to = 'complaints', default = 'complaints/default-image.jpg')
 	complaint_place = 					models.CharField(max_length = 1000, null = True)
 	complaint_under_investigation_by = 	models.CharField(max_length = 1000, null = True, blank = True)
-	slug = models.SlugField(unique=True, max_length=100)
+	complaint_upvotes = 				models.IntegerField(default = 0)
 	tags = TaggableManager()
 
 	def __str__(self):
@@ -22,3 +22,10 @@ class Message(models.Model):
 	message_complaint = 	models.ForeignKey(Complaint, null = True, on_delete = models.CASCADE)
 	message_type = 			models.CharField(max_length = 50, default = "comment")
 	message_content = 		models.CharField(max_length = 1000, null = True)
+
+	def __str__(self):
+		return self.message_user + " message on " + self.message_complaint
+
+class Investigation(models.Model):
+	investigation_complaint =		models.ForeignKey(Complaint, null = True, on_delete = models.CASCADE)
+	investigation_in_charge = 		models.ForeignKey(User, null = True, on_delete = models.CASCADE)

@@ -11,6 +11,11 @@
 <div class="container">
 	<div class="heading-section">
 		<h2>{{complaint.complaint_title}}</h2>
+		<span>
+			<button class="upvote-change upvote" data-complaint="{{complaint.id}}">U</button>
+			<span class="upvoted-count-{{complaint.id}}"><strong>{{complaint.complaint_upvotes}}</strong></span>
+			<button class="upvote-change downvote" data-complaint="{{complaint.id}}">D</button>
+		</span>
 	</div>
 	<div class="row">
 		<div class="col-md-6">
@@ -34,16 +39,18 @@
 				<p>{{complaint.complaint_description}}</p>
 				<div class="row">
 					<div class="col-md-6">
-						<a href="{% url 'accounts:profile-view' complaint.complaint_filer %}" class="round-black-btn">Request Contact</a>
+						<a href="{% url 'accounts:profile-view' complaint.complaint_filer %}">
+							<button type="button" class="btn btn-dark mt-2 ml-2" data-toggle="modal" data-target="#InvestigationsModal">Request Contact</button>
+						</a>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col">
-						<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+						<div class="modal fade" id="socialModal" tabindex="-1" role="dialog" aria-labelledby="socialModalTitle" aria-hidden="true">
 							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content">
 									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+										<h5 class="modal-title" id="exampleModalLongTitle">Share</h5>
 										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
 										</button>
@@ -86,24 +93,39 @@
 								}
 							</script>
 						</div>
-							<button type="button" class="round-black-btn" data-toggle="modal" data-target="#exampleModalCenter">
-								Share
-							</button>
-						</a>
+						<button type="button" class="btn btn-dark mt-2 ml-2" data-toggle="modal" data-target="#socialModal">Share</button>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col">
-						{% if profile != request.user and not investigastion_ongoing_by_curr %}
-						<button data-profile="{{complaint.id}}" class="round-black-btn investigate">Investigate</button>
-						{% elif investigastion_ongoing_by_curr %}
-						<button class="round-black-btn under-investigation">Under Investigation</button>
+						{% if investigastion_ongoing_by_curr_user %}
+						<button type="button" class="btn btn-success under-investigation mt-2 ml-2">Under Investigation</button>
+						{% elif profile != request.user %}
+						<button type="button" class="btn btn-dark investigate mt-2 ml-2" data-profile="{{complaint.id}}">Investigate</button>
 						{% endif %}
 					</div>
 				</div>
 				<div class="row">
 					<div class="col">
-						<a href="#" class="round-black-btn">Under Investigation By : </a>
+						<div class="modal fade" id="InvestigationsModal" tabindex="-1" role="dialog" aria-labelledby="InvestigationsModalTitle" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLongTitle">Under Investigation By</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body" style="display: block">
+										{% for i in investigations %}
+										<a href="{% url 'accounts:profile-view' i.investigation_in_charge.slug %}">{{i.investigation_in_charge}}</a>
+										<br>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+						</div>
+						<button type="button" class="btn btn-dark mt-2 ml-2" data-toggle="modal" data-target="#InvestigationsModal">Show Investigators</button>
 					</div>
 				</div>
 			</div>
@@ -163,25 +185,71 @@
 	</div>
 </div>
 
-	<script>
-		$('.investigate').on('click', function() {
-        var complaint_id = $(this).data('complaint');
-        $.ajax({
-        url: "",
-        type: "post",
-        data: {
-            complaint_id: complaint_id,
-            csrfmiddlewaretoken: "{{csrf_token}}",
-        },
-        dataType: 'json',
-        });
-        /*var element = document.getElementsByClassName("request-contact-info");
-        console.log(element);
-        element.className += " request-sent-button";
-        console.log(element);
-        element.classList.add("request-sent-button");*/
-    });
-	</script>
+<script>
+	$('.investigate').on('click', function() {
+		var complaint_id = "{{complaint.id}}";
+		$.ajax({
+		url: "{% url 'complaints:investigate-complaint' complaint.id %}",
+		type: "post",
+		data: {
+			complaint_id: complaint_id,
+			csrfmiddlewaretoken: "{{csrf_token}}",
+		},
+		dataType: 'json',
+		});
+		$(this).removeClass('btn-dark investigate');
+		$(this).addClass('btn-success under-investigation');
+		$(this).html("Under Investigation");
+		/*var element = document.getElementsByClassName("request-contact-info");
+		console.log(element);
+		element.className += " request-sent-button";
+		console.log(element);
+		element.classList.add("request-sent-button");*/
+	});
+
+	$('.upvote-change').on('click', function() {
+		var complaint_id = $(this).data('complaint');
+		var vote_action = $(this).attr('class').split(' ')[1];
+		if(vote_action == 'upvote') {
+			var url = "{% url 'complaints:upvote-complaint' complaint.id %}";
+			$.ajax({
+			url: url,
+			type: "post",
+			data: {
+				complaint_id: complaint_id,
+				csrfmiddlewaretoken: "{{csrf_token}}",
+			},
+			dataType: 'json',
+			success: function(response) {
+				var previous_upvoted_count = $('.upvoted-count-'+complaint_id).text();
+				if(response['upvote_post'] == true) {
+				$('.upvoted-count-'+complaint_id).text(parseInt(previous_upvoted_count)+1);
+				}
+			}
+			});
+		}
+		else {
+			var url = "{% url 'complaints:downvote-complaint' complaint.id %}";
+			$.ajax({
+			url: url,
+			type: "post",
+			data: {
+				complaint_id: complaint_id,
+				csrfmiddlewaretoken: "{{csrf_token}}",
+			},
+			dataType: 'json',
+			success: function(response) {
+				var previous_upvoted_count = $('.upvoted-count-'+complaint_id).text();
+				console.log(previous_upvoted_count);
+				if(response['downvote_post'] == true) {
+				$('.upvoted-count-'+complaint_id).text(parseInt(previous_upvoted_count)-1);
+				}
+			}
+			});
+		}	
+	});
+
+</script>
 
 <style>
 	.pd-wrap {

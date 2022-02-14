@@ -17,6 +17,9 @@ class User(AbstractUser):
 	user_address = 				models.CharField(max_length = 100, null = True, blank = True)
 	slug = 						models.SlugField(unique=True, max_length=100, default='some string')
 
+	def __str__(self):
+		return str(self.username)
+
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.username)
 		super(User, self).save(*args, **kwargs)

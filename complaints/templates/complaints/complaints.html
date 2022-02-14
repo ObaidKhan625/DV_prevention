@@ -315,7 +315,7 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
         {% for complaint in complaints %}
           <div class="blogs-item hvr-float-shadow wow fadeInLeft h-100 mb-5" data-wow-delay="0.5s">
             <div class="blog-img photo">
-              <a href="{% url 'complaints:show-complaint-detail' complaint.slug %}"><img src="{% static 'images/' %}{{complaint.complaint_request_image}}" alt="" class="img-fluid"></a>
+              <a href="{% url 'complaints:show-complaint-detail' complaint.id %}"><img src="{% static 'images/' %}{{complaint.complaint_request_image}}" alt="" class="img-fluid"></a>
               <p class="blog-time">
               <span class="blog-date">25</span>
               <span class="blog-month">May</span>
@@ -359,7 +359,7 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
 				
                 <p>{{complaint.complaint_description}}</p>
                 <p class="read-more">
-                  <a href="{% url 'complaints:show-complaint-detail' complaint.slug %}">Read More</a>
+                  <a href="{% url 'complaints:show-complaint-detail' complaint.id %}">Read More</a>
                 </p>
                 
               </div>

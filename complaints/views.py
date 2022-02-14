@@ -2,7 +2,7 @@ from .forms import ComplaintForm
 from .models import *
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.template.defaultfilters import slugify
+from django.http import JsonResponse
 from user_auth.decorators import auth_or_not
 from accounts.models import User
 from PIL import Image
@@ -13,19 +13,22 @@ from django.shortcuts import render, get_object_or_404
 # Create your views here.
 
 #Helper Functions
-def complaint_detail_components(request, complaint_slug):
+def complaint_detail_components(request, complaint_id):
 	"""
 	Components regularly needed in context, for keeping code DRY
 	"""
-	complaint = Complaint.objects.get(slug = complaint_slug)
-	#tag = get_object_or_404(Tag, slug=complaint_slug)
-	#print(tag)
+	complaint = Complaint.objects.get(id = complaint_id)
+	profile = complaint.complaint_filer
 	updates = Message.objects.filter(message_type = "update", message_complaint = complaint)
 	comments = Message.objects.filter(message_type = "comment", message_complaint = complaint)
 	total_updates = len(updates)
 	total_comments = len(comments)
+	investigations = Investigation.objects.filter(investigation_complaint = complaint)
+	investigastion_ongoing_by_curr_user = investigations.filter(investigation_in_charge = request.user).exists()
 	return {'complaint':complaint, 'updates':updates, 'comments':comments, 'total_updates':total_updates, 
-	'total_comments':total_comments, 'current_complaint_link':"http://127.0.0.1:8000/complaints/"+complaint.slug}
+	'total_comments':total_comments, 'current_complaint_link':"http://127.0.0.1:8000/complaints/"+str(complaint.id), 
+	'investigations':investigations, 
+	'investigastion_ongoing_by_curr_user': investigastion_ongoing_by_curr_user, 'profile':profile}
 
 def exploreComplaints(request):
 	"""
@@ -35,11 +38,11 @@ def exploreComplaints(request):
 	context = {'complaints':complaints}
 	return render(request, 'complaints/complaints.html', context)
 
-def showComplaintDetail(request, complaint_slug):
+def showComplaintDetail(request, complaint_id):
 	"""
 	Show detail of a particular complaint
 	"""
-	context = complaint_detail_components(request, complaint_slug)
+	context = complaint_detail_components(request, complaint_id)
 	return render(request, 'complaints/complaint_detail.html', context)
 
 @login_required(login_url='user-auth:login')
@@ -65,7 +68,6 @@ def createComplaint(request):
 		if form.is_valid():
 			#Complaint.objects.filter(complaint_filer = user).delete()
 			newpost = form.save(commit=False)
-			newpost.slug = slugify(newpost.complaint_title)
 			newpost.save()
 			# Without this next line the tags won't be saved.
 			form.save_m2m()
@@ -92,13 +94,13 @@ def tagged(request, slug):
 
 @login_required(login_url='user-auth:login')
 @auth_or_not(1)
-def addMessage(request, complaint_slug, message_type):
+def addMessage(request, complaint_id, message_type):
 	"""
 	Add comment/update to complaint
 	"""
 	if request.method == "POST":
 		message_content = None
-		complaint = Complaint.objects.get(slug = complaint_slug)
+		complaint = Complaint.objects.get(id = complaint_id)
 		if message_type == "update":
 			message_content = request.POST.get('update-add')
 		else:
@@ -106,9 +108,28 @@ def addMessage(request, complaint_slug, message_type):
 		print('hey', request.POST.get('comment-add'))
 
 		if len(message_content) == 0:
-			context = complaint_detail_components(request, complaint_slug)
+			context = complaint_detail_components(request, complaint_id)
 			return render(request, 'complaints/complaint_detail.html', context)
 		Message.objects.create(message_user = request.user, message_complaint = complaint, 
 		message_type = message_type, message_content = message_content)
 
-	return redirect('complaints:show-complaint-detail', complaint_slug = complaint.slug)
+	return redirect('complaints:show-complaint-detail', complaint_id = complaint.id)
+
+def investigateComplaint(request, complaint_id):
+	complaint = Complaint.objects.get(id = complaint_id)
+	if(not Investigation.objects.filter(investigation_complaint = complaint, investigation_in_charge = request.user).exists()):
+		Investigation.objects.create(investigation_complaint = complaint, investigation_in_charge = request.user)
+	return JsonResponse({'post':True})
+
+def complaintUpvote(request, complaint_id):
+	complaint = Complaint.objects.get(id = complaint_id)
+	complaint.complaint_upvotes += 1
+	complaint.save()
+	return JsonResponse({'upvote_post':True})
+
+def complaintDownvote(request, complaint_id):
+	complaint = Complaint.objects.get(id = complaint_id)
+	complaint.complaint_upvotes -= 1
+	complaint.save()
+	return JsonResponse({'downvote_post':True})
+
