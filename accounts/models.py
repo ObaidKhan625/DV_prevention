@@ -30,3 +30,11 @@ class User_Document(models.Model):
 	
 	def __str__(self):
 		return str(self.user_file)
+
+class Rating(models.Model):
+	rating_from = 			models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name='rating_from')
+	rating_to = 			models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name='rating_to')
+	rating_score = 			models.FloatField(default = 0.0)
+
+	def __str__(self):
+		return str(self.rating_from) + " to " + str(self.rating_to)

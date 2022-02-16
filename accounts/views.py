@@ -21,7 +21,19 @@ def profileView(request, profile_slug):
 	user_documents = User_Document.objects.filter(user_name = profile)
 	contact_permitted_instances = Contact_Permission.objects.filter(permitted_user = request.user)
 	contact_request_sent = Contact_Request.objects.filter(requested_by = request.user, requested_user = profile).exists()
-	
+
+
+	total_profile_ratings = Rating.objects.filter(rating_to = profile).count()
+	total_profile_score = 0
+	for i in Rating.objects.filter(rating_to = profile):
+		total_profile_score += i.rating_score
+
+	total_profile_score /= max(total_profile_ratings, 1)
+	total_profile_score = round(total_profile_score, 2)
+	user_current_rating = 0
+	if Rating.objects.filter(rating_from = request.user, rating_to = profile).exists():
+		user_current_rating = Rating.objects.get(rating_from = request.user, rating_to = profile).rating_score
+
 	permitted_user = Contact_Permission.objects.filter(permitted_user = request.user, permitted_by = profile).exists()
 	if profile.user_role == 'NGO/Activist/Mod' or profile == request.user:
 		permitted_user = True
@@ -29,10 +41,11 @@ def profileView(request, profile_slug):
 	contact_permitted_users = []
 	for i in contact_permitted_instances:
 		contact_permitted_users.append(i.permitted_user)
-	
+
 	context = {'profile':profile, 'user_documents':user_documents, 'verifications_count':verifications_count,
 	'contact_permitted_users':contact_permitted_users, 'contact_request_sent':contact_request_sent, 
-	'report_count':report_count, 'permitted_user':permitted_user}
+	'report_count':report_count, 'permitted_user':permitted_user, 'total_profile_score':total_profile_score, 
+	'user_current_rating':user_current_rating}
 	return render(request, 'accounts/profile.html', context)
 
 @login_required(login_url='user_auth:login')
@@ -51,6 +64,15 @@ def profileEdit(request):
 		return redirect('/')
 	context = {'profile':profile, 'form':form}
 	return render(request, 'accounts/profile_edit_form.html', context)
+
+@login_required(login_url='user_auth:login')
+@auth_or_not(1)
+def profileRate(request, profile_slug):
+	profile = User.objects.get(slug = profile_slug)
+	if(Rating.objects.filter(rating_from = request.user, rating_to = profile).exists()):
+		Rating.objects.filter(rating_from = request.user, rating_to = profile).delete()
+	Rating.objects.create(rating_score = int(request.POST.get('slider1')), rating_from = request.user, rating_to = profile)
+	return redirect(reverse('accounts:profile-view', kwargs={'profile_slug':profile_slug}))
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)

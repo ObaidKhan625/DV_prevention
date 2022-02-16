@@ -25,6 +25,10 @@
                     <h3 class="title">Permission Not Availible</h3>
                     <p class="category">Permission Not Availible</p>
                     {% endif %}
+                    {% if profile.user_role == 'NGO/Activist/Mod' %}
+                    <h5>Activist Rating : </h5>
+                    <h3>{{total_profile_score}}</h3>
+                    {% endif %}
                     <div class="content">
                     <div class="social-description">
                         <h2>0</h2>
@@ -54,6 +58,36 @@
                     <button class="btn btn-primary btn-round btn-lg request-sent-button">Contact Request Sent</button>
                     {% endif %}
                 </div>
+                {% if profile.user_role == 'NGO/Activist/Mod' and request.user != profile %}
+                <!-- Ratings Start -->
+                    <div id="rating-container" class="p-5">
+                        <form action="{% url 'accounts:profile-rate' profile.username %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <h1>Rate The Profile</h1>
+                            <hr>
+                            <div id="first">
+                                <label for="slider1">Efficiency</label>
+                                <input type="range" id="sliderOne" name="slider1" min=0 max=10 value={{user_current_rating}}>
+                                <div class="score" id="ratingOne">{{user_current_rating}}</div>
+                            </div>
+                            <input type="submit" value="Submit" action="">
+                        </form>
+                    </div>
+                  
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+                    <script src="js/getRatings.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+                    <script>
+                        $(document).ready(function() {
+                            $('input[type="range"]').on("change mousemove", function() {
+                            $(this).next().html($(this).val());
+                            })
+                        });
+                    </script>
+                <!-- Ratings End -->
+                {% endif %}
+
                 <h3 class="title">Contacts</h3>
                 <h5 class="description">
                     {% if permitted_user == True %}
@@ -100,37 +134,7 @@
                         </div>
                     </div>
                     </div>
-                    <!--
-                    <div class="tab-pane" id="profile" role="tabpanel">
-                    <div class="col-md-10 ml-auto mr-auto">
-                        <div class="row collections">
-                            <div class="col-md-6">
-                                <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" class="img-raised">
-                                <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                            </div>
-                            <div class="col-md-6">
-                                <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                                <img src="https://images.unsplash.com/photo-1489171078254-c3365d6e359f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=889&q=80" alt="" class="img-raised">
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="tab-pane" id="messages" role="tabpanel">
-                    <div class="col-md-10 ml-auto mr-auto">
-                        <div class="row collections">
-                            <div class="col-md-6">
-                                <img src="https://images.unsplash.com/photo-1527694224012-be005121c774?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="" class="img-raised">
-                                <img src="https://images.unsplash.com/photo-1468174482686-1047396f13b3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="" class="img-raised">
-                            </div>
-                            <div class="col-md-6">
-                                <img src="https://images.unsplash.com/photo-1506377295352-e3154d43ea9e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="" class="img-raised">
-                                <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=753&q=80"
-                                    class="img-raised">
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    -->
+                    
                 </div>
             </div>
             {% endif %}
@@ -1429,5 +1433,142 @@ function debounce(func, wait, immediate) {
 };
 
 </script>
+
+<style>
+    input[type="range"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+
+/* positioning and background image*/
+
+input[type="range"] {
+  width: 300px;
+  height: 26px;
+  background: #ddd;
+  background: repeating-linear-gradient(90deg, #bbb, #bbb 2px, transparent 0px, transparent 28.35px);
+  background-repeat: no-repeat;
+  background-size: 286px 100%;
+  background-position: 7px center;
+}
+
+
+/* Form element re-Styling */
+
+input[type=range]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  /*    background: #ff7860;*/
+  background: #FF5E00;
+  width: 100%;
+  height: 4px;
+  border-radius: 4px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 3px solid #FF5E00;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #fff;
+  margin-top: -6px;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+/* scores box styles */
+
+.score {
+  text-align: center;
+  display: inline-block;
+  font-family: "proxima-nova", sans-serif;
+  font-size: 1em;
+  /*    font-weight: bold;*/
+  background: #2E2E2E;
+  color: #fff;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  padding-top: 3px;
+  position: relative;
+  top: -8px;
+  right: -5px;
+  margin-left: 10px;
+}
+
+
+/* Form presentation element styles */
+
+#rating-container {
+  width: 100%;
+  margin: 0 auto;
+  background: rgba(255,255,255, 1);
+  box-shadow: #202021 0 25px 38px;
+}
+
+label {
+  font-family: "proxima-nova", sans-serif;
+  display: inline-block;
+  
+}
+
+hr {
+  border: 1px solid #ccc;
+  margin-bottom: 25px;
+}
+
+
+/* Button Styles */
+
+input[type="submit"] {
+  font-family: "proxima-nova", sans-serif;
+  font-weight: bold;
+  font-size: 1.2em;
+  cursor: pointer;
+  color: #fff;
+  width: 100%;
+  height: 52px;
+  margin-top: 32px;
+  /*    border-radius: 10px;*/
+  background: #FF5E00;
+  border: none;
+  border-bottom: 5px solid #b44200;
+  /*    border: 2px solid #FF5E00;*/
+}
+
+
+/* CSS alt colour */
+
+input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  background-color: #e95e38;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  background-color: #e95e38;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  border-color: #000000;
+}
+
+input[type=range]::-webkit-slider-thumb:active {
+  border-color: #000000;
+}
+
+input[type="submit"] {
+  background-color: #e95e38;
+  border-bottom-color: #000000;
+}
+
+input[type="submit"]:hover {
+  background-color: #e95e38;
+  border-bottom-color: #000000;
+  color: #eee;
+}
+</style>
 
 {% endblock %}
