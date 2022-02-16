@@ -17,9 +17,6 @@ def complaint_detail_components(request, complaint_id):
 	"""
 	Components regularly needed in context, for keeping code DRY
 	"""
-	complaint = Complaint.objects.get(id = complaint_id)
-	profile = complaint.complaint_filer
-	updates = Message.objects.filter(message_type = "update", message_complaint = complaint)
 	comments = Message.objects.filter(message_type = "comment", message_complaint = complaint)
 	total_updates = len(updates)
 	total_comments = len(comments)
@@ -30,11 +27,15 @@ def complaint_detail_components(request, complaint_id):
 	'investigations':investigations, 
 	'investigastion_ongoing_by_curr_user': investigastion_ongoing_by_curr_user, 'profile':profile}
 
-def exploreComplaints(request):
+def exploreComplaints(request, sorting_parameter="upvotes"):
 	"""
 	See availible complaints, shown on user login
 	"""
 	complaints = Complaint.objects.filter(complaint_status='active')
+	if(sorting_parameter=="name"):
+		complaints = sorted(complaints, key = lambda x : x.complaint_name, reverse = True)
+	else:
+		complaints = sorted(complaints, key = lambda x : x.complaint_upvotes, reverse = True)
 	context = {'complaints':complaints}
 	return render(request, 'complaints/complaints.html', context)
 
@@ -123,13 +124,25 @@ def investigateComplaint(request, complaint_id):
 
 def complaintUpvote(request, complaint_id):
 	complaint = Complaint.objects.get(id = complaint_id)
+	complaint_upvotes_list = complaint.complaint_upvotes_users.split(',')
+	print(complaint_upvotes_list)
+	for i in complaint_upvotes_list:
+		if(i == str(request.user)):
+			return JsonResponse({'upvote_post':False})
 	complaint.complaint_upvotes += 1
+	complaint.complaint_upvotes_users += (str(request.user)+',')
 	complaint.save()
 	return JsonResponse({'upvote_post':True})
 
 def complaintDownvote(request, complaint_id):
 	complaint = Complaint.objects.get(id = complaint_id)
+	complaint_downvotes_list = complaint.complaint_downvotes_users.split(',')
+	print(complaint_downvotes_list)
+	for i in complaint_downvotes_list:
+		if(i == str(request.user)):
+			return JsonResponse({'upvote_post':False})
 	complaint.complaint_upvotes -= 1
+	complaint.complaint_downvotes_users += (str(request.user)+',')
 	complaint.save()
 	return JsonResponse({'downvote_post':True})
 

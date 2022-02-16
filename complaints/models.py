@@ -12,6 +12,8 @@ class Complaint(models.Model):
 	complaint_place = 					models.CharField(max_length = 1000, null = True)
 	complaint_under_investigation_by = 	models.CharField(max_length = 1000, null = True, blank = True)
 	complaint_upvotes = 				models.IntegerField(default = 0)
+	complaint_upvotes_users = 			models.TextField(default=',', blank = True)
+	complaint_downvotes_users = 		models.TextField(default=',', blank = True)
 	tags = TaggableManager()
 
 	def __str__(self):

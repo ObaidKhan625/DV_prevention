@@ -317,8 +317,10 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
             <div class="blog-img photo">
               <a href="{% url 'complaints:show-complaint-detail' complaint.id %}"><img src="{% static 'images/' %}{{complaint.complaint_request_image}}" alt="" class="img-fluid"></a>
               <p class="blog-time">
-              <span class="blog-date">25</span>
-              <span class="blog-month">May</span>
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+              <span class="blog-date"><i class="fa fa-solid fa-chevron-up"></i></span>
+              <br>
+              <span class="blog-month">{{complaint.complaint_upvotes}}</span>
               </p>
             </div>
             <div class="blog-detail">
@@ -336,129 +338,8 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
     </div>
   </section>
 </div>
-<!--blog-area end-->
-    <!--<div class="d-flex justify-content-center row">
-        <div class="col-md-10">
-            {% for complaint in complaints %}
-            <div class="blog-card">
-              <div class="meta">
-                <div class="photo" style="background-image: url(https://storage.googleapis.com/chydlx/codepen/blog-cards/image-1.jpg)"></div>
-                <ul class="details">
-                  <li class="author"><a href="#">{{complaint.complaint_filer}}</a></li>
-                  <li class="date">Aug. 24, 2015</li>
-                  <li class="tags">{{complaint.complaint_place}}</li>
-                </ul>
-              </div>
-              <div class="description">
-                <h1>{{complaint.complaint_title}}</h1>
-                <h2>
-					{% for tag in complaint.tags.all %}
-					<div class="btn btn-danger" style="height: 30px; padding: 1px;">#{{ tag }}</div>
-					{% endfor %}
-                </h2>
-				
-                <p>{{complaint.complaint_description}}</p>
-                <p class="read-more">
-                  <a href="{% url 'complaints:show-complaint-detail' complaint.id %}">Read More</a>
-                </p>
-                
-              </div>
-            </div>
-            {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>-->
 
 {% endblock %}
-
-<!--
-    <div class="blog-card">
-        <div class="meta">
-          <div class="photo" style="background-image: url(https://storage.googleapis.com/chydlx/codepen/blog-cards/image-1.jpg)"></div>
-          <ul class="details">
-            <li class="author"><a href="#">John Doe</a></li>
-            <li class="date">Aug. 24, 2015</li>
-            <li class="tags">
-              <ul>
-                <li><a href="#">Learn</a></li>
-                <li><a href="#">Code</a></li>
-                <li><a href="#">HTML</a></li>
-                <li><a href="#">CSS</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <div class="description">
-          <h1>Learning to Code</h1>
-          <h2>Opening a door to the future</h2>
-          <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad eum dolorum architecto obcaecati enim dicta praesentium, quam nobis! Neque ad aliquam facilis numquam. Veritatis, sit.</p>
-          <p class="read-more">
-            <a href="#">Read More</a>
-          </p>
-        </div>
-      </div>
-      <div class="blog-card alt">
-        <div class="meta">
-          <div class="photo" style="background-image: url(https://storage.googleapis.com/chydlx/codepen/blog-cards/image-2.jpg)"></div>
-          <ul class="details">
-            <li class="author"><a href="#">Jane Doe</a></li>
-            <li class="date">July. 15, 2015</li>
-            <li class="tags">
-              <ul>
-                <li><a href="#">Learn</a></li>
-                <li><a href="#">Code</a></li>
-                <li><a href="#">JavaScript</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <div class="description">
-          <h1>Mastering the Language</h1>
-          <h2>Java is not the same as JavaScript</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad eum dolorum architecto obcaecati enim dicta praesentium, quam nobis! Neque ad aliquam facilis numquam. Veritatis, sit.</p>
-          <p class="read-more">
-            <a href="#">Read More</a>
-          </p>
-        </div>
-      </div>
-    -->
-	<!--blog-area-->
-
-<!--<div class="blogs-item hvr-float-shadow wow fadeInLeft" data-wow-delay="0.7s">
-                <div class="blog-img">
-                    <a href="javacript:;"><img src="https://srmahour.github.io/custom-testimonial-slider-and-blog/images/blog-7.jpg" alt="" class="img-fluid"></a>
-                    <p class="blog-time">
-                        <span class="blog-date">25</span>
-                        <span class="blog-month">May</span>
-                    </p>
-                </div>
-                <div class="blog-detail">
-                    <h4><a href="javascript:;">Ideas That Moved Us In 2018</a></h4>
-                    <ul>
-                        <li><a href="javascript:;">BY ADMIN</a></li>
-                        <li><a href="javascript:;">IN TECHNOLOGY</a></li>
-                    </ul>
-                    <p>Maecenas varius finibus orci vel dignissim. Nam posuere, magna pellentesque accumsan tincidunt, libero lorem convallis lectus</p>
-                </div>
-            </div>
-            <div class="blogs-item hvr-float-shadow wow fadeInLeft" data-wow-delay="0.9s">
-                <div class="blog-img">
-                    <a href="javacript:;"><img src="https://srmahour.github.io/custom-testimonial-slider-and-blog/images/blog-9.jpg" alt="" class="img-fluid"></a>
-                    <p class="blog-time">
-                        <span class="blog-date">25</span>
-                        <span class="blog-month">May</span>
-                    </p>
-                </div>
-                <div class="blog-detail">
-                    <h4><a href="javascript:;">Ideas That Moved Us In 2018</a></h4>
-                    <ul>
-                        <li><a href="javascript:;">BY ADMIN</a></li>
-                        <li><a href="javascript:;">IN TECHNOLOGY</a></li>
-                    </ul>
-                    <p>Maecenas varius finibus orci vel dignissim. Nam posuere, magna pellentesque accumsan tincidunt, libero lorem convallis lectus</p>
-                </div>
-            </div>-->
 
 <!--<div class="read-more-btn">
             <a href="javascript:;" class="hvr-float-shadow">Read More</a>

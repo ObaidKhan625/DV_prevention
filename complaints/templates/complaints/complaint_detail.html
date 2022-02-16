@@ -12,9 +12,9 @@
 	<div class="heading-section">
 		<h2>{{complaint.complaint_title}}</h2>
 		<span>
-			<button class="upvote-change upvote" data-complaint="{{complaint.id}}">U</button>
-			<span class="upvoted-count-{{complaint.id}}"><strong>{{complaint.complaint_upvotes}}</strong></span>
-			<button class="upvote-change downvote" data-complaint="{{complaint.id}}">D</button>
+			<button class="upvote-change upvote btn btn-success" data-complaint="{{complaint.id}}"><i class="fa fa-solid fa-chevron-up"></i></button>
+			<span class="ml-2 mr-2 upvoted-count-{{complaint.id}}"><strong>{{complaint.complaint_upvotes}}</strong></span>
+			<button class="upvote-change downvote btn btn-danger" data-complaint="{{complaint.id}}"><i class="fa fa-solid fa-chevron-down"></i></button>
 		</span>
 	</div>
 	<div class="row">

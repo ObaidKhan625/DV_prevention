@@ -4,6 +4,7 @@ app_name = 'complaints'
 
 urlpatterns = [
 	path('', views.exploreComplaints, name='explore-complaints'),
+	path('?sort_by=<str:sorting_parameter>/', views.exploreComplaints, name='explore-complaints-by-parameter'),
 	path('investigate/<str:complaint_id>/', views.investigateComplaint, name='investigate-complaint'),
 	path('request-history/<str:user_id>/', views.complaintStatus, name='request-history'),
 	path('create-complaint/', views.createComplaint, name='create-complaint'),
