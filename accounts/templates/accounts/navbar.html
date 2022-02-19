@@ -161,7 +161,7 @@
 }
 </style>
 <nav class="navbar navbar-expand-custom navbar-mainbg">
-	<a class="navbar-brand navbar-logo" href="#">Navbar</a>
+	<a class="navbar-brand navbar-logo">Domestic Violence Prevention</a>
 	<button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fas fa-bars text-white"></i>
 	</button>
@@ -175,20 +175,20 @@
 				<a class="nav-link" href="{% url 'complaints:explore-complaints' %}"><i class="fas fa-tachometer-alt"></i>Explore</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="javascript:void(0);"><i class="fars fa-address-book"></i>Request History</a>
+				<a class="nav-link" href="javascript:void(0);"><i class="fa fa-solid fa-list"></i>Request History</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="{% url 'complaints:create-complaint' %}"><i class="far fa-clone"></i>Create Complaint</a>
 			</li>
 			<li class="nav-item">
 				{% if request.user.user_role == 'Normal user/Victim' %}
-				<a class="nav-link" href="{% url 'user_requests:show-contact-requests' %}">Contact Requests</a>
+				<a class="nav-link" href="{% url 'user_requests:show-contact-requests' %}"><i class="fa fa-solid fa-newspaper"></i>Contact Requests</a>
 				{% else  %}
-				<a class="nav-link" href="{% url 'user_requests:show-complaint-requests' %}">Complaint Requests</a>
+				<a class="nav-link" href="{% url 'user_requests:show-complaint-requests' %}"><i class="fa fa-solid fa-newspaper"></i>Complaint Requests</a>
 				{% endif %}
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Complaint status</a>
+				<a class="nav-link" href="{% url 'accounts:profile-view' request.user %}"><i class="fa fa-solid fa-user"></i>Profile</a>
 			</li>
 		</ul>
 	</div>
@@ -246,7 +246,10 @@ jQuery(document).ready(function($){
 	var header = document.getElementById("navbar-menu");
 	var btns = header.getElementsByClassName("nav-item");
 	var window_link_list = window.location.href.split('/');
-	if(window_link_list.length === 5 && window_link_list[3] === "complaints") {
+	if(window_link_list[3] === "profile") {
+		btns[4].className += " active";
+	}
+	else if(window_link_list.length === 5 && window_link_list[3] === "complaints") {
 		btns[0].className += " active";
 	}
 	else if(window_link_list.length === 6 && window_link_list[3] === "complaints") {

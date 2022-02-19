@@ -12,23 +12,23 @@
                 </div>
                 <div class="container">
                     <div class="photo-container">
-                    {% if profile.user_role == 'NGO/Activist/Mod' %}
-                    <img src="{% static 'images/profile_backgrounds/activists_background.jpg' %}" height="110%" width="140%">
-                    {% else %}
-                    <img src="{% static 'images/profile_backgrounds/normal_users_background.jpg' %}" height="120%" width="140%">
-                    {% endif %}
-                    </div>
-                    {% if permitted_user == True %}
-                    <h3 class="title">{{profile.username}}</h3>
-                    <p class="category">{{profile.user_role}}</p>
-                    {% else %}
-                    <h3 class="title">Permission Not Availible</h3>
-                    <p class="category">Permission Not Availible</p>
-                    {% endif %}
-                    {% if profile.user_role == 'NGO/Activist/Mod' %}
-                    <h5>Activist Rating : </h5>
-                    <h3>{{total_profile_score}}</h3>
-                    {% endif %}
+                      {% if profile.user_role == 'NGO/Activist/Mod' %}
+                      <img src="{% static 'images/profile_backgrounds/activists_background.jpg' %}" height="110%" width="140%">
+                      {% else %}
+                      <img src="{% static 'images/profile_backgrounds/normal_users_background.jpg' %}" height="120%" width="140%">
+                      {% endif %}
+                      </div>
+                      {% if permitted_user == True %}
+                      <h3 class="title">{{profile.username}}</h3>
+                      <p class="category">{{profile.user_role}}</p>
+                      {% else %}
+                      <h3 class="title">Permission Not Availible</h3>
+                      <p class="category">Permission Not Availible</p>
+                      {% endif %}
+                      {% if profile.user_role == 'NGO/Activist/Mod' %}
+                      <h5>Activist Rating : </h5>
+                      <h3>{{total_profile_score}}</h3>
+                      {% endif %}
                     <div class="content">
                     <div class="social-description">
                         <h2>0</h2>
@@ -51,12 +51,24 @@
         <div class="section">
             <div class="container">
                 <div class="button-container">
-                    {% if profile != request.user and not contact_request_sent%}
+                  {% if profile.user_role == 'Normal user/Victim' %}
+                    {% if profile == request.user %}
+                      <button class="btn btn-primary btn-round btn-lg">-</button>
+                    {% elif profile != request.user and not contact_request_sent %}
                     <button data-profile="{{profile.id}}" class="btn btn-primary btn-round btn-lg request-contact-info">Send Contact Request</button>
                     {% endif %}
                     {% if contact_request_sent %}
                     <button class="btn btn-primary btn-round btn-lg request-sent-button">Contact Request Sent</button>
                     {% endif %}
+                  {% else %}
+                    {% if profile == request.user %}
+                    <button class="btn btn-primary btn-round btn-lg">-</button>
+                    {% elif user_complaint_availible %}
+                      <button data-profile="{{profile.id}}" class="btn btn-primary btn-round btn-lg request-complaint-action">Send Complaint Request</button>
+                    {% else %}
+                      <button class="btn btn-primary btn-round btn-lg">No Complaint Found</button>
+                    {% endif %}
+                  {% endif %}
                 </div>
                 {% if profile.user_role == 'NGO/Activist/Mod' and request.user != profile %}
                 <!-- Ratings Start -->
@@ -162,6 +174,18 @@
         console.log(element);
         element.classList.add("request-sent-button");*/
     });
+    $('.request-complaint-action').on('click', function() {
+        var profile_id = $(this).data('profile');
+        $.ajax({
+        url: "{% url 'user_requests:request-complaint-action' profile.id%}",
+        type: "post",
+        data: {
+            profile_id: profile_id,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+        },
+        dataType: 'json',
+        });
+    });           
     $('.verified-count').on('click', function() {
     var profile_id = $(this).data('profile');
     $.ajax({

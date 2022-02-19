@@ -42,10 +42,12 @@ def profileView(request, profile_slug):
 	for i in contact_permitted_instances:
 		contact_permitted_users.append(i.permitted_user)
 
+	user_complaint_availible = Complaint.objects.filter(complaint_filer = request.user).exists()
+
 	context = {'profile':profile, 'user_documents':user_documents, 'verifications_count':verifications_count,
 	'contact_permitted_users':contact_permitted_users, 'contact_request_sent':contact_request_sent, 
 	'report_count':report_count, 'permitted_user':permitted_user, 'total_profile_score':total_profile_score, 
-	'user_current_rating':user_current_rating}
+	'user_current_rating':user_current_rating, 'user_complaint_availible':user_complaint_availible}
 	return render(request, 'accounts/profile.html', context)
 
 @login_required(login_url='user_auth:login')

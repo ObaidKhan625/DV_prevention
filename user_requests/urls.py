@@ -12,7 +12,7 @@ urlpatterns = [
 	path('show-contact-requests/', views.showContactRequests, name = 'show-contact-requests'),
 	path('show-complaint-requests/', views.showComplaintRequests, name = 'show-complaint-requests'),
 	path('contact-request-action/<str:request_id>/<int:action>/', views.requestContactInfoAction, name = 'request-contact-info-action'),
-	#path('complaint-request-action/<str:request_id>/<int:action>/', views.complaintRequestAction, name = 'complaint-request-action'),
+	path('complaint-request-action/<str:profile_id>/', views.requestComplaintAction, name = 'request-complaint-action'),
 ]
 
 if settings.DEBUG:

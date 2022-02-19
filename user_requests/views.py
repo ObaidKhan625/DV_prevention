@@ -108,9 +108,14 @@ def showComplaintRequests(request):
 	"""
 	See Complaint Requests availible for user's profile
 	"""
-	complaint_requests = Complaint_Request.objects.filter(requested_user = request.user)
-	context = {'complaint_requests':complaint_requests}
-	return render(request, 'user_requests/complaint_requests.html', context)
+	complaint_requests_all = Complaint_Request.objects.filter(requested_user = request.user)
+	print(complaint_requests_all)
+	complaints = []
+	for i in complaint_requests_all:
+		if i.complaint.complaint_status == 'active':
+			complaints.append(i.complaint)
+	context = {'complaints':complaints, 'complaint_page_title':'Complaint Requests for '+ str(request.user)}
+	return render(request, 'complaints/complaints.html', context)
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
@@ -126,3 +131,14 @@ def requestContactInfoAction(request, request_id, action):
 	else:
 		Contact_Request.objects.get(id = request_id).delete()
 	return redirect('user_requests:show-contact-requests')
+
+@login_required(login_url='user_auth:login')
+@auth_or_not(1)
+def requestComplaintAction(request, profile_id):
+	"""
+	Request an activist to look into current user's complaint
+	"""
+	profile = User.objects.get(id = profile_id)
+	complaint = Complaint.objects.filter(complaint_filer = request.user)[0]
+	Complaint_Request.objects.get_or_create(requested_by = request.user, requested_user = profile, complaint = complaint)
+	return redirect(reverse('accounts:profile-view', kwargs={'profile_slug':profile.slug}))

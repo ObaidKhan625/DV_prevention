@@ -17,6 +17,9 @@ def complaint_detail_components(request, complaint_id):
 	"""
 	Components regularly needed in context, for keeping code DRY
 	"""
+	complaint = Complaint.objects.get(id = complaint_id)
+	profile = complaint.complaint_filer
+	updates = Message.objects.filter(message_type = "update", message_complaint = complaint)
 	comments = Message.objects.filter(message_type = "comment", message_complaint = complaint)
 	total_updates = len(updates)
 	total_comments = len(comments)
@@ -36,7 +39,7 @@ def exploreComplaints(request, sorting_parameter="upvotes"):
 		complaints = sorted(complaints, key = lambda x : x.complaint_name, reverse = True)
 	else:
 		complaints = sorted(complaints, key = lambda x : x.complaint_upvotes, reverse = True)
-	context = {'complaints':complaints}
+	context = {'complaints':complaints, 'complaint_page_title': 'Complaints'}
 	return render(request, 'complaints/complaints.html', context)
 
 def showComplaintDetail(request, complaint_id):
