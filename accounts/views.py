@@ -22,7 +22,6 @@ def profileView(request, profile_slug):
 	contact_permitted_instances = Contact_Permission.objects.filter(permitted_user = request.user)
 	contact_request_sent = Contact_Request.objects.filter(requested_by = request.user, requested_user = profile).exists()
 
-
 	total_profile_ratings = Rating.objects.filter(rating_to = profile).count()
 	total_profile_score = 0
 	for i in Rating.objects.filter(rating_to = profile):
@@ -78,13 +77,13 @@ def profileRate(request, profile_slug):
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
-def drop_zone_file(request):
+def profile_drop_zone_file(request):
 	context = {}
-	return render(request, 'accounts/drop-zone.html', context)
+	return render(request, 'accounts/profile_drop_zone.html', context)
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
-def file_upload_view(request):
+def profile_file_upload_view(request):
 	"""
 	Upload Verification files
 	"""

@@ -25,10 +25,12 @@ def complaint_detail_components(request, complaint_id):
 	total_comments = len(comments)
 	investigations = Investigation.objects.filter(investigation_complaint = complaint)
 	investigastion_ongoing_by_curr_user = investigations.filter(investigation_in_charge = request.user).exists()
+	complaint_documents = Complaint_Document.objects.filter(complaint_name = complaint)
 	return {'complaint':complaint, 'updates':updates, 'comments':comments, 'total_updates':total_updates, 
 	'total_comments':total_comments, 'current_complaint_link':"http://127.0.0.1:8000/complaints/"+str(complaint.id), 
 	'investigations':investigations, 
-	'investigastion_ongoing_by_curr_user': investigastion_ongoing_by_curr_user, 'profile':profile}
+	'investigastion_ongoing_by_curr_user': investigastion_ongoing_by_curr_user, 'profile':profile, 
+	'complaint_documents':complaint_documents}
 
 def exploreComplaints(request, sorting_parameter="upvotes"):
 	"""
@@ -84,18 +86,6 @@ def createComplaint(request):
 	context = {'form':form}
 	return render(request, 'complaints/create_complaint_page.html', context)
 
-"""
-def tagged(request, slug):
-    tag = get_object_or_404(Tag, slug=slug)
-    # Filter posts by tag name  
-    posts = Complaint.objects.filter(tags=tag)
-    context = {
-        'tag':tag,
-        'posts':posts,
-    }
-    return render(request, 'home.html', context)
-"""
-
 @login_required(login_url='user-auth:login')
 @auth_or_not(1)
 def addMessage(request, complaint_id, message_type):
@@ -149,3 +139,24 @@ def complaintDownvote(request, complaint_id):
 	complaint.save()
 	return JsonResponse({'downvote_post':True})
 
+@login_required(login_url='user_auth:login')
+@auth_or_not(1)
+def complaint_drop_zone_file(request):
+	context = {}
+	return render(request, 'complaints/complaint_drop_zone.html', context)
+
+@login_required(login_url='user_auth:login')
+@auth_or_not(1)
+def complaint_file_upload_view(request):
+	"""
+	Upload Verification files
+	"""
+	complaint = Complaint.objects.filter(complaint_filer = request.user)[0]
+	if request.method == "POST":
+		my_file = request.FILES.get('file')
+		if(str(my_file).endswith('jpg') or str(my_file).endswith('jpeg') or str(my_file).endswith('jfif') or str(my_file).endswith('pjpeg') or str(my_file).endswith('pjp') or str(my_file).endswith('png')):
+			complaint_document = Complaint_Document.objects.create(complaint_name = complaint, complaint_file = my_file)
+		else:
+			pass
+		return redirect('/')
+	return JsonResponse({'post':'false'})

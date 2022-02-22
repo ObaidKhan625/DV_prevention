@@ -19,6 +19,13 @@ class Complaint(models.Model):
 	def __str__(self):
 		return self.complaint_title
 
+class Complaint_Document(models.Model):
+	complaint_name = 			models.ForeignKey(Complaint, null = True, on_delete = models.CASCADE, related_name = 'complaint_documents')
+	complaint_file = 			models.ImageField(null = True, upload_to = 'identity')
+	
+	def __str__(self):
+		return str(self.complaint_file)
+
 class Message(models.Model):
 	message_user = 			models.ForeignKey(User, null = True, on_delete = models.CASCADE)
 	message_complaint = 	models.ForeignKey(Complaint, null = True, on_delete = models.CASCADE)

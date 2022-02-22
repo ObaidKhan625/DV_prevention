@@ -120,17 +120,17 @@
                 {% endif %}
                 {% if profile.user_role == 'NGO/Activist/Mod' %}
                 <div class="row">
-                <div class="col-md-6 ml-auto mr-auto">
-                    <h4 class="title text-center">Verification Docs</h4>
-                    <div class="nav-align-center">
-                    <ul class="nav nav-pills nav-pills-primary nav-pills-just-icons" role="tablist">
-                        <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'accounts:file-drop-zone-view' %}">
-                            <i class="fa fa-plus"></i>
-                        </a>
-                        </li>
-                    </ul>
-                </div>
+                  <div class="col-md-6 ml-auto mr-auto">
+                      <h4 class="title text-center">Verification Docs</h4>
+                      <div class="nav-align-center">
+                      <ul class="nav nav-pills nav-pills-primary nav-pills-just-icons" role="tablist">
+                          <li class="nav-item">
+                          <a class="nav-link active" href="{% url 'accounts:profile-file-drop-zone-view' %}">
+                              <i class="fa fa-plus"></i>
+                          </a>
+                          </li>
+                      </ul>
+                  </div>
                 </div>
                 <div class="tab-content gallery">
                     <div class="tab-pane active" id="home" role="tabpanel">
@@ -146,7 +146,6 @@
                         </div>
                     </div>
                     </div>
-                    
                 </div>
             </div>
             {% endif %}
@@ -160,7 +159,7 @@
     $('.request-contact-info').on('click', function() {
         var profile_id = $(this).data('profile');
         $.ajax({
-        url: "{% url 'user_requests:request-contact-info' profile.id%}",
+        url: "{% url 'user_requests:request-contact-info' profile.id %}",
         type: "post",
         data: {
             profile_id: profile_id,
@@ -168,11 +167,9 @@
         },
         dataType: 'json',
         });
-        /*var element = document.getElementsByClassName("request-contact-info");
-        console.log(element);
-        element.className += " request-sent-button";
-        console.log(element);
-        element.classList.add("request-sent-button");*/
+        var element = document.querySelector(".request-contact-info");
+        element.className = "btn btn-primary btn-round btn-lg request-sent-button";
+        element.innerHTML = "Contact Request Sent";
     });
     $('.request-complaint-action').on('click', function() {
         var profile_id = $(this).data('profile');
