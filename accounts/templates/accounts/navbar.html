@@ -158,10 +158,14 @@
 		bottom: -25px;
 		left: -25px;
 	}
+	.navbar-mainbg{
+		background-color: #5161ce;
+		padding: 0px;
+		height: 60px;
+	}
 }
 </style>
 <nav class="navbar navbar-expand-custom navbar-mainbg">
-	<a class="navbar-brand navbar-logo">Domestic Violence Prevention</a>
 	<button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fas fa-bars text-white"></i>
 	</button>
@@ -257,6 +261,12 @@ jQuery(document).ready(function($){
 	}
 	else if(window_link_list.length === 5 && window_link_list[3] === "show-complaint-requests") {
 		btns[3].className += " active";
+	}
+	else if(window_link_list.length === 5 && window_link_list[3] === "show-contact-requests") {
+		btns[3].className += " active";
+	}
+	else {
+		btns[0].className += " active";
 	}
 
 	// for (var i = 0; i < btns.length; i++) {

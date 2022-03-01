@@ -3,24 +3,31 @@
 
 {% block content %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="container mt-5 mb-5">
     <div class="d-flex justify-content-center row">
         <div class="col-md-10">
             {% for contact_request in contact_requests %}
             <div class="row p-2 bg-white border rounded">
                 <div class="col-md-6 mt-1">
-                    <h5>{{contact_request.requested_by}}</h5>
+                    <h5>By: </h5>
+                    <a href="{% url 'accounts:profile-view' contact_request.requested_by %}"><h3>{{contact_request.requested_by}}</h5></a>
                     <div class="d-flex flex-row">
                     </div>
                     <p class="text-justify para mb-0">{{contact_request.request_note}}<br><br></p>
+                </div>
+                <div class="col-md-3 mt-1">
+                </div>
+                <div class="col-md-3">
                     <a href="{% url 'user_requests:request-contact-info-action' contact_request.id True %}">
-                        <button class="btn btn-success" style="position: relative;">
-                        O
+                        <button class="btn btn-success m-1 mt-3" style="width: 100%;">
+                            <i class="fa fa-check"></i> Accept
                         </button>
                     </a>
                     <a href="{% url 'user_requests:request-contact-info-action' contact_request.id False %}">
-                        <button class="btn btn-danger" style="position: relative;">
-                        X
+                        <button class="btn btn-danger m-1 mt-3" style="width: 100%;">
+                            <strong>X</strong> Deny
                         </button>
                     </a>
                 </div>
