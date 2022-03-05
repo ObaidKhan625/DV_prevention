@@ -9,7 +9,7 @@ class Complaint(models.Model):
 	complaint_description = 			models.TextField(null = True)
 	complaint_status = 					models.CharField(max_length = 10, default = 'active')
 	complaint_request_image = 			models.ImageField(null = True, blank = True, upload_to = 'complaints', default = 'complaints/default-image.jpg')
-	complaint_place = 					models.CharField(max_length = 1000, null = True)
+	complaint_place = 					models.CharField(max_length = 1000, null = True, blank = True)
 	complaint_under_investigation_by = 	models.CharField(max_length = 1000, null = True, blank = True)
 	complaint_upvotes = 				models.IntegerField(default = 0)
 	complaint_upvotes_users = 			models.TextField(default=',', blank = True)

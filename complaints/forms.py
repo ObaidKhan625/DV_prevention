@@ -9,6 +9,7 @@ class ComplaintForm(ModelForm):
 
 	def save(self, commit=True):
 		instance = super(ComplaintForm, self).save(commit=False)
+		instance.complaint_place = instance.complaint_place_geocode['place_name']
 		instance.complaint_place_geocode = json.dumps(instance.complaint_place_geocode)
 		# instance.flag1 = 'flag1' in self.cleaned_data['multi_choice'] # etc
 		if commit:

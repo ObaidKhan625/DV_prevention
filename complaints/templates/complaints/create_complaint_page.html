@@ -26,8 +26,9 @@
             {% render_field form.complaint_title class="form-control" name="complaint_title" id="complaint_title" type="text" %}
         </div>
         <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
-            <label for="place">Place : </label><br>
-            {% render_field form.complaint_place class="form-control" name="complaint_place" type="text" %}
+            <label for="geocoder">Place : </label><br>
+            <div id="geocoder">
+            </div>
         </div>
         <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
             <label for="description">Description : </label><br>
@@ -40,8 +41,6 @@
         <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
             <label>Tags</label>
             {% render_field form.tags class="form-control" name="tags" data-role="tagsinput" type="text" %}
-        </div>
-        <div id="geocoder">
         </div>
         <!-- <pre id="result"></pre> -->
         <input id="complaint_place_geocode" name="complaint_place_geocode" type="hidden">
@@ -68,6 +67,7 @@
         // TO MAKE THE MAP APPEAR YOU MUST
         // ADD YOUR ACCESS TOKEN FROM
         // https://account.mapbox.com
+        // <input type="text" class="mapboxgl-ctrl-geocoder--input" placeholder="Search" aria-label="Search">
         mapboxgl.accessToken = 'pk.eyJ1IjoiZXBoaXJhbS1yZW5haXMiLCJhIjoiY2t5ajZ1aTVoMWk4ZTJvcG1nNzRjaWY0MiJ9.ipIanO9ZaafvcgugtuZAFg';
         const geocoder = new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
@@ -77,22 +77,16 @@
         geocoder.addTo('#geocoder');
         
         // Get the geocoder results container.
-        const results = document.getElementById('geocoder');
-        // const results = document.getElementById('complaint_title');
+        var complaint_place_geocode = null;
         
-        // // Add geocoder result to container.
-        // geocoder.on('result', (e) => {
-        //     results.innerText = JSON.stringify(e.result, null, 2);
-        // });
-        
-        // // Clear results container when search is cleared.
-        // geocoder.on('clear', () => {
-        //     results.innerText = '';
-        // });
+        // Add geocoder result to container.
+        geocoder.on('result', (e) => {
+            complaint_place_geocode = JSON.stringify(e.result, null, 2);
+            // results.innerText = JSON.stringify(e.result, null, 2);
+        });
 
         $("#submit").on('click', function () {
-            document.getElementById('complaint_place_geocode').value = results.innerHTML;
-            console.log(results.innerHTML);
+            document.getElementById('complaint_place_geocode').value = complaint_place_geocode;
             // alert(document.getElementById('complaint_place_geocode').value);
         });
     </script>

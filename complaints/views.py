@@ -75,11 +75,11 @@ def createComplaint(request):
 		if form.is_valid():
 			#Complaint.objects.filter(complaint_filer = user).delete()
 			newpost = form.save(commit=False)
-			# newpost.save()
+			newpost.save()
 			# Without this next line the tags won't be saved.
-			# form.save_m2m()
-			# complaint = Complaint.objects.filter(complaint_filer = None, complaint_status="active")
-			# complaint.update(complaint_filer = user)
+			form.save_m2m()
+			complaint = Complaint.objects.filter(complaint_filer = None, complaint_status="active")
+			complaint.update(complaint_filer = user)
 			# Complaint.objects.filter(user=None, status='active').update(user=user)
 		else:
 			print(form.errors)
