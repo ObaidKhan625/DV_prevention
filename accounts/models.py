@@ -14,7 +14,7 @@ class User(AbstractUser):
 	user_profile_image =  		models.ImageField(null = True, upload_to = 'profiles', default = 'profiles/default-image.jpg')
 	user_role = 				models.CharField(max_length = 50, null = True, choices = role_choices)
 	user_description = 			models.TextField(null = True, blank = True)
-	user_address = 				models.CharField(max_length = 100, null = True, blank = True)
+	user_address = 				models.JSONField(null = True)
 	slug = 						models.SlugField(unique=True, max_length=100, default='some string')
 
 	def __str__(self):

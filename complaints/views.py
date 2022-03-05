@@ -26,6 +26,7 @@ def complaint_detail_components(request, complaint_id):
 	investigations = Investigation.objects.filter(investigation_complaint = complaint)
 	investigastion_ongoing_by_curr_user = investigations.filter(investigation_in_charge = request.user).exists()
 	complaint_documents = Complaint_Document.objects.filter(complaint_name = complaint)
+
 	return {'complaint':complaint, 'updates':updates, 'comments':comments, 'total_updates':total_updates, 
 	'total_comments':total_comments, 'current_complaint_link':"http://127.0.0.1:8000/complaints/"+str(complaint.id), 
 	'investigations':investigations, 
@@ -74,12 +75,14 @@ def createComplaint(request):
 		if form.is_valid():
 			#Complaint.objects.filter(complaint_filer = user).delete()
 			newpost = form.save(commit=False)
-			newpost.save()
+			# newpost.save()
 			# Without this next line the tags won't be saved.
-			form.save_m2m()
-			complaint = Complaint.objects.filter(complaint_filer = None, complaint_status="active")
-			complaint.update(complaint_filer = user)
-			#Complaint.objects.filter(user=None, status='active').update(user=user)
+			# form.save_m2m()
+			# complaint = Complaint.objects.filter(complaint_filer = None, complaint_status="active")
+			# complaint.update(complaint_filer = user)
+			# Complaint.objects.filter(user=None, status='active').update(user=user)
+		else:
+			print(form.errors)
 		return redirect('complaints:explore-complaints')
 	
 	form = ComplaintForm()

@@ -14,6 +14,7 @@ class Complaint(models.Model):
 	complaint_upvotes = 				models.IntegerField(default = 0)
 	complaint_upvotes_users = 			models.TextField(default=',', blank = True)
 	complaint_downvotes_users = 		models.TextField(default=',', blank = True)
+	complaint_place_geocode = 			models.JSONField(null = True, blank = True)
 	tags = TaggableManager()
 
 	def __str__(self):

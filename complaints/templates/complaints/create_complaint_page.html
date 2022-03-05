@@ -5,13 +5,25 @@
 
 {% block content %}
 
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
 <link rel="stylesheet" href="/static/css/tagsinput.css" />
+
+<style>
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+
 <div class="pt-5 pb-5" style="margin: auto; width: 50%;">
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
             <label for="title">Title : </label><br>
-            {% render_field form.complaint_title class="form-control" name="complaint_title" type="text" %}
+            {% render_field form.complaint_title class="form-control" name="complaint_title" id="complaint_title" type="text" %}
         </div>
         <div class="form-group col" style="margin: auto; width: 100%; margin-bottom: 10px;">
             <label for="place">Place : </label><br>
@@ -29,12 +41,61 @@
             <label>Tags</label>
             {% render_field form.tags class="form-control" name="tags" data-role="tagsinput" type="text" %}
         </div>
+        <div id="geocoder">
+        </div>
+        <!-- <pre id="result"></pre> -->
+        <input id="complaint_place_geocode" name="complaint_place_geocode" type="hidden">
         <span style="padding-left: 15px;"></span><button type="submit" id="submit" name="submit" class="btn btn-primary">Submit</button>
         </span>
         <!--
             <span style="padding-left: 15px;"><button type="submit">Upload</button></span>
         -->
     </form>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+ 
+    <style>
+    #geocoder {
+        z-index: 1;
+        margin: 20px;
+    }
+    .mapboxgl-ctrl-geocoder {
+        min-width: 100%;
+    }
+    </style>
+    
+    <script>
+        // TO MAKE THE MAP APPEAR YOU MUST
+        // ADD YOUR ACCESS TOKEN FROM
+        // https://account.mapbox.com
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZXBoaXJhbS1yZW5haXMiLCJhIjoiY2t5ajZ1aTVoMWk4ZTJvcG1nNzRjaWY0MiJ9.ipIanO9ZaafvcgugtuZAFg';
+        const geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            types: 'country,region,place,postcode,locality,neighborhood'
+        });
+        
+        geocoder.addTo('#geocoder');
+        
+        // Get the geocoder results container.
+        const results = document.getElementById('geocoder');
+        // const results = document.getElementById('complaint_title');
+        
+        // // Add geocoder result to container.
+        // geocoder.on('result', (e) => {
+        //     results.innerText = JSON.stringify(e.result, null, 2);
+        // });
+        
+        // // Clear results container when search is cleared.
+        // geocoder.on('clear', () => {
+        //     results.innerText = '';
+        // });
+
+        $("#submit").on('click', function () {
+            document.getElementById('complaint_place_geocode').value = results.innerHTML;
+            console.log(results.innerHTML);
+            // alert(document.getElementById('complaint_place_geocode').value);
+        });
+    </script>
 </div>
 <script src="/static/js/tagsinput.js"></script>
 <script>
