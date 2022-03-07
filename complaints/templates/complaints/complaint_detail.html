@@ -107,6 +107,15 @@
 					</div>
 				</div>
 				{% endif %}
+				{% if request.user == profile %}
+				<div class="row">
+					<div class="col">
+						<a href="{% url 'complaints:complaint-request-nearest-activist' %}">
+							<button type="button" class="btn btn-dark mt-2 ml-2">Find Nearest Activists</button>
+						</a>
+					</div>
+				</div>
+				{% endif %}
 				<div class="row">
 					<div class="col">
 						<div class="modal fade" id="InvestigationsModal" tabindex="-1" role="dialog" aria-labelledby="InvestigationsModalTitle" aria-hidden="true">
@@ -138,11 +147,11 @@
 									<div class="modal-header">
 										<h5 class="modal-title" id="exampleModalLongTitle">Complaint Docs</h5>
 										{% if profile == request.user %}
-										<span>
+										<div>
 											<a class="nav-link active" href="{% url 'complaints:complaint-file-drop-zone-view' %}">
 												<button type="button" class="btn btn-primary">Upload</button>
 											</a>
-										</span>
+										</div>
 										{% endif %}
 										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 											<span aria-hidden="true">&times;</span>

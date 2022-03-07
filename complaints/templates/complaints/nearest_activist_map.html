@@ -211,6 +211,8 @@
           
           user_lat = position.coords.latitude;
           user_long = position.coords.longitude;
+          // console.log(user_long);
+          // console.log(user_lat);
       }); 
 
       const map = new mapboxgl.Map({
@@ -220,63 +222,25 @@
         zoom: 7,
         scrollZoom: false,
       });
-      
-      const stores = {
-        'type': 'FeatureCollection',
-        'features': [
-          {
-            'type': 'Feature',
+
+    var stores = {'type': 'FeatureCollection', 'features': []};
+
+    {% for i in complaints %}
+        var store = {
             'geometry': {
-              'type': 'Point',
-              'coordinates': [73.0923264, 19.90008784]
+                'type': 'Point',
+                'coordinates': ["{{i.complaint_place_geocode.geometry.coordinates.0}}", 
+                "{{i.complaint_place_geocode.geometry.coordinates.1}}"]
             },
             'properties': {
-              'phoneFormatted': '(202) 234-7336',
-              'phone': '2022347336',
-              'address': '1471 P St NW',
-              'city': 'Washington DC',
-              'country': 'United States',
-              'crossStreet': 'at 15th St NW',
-              'postalCode': '20005',
-              'state': 'D.C.'
+              'address': "{{i.complaint_place_geocode.place_name}}", 
+              "city": "{{i.complaint_place_geocode.text}}",
             }
-          },
-          {
-            'type': 'Feature',
-            'geometry': {
-              'type': 'Point',
-              'coordinates': [73.41824128847816, 17.746361176717883]
-            },
-            'properties': {
-              'phoneFormatted': '(202) 507-8357',
-              'phone': '2025078357',
-              'address': '2221 I St NW',
-              'city': 'Washington DC',
-              'country': 'United States',
-              'crossStreet': 'at 22nd St NW',
-              'postalCode': '20037',
-              'state': 'D.C.'
-            }
-          },
-          {
-            'type': 'Feature',
-            'geometry': {
-              'type': 'Point',
-              'coordinates': [72.923264, 19.3008784]
-            },
-            'properties': {
-              'phoneFormatted': '(202) 337-9338',
-              'phone': '2023379338',
-              'address': '3333 M St NW',
-              'city': 'Washington DC',
-              'country': 'United States',
-              'crossStreet': 'at 34th St NW',
-              'postalCode': '20007',
-              'state': 'D.C.'
-            }
-          },
-        ]
-      };
+        }
+        // console.log(store);
+        stores.features.push(store);
+    {% endfor %}
+    console.log(stores);
 
       /**
        * Assign a unique id to each store. You'll use this `id`
@@ -285,7 +249,7 @@
        */
       stores.features.forEach((store, i) => {
         store.properties.id = i;
-        console.log(store.properties.id);
+        // console.log(store.properties.id);
       });
 
       map.on('load', () => {
@@ -391,7 +355,7 @@
           el.id = `marker-${marker.properties.id}`;
           /* Assign the `marker` class to each marker for styling. */
           el.className = 'marker';
-
+          console.log(marker.geometry.coordinates);
           new mapboxgl.Marker(el, { offset: [0, -23] })
             .setLngLat(marker.geometry.coordinates)
             .addTo(map);
@@ -514,14 +478,3 @@
     </script>
   </body>
 </html>
-
-<!--
-  Im working with the MapBox API and I want to customize the 'UserLocate' button such that it not only gives the current location but also sorts locations from the user. Here's the current code.
-
-I am able to sort distances when I press a custom button I made. But I want to make the sort button and the user locate button the same. How do I do that? Im new to javascript. I want to add that sorting code in here.
-
-navigator.geolocation.getCurrentPosition(position => { 
-          user_lat = position.coords.latitude;
-          user_long = position.coords.longitude;
-      }); 
--->

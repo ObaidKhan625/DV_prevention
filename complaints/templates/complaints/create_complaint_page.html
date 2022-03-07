@@ -7,10 +7,22 @@
 
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+<link
+href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
+rel="stylesheet"
+/>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+<link
+rel="stylesheet"
+href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css"
+type="text/css"
+/>
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
 
 <link rel="stylesheet" href="/static/css/tagsinput.css" />
 
@@ -63,18 +75,11 @@
     }
     </style>
     
-    <script>
+    <!-- <script>
         // TO MAKE THE MAP APPEAR YOU MUST
         // ADD YOUR ACCESS TOKEN FROM
         // https://account.mapbox.com
         // <input type="text" class="mapboxgl-ctrl-geocoder--input" placeholder="Search" aria-label="Search">
-        mapboxgl.accessToken = 'pk.eyJ1IjoiZXBoaXJhbS1yZW5haXMiLCJhIjoiY2t5ajZ1aTVoMWk4ZTJvcG1nNzRjaWY0MiJ9.ipIanO9ZaafvcgugtuZAFg';
-        const geocoder = new MapboxGeocoder({
-            accessToken: mapboxgl.accessToken,
-            types: 'country,region,place,postcode,locality,neighborhood'
-        });
-        
-        geocoder.addTo('#geocoder');
         
         // Get the geocoder results container.
         var complaint_place_geocode = null;
@@ -84,11 +89,41 @@
             complaint_place_geocode = JSON.stringify(e.result, null, 2);
             // results.innerText = JSON.stringify(e.result, null, 2);
         });
+        // 68.1766451354, 7.96553477623, 97.4025614766, 35.4940095078
+        // IND: { sw: {lat: 6.5546079, lng: 68.1113787}, ne: {lat: 35.6745457, lng: 97.395561} }
 
         $("#submit").on('click', function () {
             document.getElementById('complaint_place_geocode').value = complaint_place_geocode;
             // alert(document.getElementById('complaint_place_geocode').value);
         });
+    </script> -->
+    <script>
+        
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZXBoaXJhbS1yZW5haXMiLCJhIjoiY2t5ajZ1aTVoMWk4ZTJvcG1nNzRjaWY0MiJ9.ipIanO9ZaafvcgugtuZAFg';
+
+      const geocoder = new MapboxGeocoder({
+        // Initialize the geocoder
+        accessToken: mapboxgl.accessToken, // Set the access token
+        mapboxgl: mapboxgl, // Set the mapbox-gl instance
+        marker: false, // Do not use the default marker style
+        placeholder: 'Search for places', // Placeholder text for the search bar
+      });
+
+      geocoder.addTo('#geocoder');
+
+      // Get the geocoder results container.
+      var complaint_place_geocode = null;
+        
+        // Add geocoder result to container.
+        geocoder.on('result', (e) => {
+            complaint_place_geocode = JSON.stringify(e.result, null, 2);
+        });
+
+        $("#submit").on('click', function () {
+            document.getElementById('complaint_place_geocode').value = complaint_place_geocode;
+            // alert(document.getElementById('complaint_place_geocode').value);
+        });
+    
     </script>
 </div>
 <script src="/static/js/tagsinput.js"></script>

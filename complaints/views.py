@@ -1,6 +1,6 @@
 from .forms import ComplaintForm
 from .models import *
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from user_auth.decorators import auth_or_not
@@ -9,8 +9,15 @@ from PIL import Image
 from taggit.models import Tag
 import random
 from django.shortcuts import render, get_object_or_404
+import json
 
 # Create your views here.
+
+def findNearestActivist(request):
+	# complaint = Complaint.objects.get(complaint_filer = request.user)
+	complaints = Complaint.objects.all()
+	context = {'complaints': complaints}
+	return render(request, 'complaints/nearest_activist_map.html', context)
 
 #Helper Functions
 def complaint_detail_components(request, complaint_id):
@@ -26,12 +33,13 @@ def complaint_detail_components(request, complaint_id):
 	investigations = Investigation.objects.filter(investigation_complaint = complaint)
 	investigastion_ongoing_by_curr_user = investigations.filter(investigation_in_charge = request.user).exists()
 	complaint_documents = Complaint_Document.objects.filter(complaint_name = complaint)
+	complaint_json = complaint.complaint_place_geocode
 
 	return {'complaint':complaint, 'updates':updates, 'comments':comments, 'total_updates':total_updates, 
 	'total_comments':total_comments, 'current_complaint_link':"http://127.0.0.1:8000/complaints/"+str(complaint.id), 
 	'investigations':investigations, 
 	'investigastion_ongoing_by_curr_user': investigastion_ongoing_by_curr_user, 'profile':profile, 
-	'complaint_documents':complaint_documents}
+	'complaint_documents':complaint_documents, 'complaint_json': complaint_json}
 
 def exploreComplaints(request, sorting_parameter="upvotes"):
 	"""
@@ -110,7 +118,7 @@ def addMessage(request, complaint_id, message_type):
 		Message.objects.create(message_user = request.user, message_complaint = complaint, 
 		message_type = message_type, message_content = message_content)
 
-	return redirect('complaints:show-complaint-detail', complaint_id = complaint.id)
+	return redirect(reverse('complaints:show-complaint-detail', kwargs={'complaint_id': complaint_id}))
 
 def investigateComplaint(request, complaint_id):
 	complaint = Complaint.objects.get(id = complaint_id)
