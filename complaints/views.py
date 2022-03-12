@@ -15,8 +15,9 @@ import json
 
 def findNearestActivist(request):
 	# complaint = Complaint.objects.get(complaint_filer = request.user)
-	complaints = Complaint.objects.all()
-	context = {'complaints': complaints}
+	users = User.objects.all().exclude(username = request.user)
+	complaint = Complaint.objects.get(complaint_filer = request.user)
+	context = {'users': users, 'complaint': complaint}
 	return render(request, 'complaints/nearest_activist_map.html', context)
 
 #Helper Functions
@@ -171,3 +172,9 @@ def complaint_file_upload_view(request):
 			pass
 		return redirect('/')
 	return JsonResponse({'post':'false'})
+
+def requestHistory(request):
+	if(not Complaint.objects.filter(complaint_filer = request.user).exists()):
+		return render(request, 'complaints/no_complaint.html')
+	complaint = Complaint.objects.get(complaint_filer = request.user)
+	return redirect(reverse('complaints:show-complaint-detail', kwargs={'complaint_id': complaint.id}))

@@ -55,15 +55,16 @@ def profileEdit(request):
 	"""
 	Edit Profile
 	"""
-	profile = User.objects.get(username = request.user)
 	form = UpdateUserForm()
 
 	if request.method == "POST":
-		form = UpdateUserForm(request.POST, request.FILES, instance=profile)
+		form = UpdateUserForm(request.POST, request.FILES, instance=request.user)
 		if form.is_valid():
 			form.save()
+		else:
+			print(form.errors)
 		return redirect('/')
-	context = {'profile':profile, 'form':form}
+	context = {'user':request.user, 'form':form}
 	return render(request, 'accounts/profile_edit_form.html', context)
 
 @login_required(login_url='user_auth:login')
@@ -72,7 +73,7 @@ def profileRate(request, profile_slug):
 	profile = User.objects.get(slug = profile_slug)
 	if(Rating.objects.filter(rating_from = request.user, rating_to = profile).exists()):
 		Rating.objects.filter(rating_from = request.user, rating_to = profile).delete()
-	Rating.objects.create(rating_score = int(request.POST.get('slider1')), rating_from = request.user, rating_to = profile)
+	Rating.objects.create(rating_score = int(request.POST.get('slider-value')), rating_from = request.user, rating_to = profile)
 	return redirect(reverse('accounts:profile-view', kwargs={'profile_slug':profile_slug}))
 
 @login_required(login_url='user_auth:login')

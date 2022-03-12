@@ -203,18 +203,16 @@
     </div>
     <div id="map" class="map"></div>
     <script>
-      var user_long;
-      var user_lat;
+      var complaint_long = "{{complaint.complaint_place_geocode.geometry.coordinates.0}}";
+      var complaint_lat = "{{complaint.complaint_place_geocode.geometry.coordinates.1}}";
       mapboxgl.accessToken = 'pk.eyJ1IjoiZXBoaXJhbS1yZW5haXMiLCJhIjoiY2t5ajZ1aTVoMWk4ZTJvcG1nNzRjaWY0MiJ9.ipIanO9ZaafvcgugtuZAFg';
 
-      navigator.geolocation.getCurrentPosition(position => { 
-          
-          user_lat = position.coords.latitude;
-          user_long = position.coords.longitude;
-          // console.log(user_long);
-          // console.log(user_lat);
-      }); 
-
+      // navigator.geolocation.getCurrentPosition(position => { 
+      //     complaint_lat = "{{complaint.complaint_place_geocode.properties.geometry.coordinates.0}}";
+      //     complaint_long = "{{complaint.complaint_place_geocode.properties.geometry.coordinates.1}}";
+      // }); 
+      console.log(complaint_long);
+      console.log(complaint_lat);
       const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10',
@@ -225,19 +223,18 @@
 
     var stores = {'type': 'FeatureCollection', 'features': []};
 
-    {% for i in complaints %}
+    {% for i in users %}
         var store = {
             'geometry': {
                 'type': 'Point',
-                'coordinates': ["{{i.complaint_place_geocode.geometry.coordinates.0}}", 
-                "{{i.complaint_place_geocode.geometry.coordinates.1}}"]
+                'coordinates': ["{{i.user_place_geocode.geometry.coordinates.0}}", 
+                "{{i.user_place_geocode.geometry.coordinates.1}}"]
             },
             'properties': {
-              'address': "{{i.complaint_place_geocode.place_name}}", 
-              "city": "{{i.complaint_place_geocode.text}}",
+              'address': "{{i.user_place_geocode.place_name}}", 
+              "city": "{{i.user_place_geocode.text}}",
             }
         }
-        // console.log(store);
         stores.features.push(store);
     {% endfor %}
     console.log(stores);
@@ -249,13 +246,12 @@
        */
       stores.features.forEach((store, i) => {
         store.properties.id = i;
-        // console.log(store.properties.id);
       });
 
       map.on('load', () => {
           
         // Gives curr pos
-        map.setCenter([user_long, user_lat]);
+        // map.setCenter([complaint_long, complaint_lat]);
 
         map.addSource('places', {
           'type': 'geojson',
@@ -275,7 +271,7 @@
          const options = { units: 'miles' };
           abc = {
             'type': 'Point',
-            'coordinates': [user_long, user_lat]
+            'coordinates': [complaint_long, complaint_lat]
           }
           for (const store of stores.features) {
             store.properties.distance = turf.distance(
@@ -355,7 +351,6 @@
           el.id = `marker-${marker.properties.id}`;
           /* Assign the `marker` class to each marker for styling. */
           el.className = 'marker';
-          console.log(marker.geometry.coordinates);
           new mapboxgl.Marker(el, { offset: [0, -23] })
             .setLngLat(marker.geometry.coordinates)
             .addTo(map);

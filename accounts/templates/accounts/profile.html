@@ -18,7 +18,7 @@
                       <img src="{% static 'images/profile_backgrounds/normal_users_background.jpg' %}" height="120%" width="140%">
                       {% endif %}
                       </div>
-                      {% if permitted_user == True %}
+                      {% if permitted_user == True or profile.user_role == 'NGO/Activist/Mod' %}
                       <h3 class="title">{{profile.username}}</h3>
                       <p class="category">{{profile.user_role}}</p>
                       {% else %}
@@ -70,24 +70,24 @@
                     {% endif %}
                   {% endif %}
                 </div>
-                {% if profile.user_role == 'NGO/Activist/Mod' and request.user != profile %}
+                {% if request.user != profile %}
                 <!-- Ratings Start -->
-                    <div id="rating-container" class="p-5">
+                    <div class="p-5">
                         <form action="{% url 'accounts:profile-rate' profile.username %}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <h1>Rate The Profile</h1>
+                            <h1 style="text-align: center;">Rate The Profile</h1>
                             <hr>
-                            <div id="first">
-                                <label for="slider1">Efficiency</label>
-                                <input type="range" id="sliderOne" name="slider1" min=0 max=10 value={{user_current_rating}}>
-                                <div class="score" id="ratingOne">{{user_current_rating}}</div>
+                            <div style="display: flex; justify-content: center;">
+                              <input type="range" name="slider-value" class="form-range w-100" min="0" max="10" step="1" id="customRange3" value={{user_current_rating}}>
+                              <div class="score" id="ratingOne">{{user_current_rating}}</div>
                             </div>
-                            <input type="submit" value="Submit" action="">
+                            <div style="display: flex; justify-content: center;">
+                              <input type="submit" value="Submit" class="btn" style="background-color: #f96332;">
+                            </div>
                         </form>
                     </div>
                   
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-                    <script src="js/getRatings.js"></script>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
                     <script>
@@ -1201,306 +1201,7 @@ img {
 
   </style>
   
-<script>
-    
-var transparent = true;
-var big_image;
-
-var transparentDemo = true;
-var fixedTop = false;
-
-var navbar_initialized,
-  backgroundOrange = false,
-  toggle_initialized = false;
-
-var nowuiKit,
-  $navbar,
-  scroll_distance,
-  oVal;
-
-$(document).ready(function() {
-
-  $('[data-toggle="tooltip"], [rel="tooltip"]').tooltip();
-
-  $('[data-toggle="popover"]').each(function() {
-    color_class = $(this).data('color');
-    $(this).popover({
-      template: '<div class="popover popover-' + color_class + '" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'
-    });
-  });
-
-
-  nowuiKit.initNavbarImage();
-
-  $navbar = $('.navbar[color-on-scroll]');
-  scroll_distance = $navbar.attr('color-on-scroll') || 500;
-
-
-
-  if ($('.navbar[color-on-scroll]').length != 0) {
-    nowuiKit.checkScrollForTransparentNavbar();
-    $(window).on('scroll', nowuiKit.checkScrollForTransparentNavbar)
-  }
-
-  $('.form-control').on("focus", function() {
-    $(this).parent('.input-group').addClass("input-group-focus");
-  }).on("blur", function() {
-    $(this).parent(".input-group").removeClass("input-group-focus");
-  });
-
-
-  $('.bootstrap-switch').each(function() {
-    $this = $(this);
-    data_on_label = $this.data('on-label') || '';
-    data_off_label = $this.data('off-label') || '';
-
-    $this.bootstrapSwitch({
-      onText: data_on_label,
-      offText: data_off_label
-    });
-  });
-
-  if ($(window).width() >= 992) {
-    big_image = $('.page-header-image[data-parallax="true"]');
-
-    $(window).on('scroll', nowuiKitDemo.checkScrollForParallax);
-  }
-
-  // Activate Carousel
-  $('.carousel').carousel({
-    interval: 4000
-  });
-
-  $('.date-picker').each(function() {
-    $(this).datepicker({
-      templates: {
-        leftArrow: '<i class="now-ui-icons arrows-1_minimal-left"></i>',
-        rightArrow: '<i class="now-ui-icons arrows-1_minimal-right"></i>'
-      }
-    }).on('show', function() {
-      $('.datepicker').addClass('open');
-
-      datepicker_color = $(this).data('datepicker-color');
-      if (datepicker_color.length != 0) {
-        $('.datepicker').addClass('datepicker-' + datepicker_color + '');
-      }
-    }).on('hide', function() {
-      $('.datepicker').removeClass('open');
-    });
-  });
-
-
-});
-
-
-nowuiKitDemo = {
-  checkScrollForParallax: debounce(function() {
-    var current_scroll = $(this).scrollTop();
-
-    oVal = ($(window).scrollTop() / 3);
-    big_image.css({
-      'transform': 'translate3d(0,' + oVal + 'px,0)',
-      '-webkit-transform': 'translate3d(0,' + oVal + 'px,0)',
-      '-ms-transform': 'translate3d(0,' + oVal + 'px,0)',
-      '-o-transform': 'translate3d(0,' + oVal + 'px,0)'
-    });
-
-  }, 6)
-
-}
-
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function() {
-    var context = this,
-      args = arguments;
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    }, wait);
-    if (immediate && !timeout) func.apply(context, args);
-  };
-};
-
-$(window).on('resize', function() {
-  nowuiKit.initNavbarImage();
-});
-
-$(document).on('click', '.navbar-toggler', function() {
-  $toggle = $(this);
-
-  if (nowuiKit.misc.navbar_menu_visible == 1) {
-    $('html').removeClass('nav-open');
-    nowuiKit.misc.navbar_menu_visible = 0;
-    $('#bodyClick').remove();
-    setTimeout(function() {
-      $toggle.removeClass('toggled');
-    }, 550);
-  } else {
-    setTimeout(function() {
-      $toggle.addClass('toggled');
-    }, 580);
-    div = '<div id="bodyClick"></div>';
-    $(div).appendTo('body').click(function() {
-      $('html').removeClass('nav-open');
-      nowuiKit.misc.navbar_menu_visible = 0;
-      setTimeout(function() {
-        $toggle.removeClass('toggled');
-        $('#bodyClick').remove();
-      }, 550);
-    });
-
-    $('html').addClass('nav-open');
-    nowuiKit.misc.navbar_menu_visible = 1;
-  }
-});
-
-nowuiKit = {
-  misc: {
-    navbar_menu_visible: 0
-  },
-
-  checkScrollForTransparentNavbar: debounce(function() {
-    if ($(document).scrollTop() > scroll_distance) {
-      if (transparent) {
-        transparent = false;
-        $('.navbar[color-on-scroll]').removeClass('navbar-transparent');
-      }
-    } else {
-      if (!transparent) {
-        transparent = true;
-        $('.navbar[color-on-scroll]').addClass('navbar-transparent');
-      }
-    }
-  }, 17),
-
-  initNavbarImage: function() {
-    var $navbar = $('.navbar').find('.navbar-translate').siblings('.navbar-collapse');
-    var background_image = $navbar.data('nav-image');
-
-    if (background_image != undefined) {
-      if ($(window).width() < 991 || $('body').hasClass('burger-menu')) {
-        $navbar.css('background', "url('" + background_image + "')")
-          .removeAttr('data-nav-image')
-          .css('background-size', "cover")
-          .addClass('has-image');
-      } else {
-        $navbar.css('background', "")
-          .attr('data-nav-image', '' + background_image + '')
-          .css('background-size', "")
-          .removeClass('has-image');
-      }
-    }
-  },
-
-  initSliders: function() {
-
-    var slider = document.getElementById('sliderRegular');
-
-    noUiSlider.create(slider, {
-      start: 40,
-      connect: [true, false],
-      range: {
-        min: 0,
-        max: 100
-      }
-    });
-
-    var slider2 = document.getElementById('sliderDouble');
-
-    noUiSlider.create(slider2, {
-      start: [20, 60],
-      connect: true,
-      range: {
-        min: 0,
-        max: 100
-      }
-    });
-  }
-}
-
-// Javascript just for Demo purpose, remove it from your project
-nowuiKitDemo = {
-  checkScrollForParallax: debounce(function() {
-    var current_scroll = $(this).scrollTop();
-
-    oVal = ($(window).scrollTop() / 3);
-    big_image.css({
-      'transform': 'translate3d(0,' + oVal + 'px,0)',
-      '-webkit-transform': 'translate3d(0,' + oVal + 'px,0)',
-      '-ms-transform': 'translate3d(0,' + oVal + 'px,0)',
-      '-o-transform': 'translate3d(0,' + oVal + 'px,0)'
-    });
-
-  }, 6)
-
-}
-
-
-
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function() {
-    var context = this,
-      args = arguments;
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    }, wait);
-    if (immediate && !timeout) func.apply(context, args);
-  };
-};
-
-</script>
-
 <style>
-    input[type="range"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-
-
-/* positioning and background image*/
-
-input[type="range"] {
-  width: 300px;
-  height: 26px;
-  background: #ddd;
-  background: repeating-linear-gradient(90deg, #bbb, #bbb 2px, transparent 0px, transparent 28.35px);
-  background-repeat: no-repeat;
-  background-size: 286px 100%;
-  background-position: 7px center;
-}
-
-
-/* Form element re-Styling */
-
-input[type=range]::-webkit-slider-runnable-track {
-  -webkit-appearance: none;
-  /*    background: #ff7860;*/
-  background: #FF5E00;
-  width: 100%;
-  height: 4px;
-  border-radius: 4px;
-}
-
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  border: 3px solid #FF5E00;
-  height: 16px;
-  width: 16px;
-  border-radius: 50%;
-  background: #fff;
-  margin-top: -6px;
-}
-
-input[type=range]:focus {
-  outline: none;
-}
-
-/* scores box styles */
 
 .score {
   text-align: center;
@@ -1523,13 +1224,6 @@ input[type=range]:focus {
 
 /* Form presentation element styles */
 
-#rating-container {
-  width: 100%;
-  margin: 0 auto;
-  background: rgba(255,255,255, 1);
-  box-shadow: #202021 0 25px 38px;
-}
-
 label {
   font-family: "proxima-nova", sans-serif;
   display: inline-block;
@@ -1541,55 +1235,6 @@ hr {
   margin-bottom: 25px;
 }
 
-
-/* Button Styles */
-
-input[type="submit"] {
-  font-family: "proxima-nova", sans-serif;
-  font-weight: bold;
-  font-size: 1.2em;
-  cursor: pointer;
-  color: #fff;
-  width: 100%;
-  height: 52px;
-  margin-top: 32px;
-  /*    border-radius: 10px;*/
-  background: #FF5E00;
-  border: none;
-  border-bottom: 5px solid #b44200;
-  /*    border: 2px solid #FF5E00;*/
-}
-
-
-/* CSS alt colour */
-
-input[type="range"]::-webkit-slider-runnable-track {
-  -webkit-appearance: none;
-  background-color: #e95e38;
-}
-
-input[type=range]::-webkit-slider-thumb {
-  background-color: #e95e38;
-}
-
-input[type=range]::-webkit-slider-thumb:hover {
-  border-color: #000000;
-}
-
-input[type=range]::-webkit-slider-thumb:active {
-  border-color: #000000;
-}
-
-input[type="submit"] {
-  background-color: #e95e38;
-  border-bottom-color: #000000;
-}
-
-input[type="submit"]:hover {
-  background-color: #e95e38;
-  border-bottom-color: #000000;
-  color: #eee;
-}
 </style>
 
 {% endblock %}

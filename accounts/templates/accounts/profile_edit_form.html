@@ -13,7 +13,7 @@
                     <div class="account-settings">
                         <div class="user-profile">
                             <div class="user-avatar">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin">
+                                <img src="{% static 'images/' %}{{user.user_profile_image}}">
                             </div>
                             <h5 class="user-name">{{user.username}}</h5>
                             <h6 class="user-email">{{user.email}}</h6>
@@ -38,27 +38,28 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="username">Full Name</label>
-                                    {% render_field form.username class="form-control" name="username" value=profile.username type="text" %}
+                                    {% render_field form.username class="form-control" name="username" value=user.username type="text" %}
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    {% render_field form.email class="form-control" name="email" value=profile.email type="text" %}
+                                    {% render_field form.email class="form-control" name="email" value=user.email type="text" %}
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="user_phone">Phone</label>
-                                    {% render_field form.user_phone class="form-control" name="user_phone" value=profile.user_phone type="text" %}
+                                    {% render_field form.user_phone class="form-control" name="user_phone" value=user.user_phone type="text" %}
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                <div class="form-group">
-                                    <label for="user_address">Address</label>
-                                    {% render_field form.user_address class="form-control" name="user_address" value=profile.user_address type="text" %}
+                                <label for="geocoder">Place : </label><br>
+                                <div id="geocoder">
                                 </div>
                             </div>
+                            <input id="user_place_geocode" name="user_place_geocode" type="hidden">
+                            <span style="padding-left: 15px;"></span>
                         </div>
                         <div class="row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -159,6 +160,50 @@
 }
 
     </style>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+<link
+href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
+rel="stylesheet"
+/>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+<link
+rel="stylesheet"
+href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css"
+type="text/css"
+/>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+ 
+<script>
+        
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZXBoaXJhbS1yZW5haXMiLCJhIjoiY2t5ajZ1aTVoMWk4ZTJvcG1nNzRjaWY0MiJ9.ipIanO9ZaafvcgugtuZAFg';
+
+    const geocoder = new MapboxGeocoder({
+      // Initialize the geocoder
+      accessToken: mapboxgl.accessToken, // Set the access token
+      mapboxgl: mapboxgl, // Set the mapbox-gl instance
+      marker: false, // Do not use the default marker style
+      placeholder: "{{user.user_place}}", // Placeholder text for the search bar
+    });
+
+    geocoder.addTo('#geocoder');
+
+    // Get the geocoder results container.
+    var user_place_geocode = null;
+      
+      // Add geocoder result to container.
+      geocoder.on('result', (e) => {
+          user_place_geocode = JSON.stringify(e.result, null, 2);
+      });
+
+      $("#submit").on('click', function () {
+          document.getElementById('user_place_geocode').value = user_place_geocode;
+          // alert(document.getElementById('user_place_geocode').value);
+      });
+  
+  </script>
 
     <!--
 <div class="Card-Block" style="height: 590px; width: 1300px; margin: auto; margin-top: 50px; border: none;">

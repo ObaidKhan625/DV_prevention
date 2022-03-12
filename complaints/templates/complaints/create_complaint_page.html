@@ -56,7 +56,8 @@ type="text/css"
         </div>
         <!-- <pre id="result"></pre> -->
         <input id="complaint_place_geocode" name="complaint_place_geocode" type="hidden">
-        <span style="padding-left: 15px;"></span><button type="submit" id="submit" name="submit" class="btn btn-primary">Submit</button>
+        <span style="padding-left: 15px;"></span>
+        <button type="submit" id="submit" name="submit" class="btn btn-primary">Submit</button>
         </span>
         <!--
             <span style="padding-left: 15px;"><button type="submit">Upload</button></span>
@@ -75,28 +76,6 @@ type="text/css"
     }
     </style>
     
-    <!-- <script>
-        // TO MAKE THE MAP APPEAR YOU MUST
-        // ADD YOUR ACCESS TOKEN FROM
-        // https://account.mapbox.com
-        // <input type="text" class="mapboxgl-ctrl-geocoder--input" placeholder="Search" aria-label="Search">
-        
-        // Get the geocoder results container.
-        var complaint_place_geocode = null;
-        
-        // Add geocoder result to container.
-        geocoder.on('result', (e) => {
-            complaint_place_geocode = JSON.stringify(e.result, null, 2);
-            // results.innerText = JSON.stringify(e.result, null, 2);
-        });
-        // 68.1766451354, 7.96553477623, 97.4025614766, 35.4940095078
-        // IND: { sw: {lat: 6.5546079, lng: 68.1113787}, ne: {lat: 35.6745457, lng: 97.395561} }
-
-        $("#submit").on('click', function () {
-            document.getElementById('complaint_place_geocode').value = complaint_place_geocode;
-            // alert(document.getElementById('complaint_place_geocode').value);
-        });
-    </script> -->
     <script>
         
       mapboxgl.accessToken = 'pk.eyJ1IjoiZXBoaXJhbS1yZW5haXMiLCJhIjoiY2t5ajZ1aTVoMWk4ZTJvcG1nNzRjaWY0MiJ9.ipIanO9ZaafvcgugtuZAFg';

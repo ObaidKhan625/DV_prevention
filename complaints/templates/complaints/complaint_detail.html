@@ -40,7 +40,7 @@
 				<div class="row">
 					<div class="col-md-6">
 						<a href="{% url 'accounts:profile-view' complaint.complaint_filer %}">
-							<button type="button" class="btn btn-dark mt-2 ml-2" data-toggle="modal" data-target="#InvestigationsModal">Request Contact</button>
+							<button type="button" class="btn btn-dark mt-2 ml-2">Request Contact</button>
 						</a>
 					</div>
 				</div>
@@ -200,8 +200,14 @@
 				{% endif %}
 				<div class="review-heading mt-5">UPDATES</div>
 				{% for i in updates %}
-				<p class="mb-3">{{i.message_user}}</p>
-				<p class="mb-20">{{i.message_content}}</p>
+				<div class="updatebox">
+					<div class="update-body">
+					<span class="tip tip-up"></span>
+					<div class="update">
+						<div>{{i.message_content}}</div>
+					</div>
+					</div>
+				</div>
 				{% endfor %}
 				{% if total_updates == 0 %}
 				<p class="mb-20">There are no updates yet.</p>
@@ -220,8 +226,15 @@
 				{% endif %}
 				<div class="review-heading mt-5">COMMENTS</div>
 				{% for i in comments %}
-				<p class="mb-3">{{i.message_user}}</p>
-				<p class="mb-20" style="word-wrap: break-word">{{i.message_content}}</p>
+				<div class="updatebox">
+					<div class="update-body">
+					<span class="tip tip-up"></span>
+					<div class="update">
+						<div><h6>{{i.message_user}}</h6></div>
+						<div>{{i.message_content}}</div>
+					</div>
+					</div>
+				</div>
 				{% endfor %}
 				{% if total_comments == 0 %}
 				<p class="mb-20">There are no comments yet.</p>
@@ -570,6 +583,54 @@
 	.img-raised {
 		box-shadow: 0px 10px 25px 0px rgba(0, 0, 0, 0.3);
 	}
+</style>
+
+<style>
+	
+/* Updates Box */
+
+#donation-updates {
+  margin-left: 3%;
+  margin-top: 3%;
+  height: 300px;
+  overflow-y: scroll;
+}
+
+.tip {
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  background: transparent;
+  border: 10px solid #ccc;
+}
+
+.tip-up {
+  top: -25px; /* Same as body margin top + border */
+  left: 10px;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  border-top-color: transparent;
+}
+
+.updatebox .update-body {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
+  padding: 5px;
+  background-color: #DADADA;
+  border-radius: 3px;
+  border: 5px solid #ccc;
+}
+
+.update-body .update {
+  min-height: 30px;
+  border-radius: 3px;
+  font-family: Arial;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #797979;
+}
 </style>
 
 <script>

@@ -1,5 +1,6 @@
 from django import forms
 from .models import User, User_Document
+import json
 
 class User_Documents_Form(forms.ModelForm):
 	class Meta:
@@ -9,14 +10,14 @@ class User_Documents_Form(forms.ModelForm):
 class UpdateUserForm(forms.ModelForm):
 	class Meta:
 		model = User
-		fields = ['username', 'user_phone', 'user_other', 'email', 'user_description', 'user_profile_image', 'user_address']
-
+		fields = ['username', 'user_phone', 'user_other', 'email', 'user_description', 'user_profile_image', 'user_place', 'user_place_geocode']
+	
 	def save(self, commit=True):
 		user = super(UpdateUserForm, self).save(commit = False)
 		user.email = self.cleaned_data['email']
 		user.user_description = self.cleaned_data['user_description']
 		user.user_profile_image = self.cleaned_data['user_profile_image']
-		print(user.email, user.user_description, user.user_profile_image)
+		user.user_place = user.user_place_geocode['place_name']
 
 		if commit:
 			return user.save()
