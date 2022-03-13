@@ -13,6 +13,7 @@ class User(AbstractUser):
 	user_other =  				models.TextField(null = True, blank = True)
 	user_profile_image =  		models.ImageField(null = True, upload_to = 'profiles', default = 'profiles/default-image.jpg')
 	user_role = 				models.CharField(max_length = 50, null = True, choices = role_choices)
+	user_complaints_solved = 	models.PositiveIntegerField(default = 0)
 	user_description = 			models.TextField(null = True, blank = True)
 	user_place = 				models.CharField(max_length = 1000, null = True, blank = True)
 	user_place_geocode = 		models.JSONField(null = True, blank = True)

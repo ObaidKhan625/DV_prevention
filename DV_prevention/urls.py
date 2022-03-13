@@ -24,7 +24,4 @@ urlpatterns = [
     path('', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('', include(('user_requests.urls', 'user_requests'), namespace='user_requests')),
     path('complaints/', include(('complaints.urls', 'complaints'), namespace='complaints')),
-    path('address/', include('addresses.urls')),
 ]
-
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

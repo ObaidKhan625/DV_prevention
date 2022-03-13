@@ -63,17 +63,6 @@ def showComplaintDetail(request, complaint_id):
 
 @login_required(login_url='user-auth:login')
 @auth_or_not(1)
-def complaintStatus(request, user_id):
-	"""
-	Extra function to check complaint's status
-	"""
-	user = User.objects.get(id = user_id)
-	complaints = Complaint.objects.filter(complaint_filer = user)
-	context = {'user':user, 'complaints':complaints}
-	return render(request, 'complaints/previous_complaint.html', context)
-
-@login_required(login_url='user-auth:login')
-@auth_or_not(1)
 def createComplaint(request):
 	"""
 	Create a Complaint
@@ -178,3 +167,14 @@ def requestHistory(request):
 		return render(request, 'complaints/no_complaint.html')
 	complaint = Complaint.objects.get(complaint_filer = request.user)
 	return redirect(reverse('complaints:show-complaint-detail', kwargs={'complaint_id': complaint.id}))
+
+
+def markComplaintAsDone(request, complaint_id):
+	for i, j in zip(request.POST.items(), range(len(request.POST))):
+		if j == 0:
+			continue
+		activist = User.objects.get(username=i[1])
+		activist.user_complaints_solved += 1
+		activist.save()
+	Complaint.objects.get(id = complaint_id).delete()
+	return redirect('complaints:explore-complaints')
