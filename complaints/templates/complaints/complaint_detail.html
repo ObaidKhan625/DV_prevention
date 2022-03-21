@@ -37,6 +37,7 @@
 					</div>
 				</div>
 				<p>{{complaint.complaint_description}}</p>
+				{% if profile != request.user %}
 				<div class="row">
 					<div class="col-md-6">
 						<a href="{% url 'accounts:profile-view' complaint.complaint_filer %}">
@@ -44,6 +45,7 @@
 						</a>
 					</div>
 				</div>
+				{% endif %}
 				<div class="row">
 					<div class="col">
 						<div class="modal fade" id="socialModal" tabindex="-1" role="dialog" aria-labelledby="socialModalTitle" aria-hidden="true">
@@ -205,7 +207,9 @@
 								</div>
 							</div>
 						</div>
+						{% if profile != request.user %}
 						<button type="button" class="btn btn-dark mt-2 ml-2" data-toggle="modal" data-target="#MarkAsDoneModal">Mark As Done</button>
+						{% endif %}
 					</div>
 				</div>
 				{% endif %}

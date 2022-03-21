@@ -123,6 +123,7 @@
                   <div class="col-md-6 ml-auto mr-auto">
                       <h4 class="title text-center">Verification Docs</h4>
                       <div class="nav-align-center">
+                      {% if profile == request.user %}
                       <ul class="nav nav-pills nav-pills-primary nav-pills-just-icons" role="tablist">
                           <li class="nav-item">
                           <a class="nav-link active" href="{% url 'accounts:profile-file-drop-zone-view' %}">
@@ -130,6 +131,7 @@
                           </a>
                           </li>
                       </ul>
+                      {% endif %}
                   </div>
                 </div>
                 <div class="tab-content gallery">
