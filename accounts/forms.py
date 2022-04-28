@@ -15,10 +15,15 @@ class UpdateUserForm(forms.ModelForm):
 	def save(self, commit=True):
 		user = super(UpdateUserForm, self).save(commit = False)
 		user.email = self.cleaned_data['email']
+		user.user_phone = self.cleaned_data['user_phone']
 		user.user_description = self.cleaned_data['user_description']
 		user.user_profile_image = self.cleaned_data['user_profile_image']
-		user.user_place = user.user_place_geocode['place_name']
-
+		if user.user_place_geocode is not None:
+			user.user_place = user.user_place_geocode['place_name']
+		user.user_other = self.cleaned_data['user_other']
+		print(user.user_other)
+		print(user.user_phone)
+		# user.user_profile_image = self.cleaned_data['user_profile_image']
 		if commit:
 			return user.save()
 		else:

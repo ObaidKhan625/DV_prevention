@@ -20,6 +20,13 @@ def profileView(request, profile_slug):
 	report_count = Report.objects.filter(reported_user = profile).count()
 	user_documents = User_Document.objects.filter(user_name = profile)
 	contact_permitted_instances = Contact_Permission.objects.filter(permitted_user = request.user)
+
+	complaint_request_sent = False
+	if(Complaint.objects.filter(complaint_filer = request.user).exists()):
+		complaint = Complaint.objects.get(complaint_filer = request.user)
+		complaint_request_sent = Complaint_Request.objects.filter(requested_by = request.user, requested_user = profile, 
+		complaint = complaint).exists()
+	
 	contact_request_sent = Contact_Request.objects.filter(requested_by = request.user, requested_user = profile).exists()
 
 	total_profile_ratings = Rating.objects.filter(rating_to = profile).count()
@@ -42,11 +49,13 @@ def profileView(request, profile_slug):
 		contact_permitted_users.append(i.permitted_user)
 
 	user_complaint_availible = Complaint.objects.filter(complaint_filer = request.user).exists()
+	user_in_contact = Contact_Permission.objects.filter(permitted_by = profile, permitted_user = request.user).exists()
 
 	context = {'profile':profile, 'user_documents':user_documents, 'verifications_count':verifications_count,
 	'contact_permitted_users':contact_permitted_users, 'contact_request_sent':contact_request_sent, 
 	'report_count':report_count, 'permitted_user':permitted_user, 'total_profile_score':total_profile_score, 
-	'user_current_rating':user_current_rating, 'user_complaint_availible':user_complaint_availible}
+	'user_current_rating':user_current_rating, 'user_complaint_availible':user_complaint_availible, 
+	'complaint_request_sent': complaint_request_sent, 'user_in_contact': user_in_contact}
 	return render(request, 'accounts/profile.html', context)
 
 @login_required(login_url='user_auth:login')

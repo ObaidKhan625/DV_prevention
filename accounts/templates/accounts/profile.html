@@ -54,23 +54,26 @@
                   {% if profile.user_role == 'Normal user/Victim' %}
                     {% if profile == request.user %}
                       <button class="btn btn-primary btn-round btn-lg">-</button>
-                    {% elif profile != request.user and not contact_request_sent %}
-                    <button data-profile="{{profile.id}}" class="btn btn-primary btn-round btn-lg request-contact-info">Send Contact Request</button>
-                    {% endif %}
-                    {% if contact_request_sent %}
-                    <button class="btn btn-primary btn-round btn-lg request-sent-button">Contact Request Sent</button>
+                    {% elif profile != request.user and not contact_request_sent and not user_in_contact %}
+                      <button data-profile="{{profile.id}}" class="btn btn-primary btn-round btn-lg request-contact-info">Send Contact Request</button>
+                    {% elif user_in_contact %}
+                      <button class="btn btn-primary btn-round btn-lg request-sent-button">Contact Availible</button>
+                    {% else %}
+                      <button class="btn btn-primary btn-round btn-lg request-sent-button">Contact Request Sent</button>
                     {% endif %}
                   {% else %}
                     {% if profile == request.user %}
                     <button class="btn btn-primary btn-round btn-lg">-</button>
-                    {% elif user_complaint_availible %}
+                    {% elif user_complaint_availible and not complaint_request_sent %}
                       <button data-profile="{{profile.id}}" class="btn btn-primary btn-round btn-lg request-complaint-action">Send Complaint Request</button>
+                    {% elif complaint_request_sent %}
+                      <button class="btn btn-primary btn-round btn-lg request-sent-button">Complaint Request Sent</button>
                     {% else %}
                       <button class="btn btn-primary btn-round btn-lg">No Complaint Found</button>
                     {% endif %}
                   {% endif %}
                 </div>
-                {% if request.user != profile %}
+                {% if request.user != profile and profile.user_role == 'NGO/Activist/Mod' %}
                 <!-- Ratings Start -->
                     <div class="p-5">
                         <form action="{% url 'accounts:profile-rate' profile.username %}" method="POST" enctype="multipart/form-data">
@@ -157,6 +160,30 @@
     </div>
 </div>
 
+{% if profile == request.user %}
+<a href="{% url 'accounts:profile-edit' %}">
+    <button id="edit-profile-button">Edit</button>
+</a>
+{% endif %}
+
+
+<style>
+    #edit-profile-button {
+        position: fixed; 
+        bottom: 80px; 
+        right: 100px; 
+        height: 80px; 
+        line-height: 80px;  
+        width: 80px; 
+        font-size:20px;
+        border-radius: 50%; 
+        background-color: #4CAF50;
+        color: white; 
+        text-align: center; 
+        cursor: pointer;
+    }
+</style>
+
 <script>
     $('.request-contact-info').on('click', function() {
         var profile_id = $(this).data('profile');
@@ -184,6 +211,9 @@
         },
         dataType: 'json',
         });
+        $(this).removeClass('request-complaint-action');
+		$(this).addClass('request-sent-button');
+		$(this).html("Complaint Request Sent");
     });           
     $('.verified-count').on('click', function() {
     var profile_id = $(this).data('profile');

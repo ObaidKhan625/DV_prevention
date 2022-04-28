@@ -34,7 +34,7 @@ class Message(models.Model):
 	message_content = 		models.CharField(max_length = 1000, null = True)
 
 	def __str__(self):
-		return self.message_user + " message on " + self.message_complaint
+		return str(self.message_user) + " message on " + str(self.message_complaint)
 
 class Investigation(models.Model):
 	investigation_complaint =		models.ForeignKey(Complaint, null = True, on_delete = models.CASCADE)

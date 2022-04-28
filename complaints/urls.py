@@ -11,6 +11,7 @@ urlpatterns = [
 	path('investigate/<str:complaint_id>/', views.investigateComplaint, name='investigate-complaint'),
 	path('mark-as-done/<str:complaint_id>/', views.markComplaintAsDone, name='mark-as-done'),
 	path('create-complaint/', views.createComplaint, name='create-complaint'),
+	path('delete_complaint/<str:complaint_id>/', views.deleteComplaint, name='delete-complaint'),
 	path('<str:complaint_id>/', views.showComplaintDetail, name='show-complaint-detail'),
 	path('<str:complaint_id>/<str:message_type>/', views.addMessage, name='update-complaint'),
 	path('<str:complaint_id>/vote_change/upvote/', views.complaintUpvote, name='upvote-complaint'),

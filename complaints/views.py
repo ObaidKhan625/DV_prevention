@@ -13,7 +13,13 @@ import json
 
 # Create your views here.
 
+@login_required(login_url='user-auth:login')
+@auth_or_not(1)
 def findNearestActivist(request):
+	"""
+	Pass Complaint and user in context, then find 
+	nearest activists from the complaint
+	"""
 	# complaint = Complaint.objects.get(complaint_filer = request.user)
 	users = User.objects.all().exclude(username = request.user)
 	complaint = Complaint.objects.get(complaint_filer = request.user)
@@ -23,7 +29,7 @@ def findNearestActivist(request):
 #Helper Functions
 def complaint_detail_components(request, complaint_id):
 	"""
-	Components regularly needed in context, for keeping code DRY
+	Helper Function, returns components regularly needed in context
 	"""
 	complaint = Complaint.objects.get(id = complaint_id)
 	profile = complaint.complaint_filer
@@ -32,7 +38,9 @@ def complaint_detail_components(request, complaint_id):
 	total_updates = len(updates)
 	total_comments = len(comments)
 	investigations = Investigation.objects.filter(investigation_complaint = complaint)
-	investigastion_ongoing_by_curr_user = investigations.filter(investigation_in_charge = request.user).exists()
+	investigastion_ongoing_by_curr_user = False
+	if(str(request.user) != "AnonymousUser"):
+		investigastion_ongoing_by_curr_user = investigations.filter(investigation_in_charge = request.user).exists()
 	complaint_documents = Complaint_Document.objects.filter(complaint_name = complaint)
 	complaint_json = complaint.complaint_place_geocode
 
@@ -71,7 +79,8 @@ def createComplaint(request):
 	if request.method == "POST":
 		form = ComplaintForm(request.POST, request.FILES)
 		if form.is_valid():
-			#Complaint.objects.filter(complaint_filer = user).delete()
+			# Delete all existing complaints of the user
+			Complaint.objects.filter(complaint_filer = user).delete()
 			newpost = form.save(commit=False)
 			newpost.save()
 			# Without this next line the tags won't be saved.
@@ -110,12 +119,16 @@ def addMessage(request, complaint_id, message_type):
 
 	return redirect(reverse('complaints:show-complaint-detail', kwargs={'complaint_id': complaint_id}))
 
+@login_required(login_url='user-auth:login')
+@auth_or_not(1)
 def investigateComplaint(request, complaint_id):
 	complaint = Complaint.objects.get(id = complaint_id)
 	if(not Investigation.objects.filter(investigation_complaint = complaint, investigation_in_charge = request.user).exists()):
 		Investigation.objects.create(investigation_complaint = complaint, investigation_in_charge = request.user)
 	return JsonResponse({'post':True})
 
+@login_required(login_url='user-auth:login')
+@auth_or_not(1)
 def complaintUpvote(request, complaint_id):
 	complaint = Complaint.objects.get(id = complaint_id)
 	complaint_upvotes_list = complaint.complaint_upvotes_users.split(',')
@@ -128,6 +141,8 @@ def complaintUpvote(request, complaint_id):
 	complaint.save()
 	return JsonResponse({'upvote_post':True})
 
+@login_required(login_url='user-auth:login')
+@auth_or_not(1)
 def complaintDownvote(request, complaint_id):
 	complaint = Complaint.objects.get(id = complaint_id)
 	complaint_downvotes_list = complaint.complaint_downvotes_users.split(',')
@@ -162,13 +177,16 @@ def complaint_file_upload_view(request):
 		return redirect('/')
 	return JsonResponse({'post':'false'})
 
+@login_required(login_url='user-auth:login')
+@auth_or_not(1)
 def requestHistory(request):
 	if(not Complaint.objects.filter(complaint_filer = request.user).exists()):
 		return render(request, 'complaints/no_complaint.html')
 	complaint = Complaint.objects.get(complaint_filer = request.user)
 	return redirect(reverse('complaints:show-complaint-detail', kwargs={'complaint_id': complaint.id}))
 
-
+@login_required(login_url='user-auth:login')
+@auth_or_not(1)
 def markComplaintAsDone(request, complaint_id):
 	for i, j in zip(request.POST.items(), range(len(request.POST))):
 		if j == 0:
@@ -176,5 +194,11 @@ def markComplaintAsDone(request, complaint_id):
 		activist = User.objects.get(username=i[1])
 		activist.user_complaints_solved += 1
 		activist.save()
+	Complaint.objects.get(id = complaint_id).delete()
+	return redirect('complaints:explore-complaints')
+
+@login_required(login_url='user-auth:login')
+@auth_or_not(1)
+def deleteComplaint(request, complaint_id):
 	Complaint.objects.get(id = complaint_id).delete()
 	return redirect('complaints:explore-complaints')

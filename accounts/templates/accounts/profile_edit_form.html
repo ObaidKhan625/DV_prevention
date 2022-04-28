@@ -38,7 +38,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="username">Full Name</label>
-                                    {% render_field form.username class="form-control" name="username" value=user.username type="text" %}
+                                    {% render_field form.username|append_attr:"readonly:readonly" class="form-control" name="username" value=user.username type="text" %}
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">

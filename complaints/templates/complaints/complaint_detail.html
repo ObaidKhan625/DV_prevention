@@ -10,6 +10,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="container">
 	<div class="heading-section">
+		{% if request.user == profile %}
+		<a href="{% url 'complaints:delete-complaint' complaint.id %}">
+			<button class="btn btn-danger mt-4" style="float: right; height: 60px; padding: 10px;">Delete Complaint</button>
+		</a>
+		{% endif %}
 		<h2>{{complaint.complaint_title}}</h2>
 		<span>
 			<button class="upvote-change upvote btn btn-success" data-complaint="{{complaint.id}}"><i class="fa fa-solid fa-chevron-up"></i></button>
@@ -31,7 +36,11 @@
 		<div class="col-md-6">
 			<div class="product-dtl">
 				<div class="product-info">
-					<div class="product-name">{{complaint.complaint_filer}}</div>
+					<div class="product-name">
+						<a href="{% url 'accounts:profile-view' profile %}" style="color: black;">
+							{{complaint.complaint_filer}}
+						</a>
+					</div>
 					<div class="reviews-counter">
 						<span>{{complaint.complaint_place}}</span>
 					</div>
@@ -75,7 +84,7 @@
 							
 								function setShareLinks() {
 									//var pageUrl = encodeURIComponent(document.URL);
-									var pageUrl = "https://myanimelist.net/anime/45576/Mushoku_Tensei__Isekai_Ittara_Honki_Dasu_Part_2/pics"
+									var pageUrl = window. location. href;
 									var tweet = encodeURIComponent($("meta[property='og:description']").attr("content"));
 								
 									$(".social-share.facebook").on("click", function() { 
