@@ -21,8 +21,6 @@ class UpdateUserForm(forms.ModelForm):
 		if user.user_place_geocode is not None:
 			user.user_place = user.user_place_geocode['place_name']
 		user.user_other = self.cleaned_data['user_other']
-		print(user.user_other)
-		print(user.user_phone)
 		# user.user_profile_image = self.cleaned_data['user_profile_image']
 		if commit:
 			return user.save()

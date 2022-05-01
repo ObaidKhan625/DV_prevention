@@ -162,7 +162,7 @@
 
 {% if profile == request.user %}
 <a href="{% url 'accounts:profile-edit' %}">
-    <button id="edit-profile-button">Edit</button>
+    <button id="edit-profile-button" class="btn btn-success">Edit Profile</button>
 </a>
 {% endif %}
 
@@ -170,14 +170,11 @@
 <style>
     #edit-profile-button {
         position: fixed; 
-        bottom: 80px; 
-        right: 100px; 
-        height: 80px; 
-        line-height: 80px;  
-        width: 80px; 
+        bottom: 30px; 
+        right: 30px; 
         font-size:20px;
-        border-radius: 50%; 
         background-color: #4CAF50;
+        border: 2px solid black;
         color: white; 
         text-align: center; 
         cursor: pointer;

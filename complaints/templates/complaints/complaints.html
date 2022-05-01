@@ -314,7 +314,7 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
         {% for complaint in complaints %}
           <div class="blogs-item hvr-float-shadow wow fadeInLeft h-100 mb-5" data-wow-delay="0.5s">
             <div class="blog-img photo">
-              <a href="{% url 'complaints:show-complaint-detail' complaint.id %}"><img src="{% static 'images/' %}{{complaint.complaint_request_image}}" alt="" class="img-fluid"></a>
+              <a href="{% url 'complaints:show-complaint-detail' complaint.id %}"><img src="{% static 'images/' %}{{complaint.complaint_request_image}}" alt="" class="img-fluid" style="height: 200px; width: 100%;"></a>
               <p class="blog-time">
               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
               <span class="blog-date"><i class="fa fa-solid fa-chevron-up"></i></span>
