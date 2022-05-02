@@ -11,7 +11,7 @@
 	 display: flex;
 	 flex-direction: column;
 	 margin: 1rem auto;
-	 box-shadow: 0 3px 7px -1px rgba(0, 0, 0, .1);
+	 box-shadow: 0 3px 7px -1px black;
 	 margin-bottom: 1.6%;
 	 background: #fff;
 	 line-height: 1.4;
@@ -107,7 +107,7 @@
 	 font-size: 1rem;
 	 font-weight: 300;
 	 text-transform: uppercase;
-	 color: #a2a2a2;
+	 color: black;
 	 margin-top: 5px;
 }
  .blog-card .description .read-more {
@@ -221,7 +221,7 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
 .heading h2 {position: relative;font-weight: 600;font-family: 'Dosis', sans-serif;text-transform: uppercase;padding: 0 0 10px;color: #231f20;}
 .heading h2:before {position: absolute;content: '';height: 1px;width: 150px;background: #ffbe00;left: 0;right: 0;bottom: 1px;margin: auto;}
 .heading h2:after {content: '';height: 3px;width: 50px;background: #3c377b;position: absolute;left: 0;right: 0;margin: auto;bottom: 0;}
-.heading p {color: #878787;}
+.heading p {color: black;}
 .heading {text-align: center;padding: 20px 0;max-width: 750px;margin: 0 auto;}
 /*hover*/
 .hvr-float-shadow {
@@ -311,7 +311,7 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
       </div>
       <div class="blogs">
         <div class="row">
-        {% for complaint in complaints %}
+		{% for complaint in complaints %}
           <div class="blogs-item hvr-float-shadow wow fadeInLeft h-100 mb-5" data-wow-delay="0.5s">
             <div class="blog-img photo">
               <a href="{% url 'complaints:show-complaint-detail' complaint.id %}"><img src="{% static 'images/' %}{{complaint.complaint_request_image}}" alt="" class="img-fluid" style="height: 200px; width: 100%;"></a>
@@ -326,7 +326,11 @@ a, a:hover,a:active, a:focus{ text-decoration: none !important; outline: none !i
               <h4><a href="javascript:;">{{complaint.complaint_title}}</a></h4>
               <ul class="scrolling-wrapper" id="cropped-tags">
                 {% for tag in complaint.tags.all %}
-                <li><a href="javascript:;">#{{ tag }}</a></li>
+				{% if filtered_tag == tag|slugify %}
+					<li style="background-color: yellow; padding: 5px;"><a href="{% url 'complaints:explore-complaints-by-tag' tag %}">#{{tag}}</a></li>
+				{% else %}
+					<li><a href="{% url 'complaints:explore-complaints-by-tag' tag %}">#{{ tag }}</a></li>
+				{% endif %}
                 {% endfor %}
               </ul>
               <p class="scrolling-wrapper" id="cropped-description">{{complaint.complaint_description}}</p>...

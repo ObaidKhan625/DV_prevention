@@ -25,7 +25,7 @@ def profileView(request, profile_slug):
 	if(Complaint.objects.filter(complaint_filer = request.user).exists()):
 		complaint = Complaint.objects.get(complaint_filer = request.user)
 		complaint_request_sent = Complaint_Request.objects.filter(requested_by = request.user, requested_user = profile, 
-		complaint = complaint).exists()
+		requested_complaint = complaint).exists()
 	
 	contact_request_sent = Contact_Request.objects.filter(requested_by = request.user, requested_user = profile).exists()
 

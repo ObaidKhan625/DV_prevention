@@ -4,6 +4,7 @@ app_name = 'complaints'
 
 urlpatterns = [
 	path('', views.exploreComplaints, name='explore-complaints'),
+	path('tag/#<str:complaint_tag>/', views.exploreComplaintsByTag, name='explore-complaints-by-tag'),
 	path('request-history/', views.requestHistory, name = 'request-history'),
 	path('find-nearest-helpers/', views.findNearestActivist, name='complaint-request-nearest-activist'),
 	path('complaint-file-drop/', views.complaint_drop_zone_file, name = 'complaint-file-drop-zone-view'),

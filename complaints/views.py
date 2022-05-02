@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from user_auth.decorators import auth_or_not
 from accounts.models import User
+from user_requests.models import Complaint_Request
 from PIL import Image
 from taggit.models import Tag
 import random
@@ -62,6 +63,25 @@ def exploreComplaints(request, sorting_parameter="upvotes"):
 	context = {'complaints':complaints, 'complaint_page_title': 'Complaints'}
 	return render(request, 'complaints/complaints.html', context)
 
+def exploreComplaintsByTag(request, complaint_tag):
+	"""
+	See availible complaints, shown on user login
+	"""
+	tag = TagComplaint.objects.get(tag = complaint_tag)
+	complaints = []
+	for i in tag.tag_complaints['complaints']:
+		try:
+			complaint = Complaint.objects.get(complaint_title = i, complaint_status = "active")
+			complaints.append(complaint)
+		except:
+			pass
+	print(str(tag))
+	for i in complaint.tags.all():
+		print(i)
+	
+	context = {'complaints':complaints, 'complaint_page_title': 'Complaints with tag #'+tag.tag, 'filtered_tag': str(tag)}
+	return render(request, 'complaints/complaints.html', context)
+
 def showComplaintDetail(request, complaint_id):
 	"""
 	Show detail of a particular complaint
@@ -87,6 +107,12 @@ def createComplaint(request):
 			form.save_m2m()
 			complaint = Complaint.objects.filter(complaint_filer = None, complaint_status="active")
 			complaint.update(complaint_filer = user)
+			
+			complaint = Complaint.objects.get(complaint_filer = user)
+			for complaint_tag in complaint.tags.all():
+				tag = TagComplaint.objects.get_or_create(tag = str(complaint_tag))
+				tag[0].tag_complaints['complaints'].append(str(complaint.complaint_title))
+				tag[0].save()
 			# Complaint.objects.filter(user=None, status='active').update(user=user)
 		else:
 			print(form.errors)
@@ -125,6 +151,10 @@ def investigateComplaint(request, complaint_id):
 	complaint = Complaint.objects.get(id = complaint_id)
 	if(not Investigation.objects.filter(investigation_complaint = complaint, investigation_in_charge = request.user).exists()):
 		Investigation.objects.create(investigation_complaint = complaint, investigation_in_charge = request.user)
+	if(Complaint_Request.objects.filter(requested_complaint = complaint, requested_by = complaint.complaint_filer, 
+	requested_user = request.user).exists()):
+		Complaint_Request.objects.filter(requested_complaint = complaint, 
+		requested_by = complaint.complaint_filer, requested_user = request.user).delete()
 	return JsonResponse({'post':True})
 
 @login_required(login_url='user-auth:login')

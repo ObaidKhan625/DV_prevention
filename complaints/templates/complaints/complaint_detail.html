@@ -30,7 +30,12 @@
 				</div>
 			</div>
 			{% for tag in complaint.tags.all %}
-			<div class="btn btn-danger mb-3" style="height: 40px; padding: 5px;">#{{ tag }}</div>
+			<script>
+				function hey(a) {
+					alert(a);
+				}
+			</script>
+			<div class="btn btn-danger mb-3" style="height: 40px; padding: 5px;" onclick="hey('{{tag}}')">#{{ tag }}</div>
 			{% endfor %}
 		</div>
 		<div class="col-md-6">
@@ -121,7 +126,7 @@
 				{% if request.user == profile %}
 				<div class="row">
 					<div class="col">
-						<a href="{% url 'complaints:complaint-request-nearest-activist' %}">
+						<a href="{% url 'complaints:complaint-request-nearest-activist' %}" target="_blank">
 							<button type="button" class="btn btn-dark mt-2 ml-2">Find Nearest Activists</button>
 						</a>
 					</div>

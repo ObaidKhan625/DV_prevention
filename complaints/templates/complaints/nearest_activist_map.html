@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -135,7 +137,15 @@
         cursor: pointer;
         height: 56px;
         width: 56px;
-        background-image: url('https://preview.redd.it/e0v2mu3j3qv41.jpg?auto=webp&s=0ed1e4b507a234526e57b0ee8f6eda882d848551');
+        background-image: url("{% static 'images/profile_backgrounds/activists_background_map_logo.jpg' %}");
+      }
+
+      .complaint-filer-marker {
+        border: none;
+        cursor: pointer;
+        height: 56px;
+        width: 56px;
+        background-image: url("{% static 'images/profile_backgrounds/current_location_map_logo.png' %}");
       }
 
       /* Marker tweaks */
@@ -211,17 +221,27 @@
       //     complaint_lat = "{{complaint.complaint_place_geocode.properties.geometry.coordinates.0}}";
       //     complaint_long = "{{complaint.complaint_place_geocode.properties.geometry.coordinates.1}}";
       // }); 
-      console.log(complaint_long);
-      console.log(complaint_lat);
       const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10',
-        center: [73.0923264, 19.90008784],
-        zoom: 7,
+        center: [complaint_long, complaint_lat],
+        zoom: 10,
         scrollZoom: false,
       });
 
     var stores = {'type': 'FeatureCollection', 'features': []};
+    var complaint_map_feature = {
+      'geometry': {
+          'type': 'Point',
+          'coordinates': ["{{complaint.complaint_place_geocode.geometry.coordinates.0}}", 
+          "{{complaint.complaint_place_geocode.geometry.coordinates.1}}"]
+      },
+      'properties': {
+        "user": "{{complaint.complaint_filer}}",
+        'address': "{{complaint.complaint_place_geocode.place_name}}", 
+        "city": "{{complaint.complaint_place_geocode.text}}",
+      }
+    }
 
     {% for i in users %}
         var store = {
@@ -231,13 +251,13 @@
                 "{{i.user_place_geocode.geometry.coordinates.1}}"]
             },
             'properties': {
+              "user": "{{i.username}}",
               'address': "{{i.user_place_geocode.place_name}}", 
               "city": "{{i.user_place_geocode.text}}",
             }
         }
         stores.features.push(store);
     {% endfor %}
-    console.log(stores);
 
       /**
        * Assign a unique id to each store. You'll use this `id`
@@ -375,6 +395,35 @@
             listing.classList.add('active');
           });
         }
+        /* Create a div element for the complaint_map_feature. */
+        const el = document.createElement('div');
+        /* Assign a unique `id` to the complaint_map_feature. */
+        el.id = `marker-${complaint_map_feature.properties.id}`;
+        /* Assign the `complaint_map_feature` class to eachcomplaint_map_feature for styling. */
+        el.className = 'complaint-filer-marker';
+        new mapboxgl.Marker(el, { offset: [0, -23] })
+          .setLngLat(complaint_map_feature.geometry.coordinates)
+          .addTo(map);
+
+        /**
+         * Listen to the element and when it is clicked, do three things:
+         * 1. Fly to the point
+         * 2. Close all other popups and display popup for clicked store
+         * 3. Highlight listing in sidebar (and remove highlight for all other listings)
+         **/
+        el.addEventListener('click', (e) => {
+          flyToStore(complaint_map_feature);
+          createPopUp(complaint_map_feature);
+          const activeItem = document.getElementsByClassName('active');
+          e.stopPropagation();
+          if (activeItem[0]) {
+            activeItem[0].classList.remove('active');
+          }
+          const listing = document.getElementById(
+            `listing-${complaint_map_feature.properties.id}`
+          );
+          listing.classList.add('active');
+        });
       }
 
       /**
@@ -449,11 +498,14 @@
       function createPopUp(currentFeature) {
         const popUps = document.getElementsByClassName('mapboxgl-popup');
         if (popUps[0]) popUps[0].remove();
+        var currentFeature_user_url = "{% url 'accounts:profile-view' 0 %}".replace('0', currentFeature.properties.user);
 
         const popup = new mapboxgl.Popup({ closeOnClick: false })
           .setLngLat(currentFeature.geometry.coordinates)
           .setHTML(
-            `<h3>Sweetgreen</h3><h4>${currentFeature.properties.address}</h4>`
+            `<a href=${currentFeature_user_url} target="_blank"><h3>${currentFeature.properties.user}</h3></a><h4>
+              ${currentFeature.properties.address}
+            </h4>`
           )
           .addTo(map);
       }

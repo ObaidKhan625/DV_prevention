@@ -44,25 +44,11 @@ def requestContactInfo(request, profile_id):
 	Request a User to view their contact info
 	"""
 	requested_user = User.objects.get(id = profile_id)
-	print(requested_user)
 	if(Contact_Request.objects.filter(requested_user = requested_user, requested_by = request.user).exists()):
 		return JsonResponse({'request_post':False})
 	else:
 		Contact_Request.objects.create(requested_user = requested_user, requested_by = request.user)
 		return JsonResponse({'request_post':True})
-
-@login_required(login_url='user_auth:login')
-@auth_or_not(1)
-def requestComplaint(request, profile_id, complaint_id):
-    """
-    Request a particular Activist/NGO to look into the complaint
-    """
-    activist = User.objects.get(id = profile_id)
-    complaint = Complaint.objects.get(id = complaint_id)
-    complaint_requests = Contact_Request.objects.create(requested_user = activist, requested_by = request.user, 
-    complaint = complaint)
-    context = {'activist':activist, 'complaint_requests':complaint_requests}
-    return render(request, 'user_requests/complaint_requests.html', context)
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
@@ -83,7 +69,7 @@ def requestContactInfoAction(request, request_id, action):
 @auth_or_not(1)
 def requestComplaintInfo(request, profile_id):
 	"""
-	Request a Activist/NGO to view their contact info
+	Request a user to view their contact info
 	"""
 	requested_user = User.objects.get(id = profile_id)
 	if(Contact_Request.objects.filter(requested_user = requested_user, requested_by = request.user).exists()):
@@ -112,8 +98,8 @@ def showComplaintRequests(request):
 	print(complaint_requests_all)
 	complaints = []
 	for i in complaint_requests_all:
-		if i.complaint.complaint_status == 'active':
-			complaints.append(i.complaint)
+		if i.requested_complaint.complaint_status == 'active':
+			complaints.append(i.requested_complaint)
 	context = {'complaints':complaints, 'complaint_page_title':'Complaint Requests for '+ str(request.user)}
 	return render(request, 'complaints/complaints.html', context)
 
@@ -140,5 +126,5 @@ def requestComplaintAction(request, profile_id):
 	"""
 	profile = User.objects.get(id = profile_id)
 	complaint = Complaint.objects.filter(complaint_filer = request.user)[0]
-	Complaint_Request.objects.get_or_create(requested_by = request.user, requested_user = profile, complaint = complaint)
+	Complaint_Request.objects.get_or_create(requested_by = request.user, requested_user = profile, requested_complaint = complaint)
 	return redirect(reverse('accounts:profile-view', kwargs={'profile_slug':profile.slug}))

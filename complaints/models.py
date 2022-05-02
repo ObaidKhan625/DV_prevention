@@ -39,3 +39,18 @@ class Message(models.Model):
 class Investigation(models.Model):
 	investigation_complaint =		models.ForeignKey(Complaint, null = True, on_delete = models.CASCADE)
 	investigation_in_charge = 		models.ForeignKey(User, null = True, on_delete = models.CASCADE)
+
+	def __str__(self):
+		return str(self.investigation_complaint) + " by " + str(self.investigation_in_charge)
+
+class TagComplaint(models.Model):
+	tag = 				models.CharField(max_length = 1000, null = True)
+	tag_complaints = 	models.JSONField(null = True)
+
+	def __str__(self):
+		return self.tag
+
+	def save(self, *args, **kwargs):
+		if(self.tag_complaints == None):
+			self.tag_complaints = {'complaints': []}
+		super(TagComplaint, self).save(*args, **kwargs)

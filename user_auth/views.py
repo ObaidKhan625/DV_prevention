@@ -36,6 +36,8 @@ def loginPage(request):
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			login(request, user)
+			if(request.user.user_phone is None or request.user.user_place is None or request.user.user_description is None):
+				return redirect('accounts:profile-edit')
 			return redirect('complaints:explore-complaints')
 		else:
 			messages.info(request, 'Incorrect Username and Password combination')
