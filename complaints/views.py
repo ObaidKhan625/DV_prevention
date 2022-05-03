@@ -22,7 +22,7 @@ def findNearestActivist(request):
 	nearest activists from the complaint
 	"""
 	# complaint = Complaint.objects.get(complaint_filer = request.user)
-	users = User.objects.all().exclude(username = request.user)
+	users = User.objects.all().exclude(username = request.user).exclude(user_place_geocode = None)
 	complaint = Complaint.objects.get(complaint_filer = request.user)
 	context = {'users': users, 'complaint': complaint}
 	return render(request, 'complaints/nearest_activist_map.html', context)

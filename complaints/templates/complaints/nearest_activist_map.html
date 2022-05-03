@@ -225,7 +225,7 @@
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10',
         center: [complaint_long, complaint_lat],
-        zoom: 10,
+        zoom: 12,
         scrollZoom: false,
       });
 
@@ -252,6 +252,7 @@
             },
             'properties': {
               "user": "{{i.username}}",
+              "slug": "{{i.slug}}",
               'address': "{{i.user_place_geocode.place_name}}", 
               "city": "{{i.user_place_geocode.text}}",
             }
@@ -444,11 +445,11 @@
           link.href = '#';
           link.className = 'title';
           link.id = `link-${store.properties.id}`;
-          link.innerHTML = `${store.properties.address}`;
+          link.innerHTML = `${store.properties.user}`;
 
           /* Add details to the individual listing. */
           const details = listing.appendChild(document.createElement('div'));
-          details.innerHTML = `${store.properties.city}`;
+          details.innerHTML = `${store.properties.address}`;
           if (store.properties.phone) {
             details.innerHTML += ` &middot; ${store.properties.phoneFormatted}`;
           }
@@ -498,7 +499,7 @@
       function createPopUp(currentFeature) {
         const popUps = document.getElementsByClassName('mapboxgl-popup');
         if (popUps[0]) popUps[0].remove();
-        var currentFeature_user_url = "{% url 'accounts:profile-view' 0 %}".replace('0', currentFeature.properties.user);
+       var currentFeature_user_url = "{% url 'accounts:profile-view' 0 %}".replace('0', currentFeature.properties.slug);
 
         const popup = new mapboxgl.Popup({ closeOnClick: false })
           .setLngLat(currentFeature.geometry.coordinates)

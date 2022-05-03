@@ -11,6 +11,14 @@ from accounts.models import User
 # Create your views here.
 from django.views.decorators.csrf import csrf_protect
 
+def nullDetails(request):
+	if(request.user.user_phone is None or request.user.user_phone == "None"):
+		return True
+	if(request.user.user_place is None or request.user.user_place == "None"):
+		return True
+	if(request.user.user_description is None or request.user.user_description == "None"):
+		return True
+
 @csrf_protect
 @auth_or_not(0)
 def registerPage(request):
@@ -36,7 +44,7 @@ def loginPage(request):
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			login(request, user)
-			if(request.user.user_phone is None or request.user.user_place is None or request.user.user_description is None):
+			if nullDetails(request):
 				return redirect('accounts:profile-edit')
 			return redirect('complaints:explore-complaints')
 		else:

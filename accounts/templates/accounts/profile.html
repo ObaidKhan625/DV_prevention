@@ -76,7 +76,7 @@
                 {% if request.user != profile and profile.user_role == 'NGO/Activist/Mod' %}
                 <!-- Ratings Start -->
                     <div class="p-5">
-                        <form action="{% url 'accounts:profile-rate' profile.username %}" method="POST" enctype="multipart/form-data">
+                        <form action="{% url 'accounts:profile-rate' profile.slug %}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <h1 style="text-align: center;">Rate The Profile</h1>
                             <hr>

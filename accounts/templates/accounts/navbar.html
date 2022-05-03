@@ -193,9 +193,15 @@
 				<a class="nav-link" href="{% url 'user_requests:show-complaint-requests' %}"><i class="fa fa-solid fa-newspaper"></i>Complaint Requests</a>
 				{% endif %}
 			</li>
+			{% if request.user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'accounts:profile-view' request.user.slug %}"><i class="fa fa-solid fa-user"></i>Profile</a>
+			</li>
+			{% else %}
 			<li class="nav-item">
 				<a class="nav-link" href="{% url 'accounts:profile-view' request.user %}"><i class="fa fa-solid fa-user"></i>Profile</a>
 			</li>
+			{% endif %}
 		</ul>
 	</div>
 </nav>

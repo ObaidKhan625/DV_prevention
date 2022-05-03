@@ -42,7 +42,7 @@
 			<div class="product-dtl">
 				<div class="product-info">
 					<div class="product-name">
-						<a href="{% url 'accounts:profile-view' profile %}" style="color: black;">
+						<a href="{% url 'accounts:profile-view' profile.slug %}" style="color: black;">
 							{{complaint.complaint_filer}}
 						</a>
 					</div>
@@ -54,7 +54,7 @@
 				{% if profile != request.user and profile.user_role != 'NGO/Activist/Mod' %}
 				<div class="row">
 					<div class="col-md-6">
-						<a href="{% url 'accounts:profile-view' complaint.complaint_filer %}">
+						<a href="{% url 'accounts:profile-view' complaint.complaint_filer.slug %}">
 							<button type="button" class="btn btn-dark mt-2 ml-2">Request Contact</button>
 						</a>
 					</div>

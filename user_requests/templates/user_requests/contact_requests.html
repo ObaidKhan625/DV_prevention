@@ -12,7 +12,7 @@
             <div class="row p-2 bg-white border rounded">
                 <div class="col-md-6 mt-1">
                     <h5>By: </h5>
-                    <a href="{% url 'accounts:profile-view' contact_request.requested_by %}"><h3>{{contact_request.requested_by}}</h5></a>
+                    <a href="{% url 'accounts:profile-view' contact_request.requested_by.slug %}"><h3>{{contact_request.requested_by}}</h5></a>
                     <div class="d-flex flex-row">
                     </div>
                     <p class="text-justify para mb-0">{{contact_request.request_note}}<br><br></p>

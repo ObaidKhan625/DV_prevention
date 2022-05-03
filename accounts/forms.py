@@ -17,7 +17,8 @@ class UpdateUserForm(forms.ModelForm):
 		user.email = self.cleaned_data['email']
 		user.user_phone = self.cleaned_data['user_phone']
 		user.user_description = self.cleaned_data['user_description']
-		user.user_profile_image = self.cleaned_data['user_profile_image']
+		if(self.cleaned_data['user_profile_image'] is not None):
+			user.user_profile_image = self.cleaned_data['user_profile_image']
 		if user.user_place_geocode is not None:
 			user.user_place = user.user_place_geocode['place_name']
 		user.user_other = self.cleaned_data['user_other']
