@@ -40,12 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'taggit',
     'widget_tweaks',
     'accounts',
     'complaints',
     'user_auth',
     'user_requests',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -76,8 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'DV_Prevention.wsgi.application'
-
+ASGI_APPLICATION = 'DV_Prevention.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -122,6 +123,15 @@ USE_L10N = True
 
 USE_TZ = True
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -148,11 +158,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 TAGGIT_CASE_INSENSITIVE = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-GOOGLE_API_KEY = "AIzaSyA3lKYIp_7z-ifkqdpG9RBgXnF1o12UgNY"
-
-RECAPTCHA_KEY = "6LfSxRwdAAAAAPeY7-3Gs3X1gFqFyVIUdlN50i0j"
-
-RECAPTCHA_SECRET_KEY = "6LfSxRwdAAAAAHEe7kQ3mqu68KnAC6DYzEXyX53V"
-
-BASE_COUNTRY = "IN"

@@ -49,10 +49,25 @@ def loginPage(request):
 			return redirect('complaints:explore-complaints')
 		else:
 			messages.info(request, 'Incorrect Username and Password combination')
-	context = {}
+	context = {"room_name": "broadcast"}
 	return render(request, 'user_auth/login.html', context)
 
 @auth_or_not(1)
 def logoutUser(request):
 	logout(request)
 	return redirect('user_auth:login')
+
+from channels.layers import get_channel_layer
+import json
+
+from asgiref.sync import async_to_sync
+def test(request):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "notification_broadcast",
+        {
+            'type': 'send_notification',
+            'message': json.dumps("Notification")
+        }
+    )
+    return HttpResponse("Done")
