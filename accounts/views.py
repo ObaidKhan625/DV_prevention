@@ -105,3 +105,20 @@ def profile_file_upload_view(request):
 			pass
 		return redirect('/')
 	return JsonResponse({'post':'false'})
+
+from channels.layers import get_channel_layer
+import json
+
+from asgiref.sync import async_to_sync
+def test(request):
+	channel_layer = get_channel_layer()
+	# print(channel_layer)
+	async_to_sync(channel_layer.group_send)(
+		"notification_broadcast",
+		{
+			'type': 'send_notification',
+			'message': json.dumps("Notification")
+		}
+	)
+	return HttpResponse("Done")
+

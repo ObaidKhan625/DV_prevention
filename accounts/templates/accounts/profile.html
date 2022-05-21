@@ -18,13 +18,8 @@
                       <img src="{% static 'images/profile_backgrounds/normal_users_background.jpg' %}" height="120%" width="140%">
                       {% endif %}
                       </div>
-                      {% if permitted_user == True or profile.user_role == 'NGO/Activist/Mod' %}
                       <h3 class="title">{{profile.username}}</h3>
                       <p class="category">{{profile.user_role}}</p>
-                      {% else %}
-                      <h3 class="title">Permission Not Availible</h3>
-                      <p class="category">Permission Not Availible</p>
-                      {% endif %}
                       {% if profile.user_role == 'NGO/Activist/Mod' %}
                       <h5>Activist Rating : </h5>
                       <h3>{{total_profile_score}}</h3>

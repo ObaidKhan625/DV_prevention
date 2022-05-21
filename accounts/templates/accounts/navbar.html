@@ -188,9 +188,29 @@
 			</li>
 			<li class="nav-item">
 				{% if request.user.user_role == 'Normal user/Victim' %}
-				<a class="nav-link" href="{% url 'user_requests:show-contact-requests' %}"><i class="fa fa-solid fa-newspaper"></i>Contact Requests</a>
+					<a class="nav-link" href="{% url 'user_requests:show-contact-requests' %}">
+						<i class="fa fa-solid fa-newspaper"></i>
+						Contact Requests
+						<span class="badge" id="notification-badge">
+							{% if request.user.is_authenticated %}
+							{{ request.session.notifications_for_request.user }}
+							{% else %}
+							0
+							{% endif %}
+						</span>
+					</a>
 				{% else  %}
-				<a class="nav-link" href="{% url 'user_requests:show-complaint-requests' %}"><i class="fa fa-solid fa-newspaper"></i>Complaint Requests</a>
+					<a class="nav-link" href="{% url 'user_requests:show-complaint-requests' %}">
+						<i class="fa fa-solid fa-newspaper"></i>
+						Complaint Requests
+						<span class="badge" id="notification-badge">
+							{% if request.user.is_authenticated %}
+							{{ request.session.notifications_for_request.user }}
+							{% else %}
+							0
+							{% endif %}
+						</span>
+					</a>
 				{% endif %}
 			</li>
 			{% if request.user.is_authenticated %}
@@ -208,6 +228,7 @@
 
 <script>
   // ---------Responsive-navbar-active-animation-----------
+  alert("{{ request.session.notifications_for_ }}{{request.user}}");
 function test(){
 	var tabsNewAnim = $('#navbarSupportedContent');
 	var selectorNewAnim = $('#navbarSupportedContent').find('li').length;
@@ -289,4 +310,28 @@ jQuery(document).ready(function($){
 		btns[0].className += " active";
 	}
 });
+</script>
+
+{{ room_name|json_script:"room-name" }}
+
+<script>
+	const roomName = "notification_requests_for_"+"{{request.session.username}}";
+	const notificationSocket = new WebSocket(
+	'ws://'
+	+ window.location.host
+	+ '/ws/notification/'
+	+ roomName
+	+ '/'
+	);
+
+  notificationSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    //document.querySelector('#chat-log').value += (data.message + '\n');
+    console.log(parseInt(document.getElementById("notification-badge").innerHTML));
+    document.getElementById("notification-badge").innerHTML = parseInt(document.getElementById("notification-badge").innerHTML) + 1;
+  };
+
+  notificationSocket.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly');
+  }; 
 </script>

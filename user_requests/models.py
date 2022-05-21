@@ -29,7 +29,7 @@ class Complaint_Request(models.Model):
 	requested_complaint = 		models.ForeignKey(Complaint, null = True, on_delete = models.CASCADE, related_name = 'complaint_request')
 	requested_by = 				models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name = 'complaint_requested_by')
 	requested_user = 			models.ForeignKey(User, null = True, on_delete = models.CASCADE, related_name = 'complaint_requested_user')
-
+	
 	def __str__(self):
 		return str(self.requested_user) + ' requested by ' + str(self.requested_by)
 

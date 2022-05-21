@@ -3,8 +3,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'notification_%s' % self.room_name
+        self.room_group_name = self.scope['url_route']['kwargs']['room_name']
+        print(self.room_group_name)
 
         # Join room group
         await self.channel_layer.group_add(
@@ -36,7 +36,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
     #     )
 
     # Receive message from room group
-    async def send_notification(self, event):
+    async def send_request_notification(self, event):
         message = json.loads(event['message'])
 
         # Send message to WebSocket

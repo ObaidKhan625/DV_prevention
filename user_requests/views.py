@@ -37,6 +37,10 @@ def reportUser(request, profile_id):
 		Report.objects.create(reported_user = reported_user, reported_by = request.user)
 		return JsonResponse({'report_post':True})
 
+from channels.layers import get_channel_layer
+import json
+from asgiref.sync import async_to_sync
+
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
 def requestContactInfo(request, profile_id):
@@ -46,37 +50,43 @@ def requestContactInfo(request, profile_id):
 	requested_user = User.objects.get(id = profile_id)
 	if(Contact_Request.objects.filter(requested_user = requested_user, requested_by = request.user).exists()):
 		return JsonResponse({'request_post':False})
-	else:
-		Contact_Request.objects.create(requested_user = requested_user, requested_by = request.user)
-		return JsonResponse({'request_post':True})
+	channel_layer = get_channel_layer()
+	# room_name_for_notification = "requests_for_"+str(request.user)
+	print("notification_requests_for_"+str(requested_user))
+	async_to_sync(channel_layer.group_send)(
+		"notification_requests_for_"+str(requested_user),
+		{
+			'type': 'send_request_notification',
+			'message': json.dumps("Notification")
+		}
+	)
+	Contact_Request.objects.create(requested_user = requested_user, requested_by = request.user)
+	request.session['notifications_for_'+str(requested_user)] += 1
+	return JsonResponse({'request_post':True})
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
-def requestContactInfoAction(request, request_id, action):
+def requestComplaintAction(request, profile_id):
 	"""
-	Permit a User to see current user's contact request
+	Request an activist to look into current user's complaint
 	"""
-	contact_info_request = Contact_Request.objects.get(id = request_id)
-	if(action == 1):
-		Contact_Permission.objects.create(permitted_user = contact_info_request.requested_by, 
-		permitted_by = request.user)
-		Contact_Request.objects.get(id = request_id).delete()
-	else:
-		Contact_Request.objects.get(id = request_id).delete()
-	return redirect('user_requests:show-contact-requests')
-
-@login_required(login_url='user_auth:login')
-@auth_or_not(1)
-def requestComplaintInfo(request, profile_id):
-	"""
-	Request a user to view their contact info
-	"""
-	requested_user = User.objects.get(id = profile_id)
-	if(Contact_Request.objects.filter(requested_user = requested_user, requested_by = request.user).exists()):
+	profile = User.objects.get(id = profile_id)
+	complaint = Complaint.objects.filter(complaint_filer = request.user)[0]
+	if(Complaint_Request.objects.filter(requested_by = request.user, requested_user = profile, requested_complaint = complaint).exists()):
 		return JsonResponse({'request_post':False})
-	else:
-		Contact_Request.objects.create(requested_user = requested_user, requested_by = request.user)
-		return JsonResponse({'request_post':True})
+	channel_layer = get_channel_layer()
+	# room_name_for_notification = "requests_for_"+str(request.user)
+	print("notification_requests_for_"+str(requested_user))
+	async_to_sync(channel_layer.group_send)(
+		"notification_requests_for_"+str(requested_user),
+		{
+			'type': 'send_request_notification',
+			'message': json.dumps("Notification")
+		}
+	)
+	Complaint_Request.objects.create(requested_by = request.user, requested_user = profile, requested_complaint = complaint)
+	request.session['notifications_for_'+str(profile)] += 1
+	return JsonResponse({'request_post':True})
 
 @login_required(login_url='user_auth:login')
 @auth_or_not(1)
@@ -117,14 +127,3 @@ def requestContactInfoAction(request, request_id, action):
 	else:
 		Contact_Request.objects.get(id = request_id).delete()
 	return redirect('user_requests:show-contact-requests')
-
-@login_required(login_url='user_auth:login')
-@auth_or_not(1)
-def requestComplaintAction(request, profile_id):
-	"""
-	Request an activist to look into current user's complaint
-	"""
-	profile = User.objects.get(id = profile_id)
-	complaint = Complaint.objects.filter(complaint_filer = request.user)[0]
-	Complaint_Request.objects.get_or_create(requested_by = request.user, requested_user = profile, requested_complaint = complaint)
-	return redirect(reverse('accounts:profile-view', kwargs={'profile_slug':profile.slug}))
