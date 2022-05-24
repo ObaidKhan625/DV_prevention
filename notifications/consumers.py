@@ -12,7 +12,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-        await self.accept()
+        if(self.scope["user"].is_authenticated):
+            await self.accept()
 
     async def disconnect(self, close_code):
         # Leave room group

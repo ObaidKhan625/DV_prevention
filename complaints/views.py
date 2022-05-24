@@ -55,6 +55,8 @@ def exploreComplaints(request, sorting_parameter="upvotes"):
 	"""
 	See availible complaints, shown on user login
 	"""
+	# request.session['notifications_for_request_user'] += 1
+	# print(request.session['notifications_for_request_user'])
 	complaints = Complaint.objects.filter(complaint_status='active')
 	if(sorting_parameter=="name"):
 		complaints = sorted(complaints, key = lambda x : x.complaint_name, reverse = True)
@@ -75,9 +77,6 @@ def exploreComplaintsByTag(request, complaint_tag):
 			complaints.append(complaint)
 		except:
 			pass
-	print(str(tag))
-	for i in complaint.tags.all():
-		print(i)
 	
 	context = {'complaints':complaints, 'complaint_page_title': 'Complaints with tag #'+tag.tag, 'filtered_tag': str(tag)}
 	return render(request, 'complaints/complaints.html', context)
@@ -135,7 +134,6 @@ def addMessage(request, complaint_id, message_type):
 			message_content = request.POST.get('update-add')
 		else:
 			message_content = request.POST.get('comment-add')
-		print('hey', request.POST.get('comment-add'))
 
 		if len(message_content) == 0:
 			context = complaint_detail_components(request, complaint_id)
@@ -162,7 +160,6 @@ def investigateComplaint(request, complaint_id):
 def complaintUpvote(request, complaint_id):
 	complaint = Complaint.objects.get(id = complaint_id)
 	complaint_upvotes_list = complaint.complaint_upvotes_users.split(',')
-	print(complaint_upvotes_list)
 	for i in complaint_upvotes_list:
 		if(i == str(request.user)):
 			return JsonResponse({'upvote_post':False})
@@ -176,7 +173,6 @@ def complaintUpvote(request, complaint_id):
 def complaintDownvote(request, complaint_id):
 	complaint = Complaint.objects.get(id = complaint_id)
 	complaint_downvotes_list = complaint.complaint_downvotes_users.split(',')
-	print(complaint_downvotes_list)
 	for i in complaint_downvotes_list:
 		if(i == str(request.user)):
 			return JsonResponse({'upvote_post':False})

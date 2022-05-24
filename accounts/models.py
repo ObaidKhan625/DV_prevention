@@ -17,6 +17,7 @@ class User(AbstractUser):
 	user_description = 			models.TextField(null = True, blank = True)
 	user_place = 				models.CharField(max_length = 1000, null = True, blank = True)
 	user_place_geocode = 		models.JSONField(null = True, blank = True)
+	user_notifications = 		models.PositiveIntegerField(default = 0)
 	slug = 						models.SlugField(unique=True, max_length=100, default='some string')
 
 	def __str__(self):

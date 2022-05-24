@@ -37,6 +37,7 @@ def reportUser(request, profile_id):
 		Report.objects.create(reported_user = reported_user, reported_by = request.user)
 		return JsonResponse({'report_post':True})
 
+from django.contrib.sessions.models import Session
 from channels.layers import get_channel_layer
 import json
 from asgiref.sync import async_to_sync
@@ -50,18 +51,26 @@ def requestContactInfo(request, profile_id):
 	requested_user = User.objects.get(id = profile_id)
 	if(Contact_Request.objects.filter(requested_user = requested_user, requested_by = request.user).exists()):
 		return JsonResponse({'request_post':False})
+	
+	requested_user.user_notifications += 1
+	requested_user.save()
+	print(requested_user.user_notifications)
+
 	channel_layer = get_channel_layer()
 	# room_name_for_notification = "requests_for_"+str(request.user)
-	print("notification_requests_for_"+str(requested_user))
-	async_to_sync(channel_layer.group_send)(
-		"notification_requests_for_"+str(requested_user),
-		{
-			'type': 'send_request_notification',
-			'message': json.dumps("Notification")
-		}
-	)
+
+	try:
+		async_to_sync(channel_layer.group_send)(
+			"notification_requests_for_"+str(requested_user),
+			{
+				'type': 'send_request_notification',
+				'message': json.dumps("Notification")
+			}
+		)
+	except:
+		pass
+	
 	Contact_Request.objects.create(requested_user = requested_user, requested_by = request.user)
-	request.session['notifications_for_'+str(requested_user)] += 1
 	return JsonResponse({'request_post':True})
 
 @login_required(login_url='user_auth:login')
@@ -70,22 +79,29 @@ def requestComplaintAction(request, profile_id):
 	"""
 	Request an activist to look into current user's complaint
 	"""
-	profile = User.objects.get(id = profile_id)
+	requested_user = User.objects.get(id = profile_id)
 	complaint = Complaint.objects.filter(complaint_filer = request.user)[0]
-	if(Complaint_Request.objects.filter(requested_by = request.user, requested_user = profile, requested_complaint = complaint).exists()):
+	if(Complaint_Request.objects.filter(requested_by = request.user, requested_user = requested_user, requested_complaint = complaint).exists()):
 		return JsonResponse({'request_post':False})
+	
+	requested_user.user_notifications += 1
+	requested_user.save()
+
 	channel_layer = get_channel_layer()
 	# room_name_for_notification = "requests_for_"+str(request.user)
-	print("notification_requests_for_"+str(requested_user))
-	async_to_sync(channel_layer.group_send)(
-		"notification_requests_for_"+str(requested_user),
-		{
-			'type': 'send_request_notification',
-			'message': json.dumps("Notification")
-		}
-	)
-	Complaint_Request.objects.create(requested_by = request.user, requested_user = profile, requested_complaint = complaint)
-	request.session['notifications_for_'+str(profile)] += 1
+
+	try:
+		async_to_sync(channel_layer.group_send)(
+			"notification_requests_for_"+str(requested_user),
+			{
+				'type': 'send_request_notification',
+				'message': json.dumps("Notification")
+			}
+		)
+	except:
+		pass
+	
+	Complaint_Request.objects.create(requested_by = request.user, requested_user = requested_user, requested_complaint = complaint)
 	return JsonResponse({'request_post':True})
 
 @login_required(login_url='user_auth:login')
@@ -95,6 +111,8 @@ def showContactRequests(request):
 	See Contact Requests availible for user's profile
 	"""
 	contact_requests = Contact_Request.objects.filter(requested_user = request.user)
+	request.user.user_notifications = 0
+	request.user.save()
 	context = {'contact_requests':contact_requests, 'True':1, 'False':0}
 	return render(request, 'user_requests/contact_requests.html', context)
 
@@ -105,11 +123,12 @@ def showComplaintRequests(request):
 	See Complaint Requests availible for user's profile
 	"""
 	complaint_requests_all = Complaint_Request.objects.filter(requested_user = request.user)
-	print(complaint_requests_all)
 	complaints = []
 	for i in complaint_requests_all:
 		if i.requested_complaint.complaint_status == 'active':
 			complaints.append(i.requested_complaint)
+	request.user.user_notifications = 0
+	request.user.save()
 	context = {'complaints':complaints, 'complaint_page_title':'Complaint Requests for '+ str(request.user)}
 	return render(request, 'complaints/complaints.html', context)
 

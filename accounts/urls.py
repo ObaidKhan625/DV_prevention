@@ -10,7 +10,6 @@ urlpatterns = [
 	path('profile-file-drop/upload/', views.profile_file_upload_view, name = 'profile-file-drop-upload-upload-view'),
 	path('edit-profile/', views.profileEdit, name = 'profile-edit'),
 	path('profile-rate/<str:profile_slug>/', views.profileRate, name='profile-rate'),
-	path('test/', views.test, name="home"),
 ]
 
 if settings.DEBUG:

@@ -9,8 +9,8 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.urls import reverse
 from accounts.models import User
 from user_requests.models import Contact_Request, Complaint_Request
-# Create your views here.
 from django.views.decorators.csrf import csrf_protect
+# Create your views here.
 
 def nullDetails(request):
 	if(request.user.user_phone is None or request.user.user_phone == "None"):
@@ -44,13 +44,7 @@ def loginPage(request):
 		password = request.POST.get('password')
 		user = authenticate(username=username, password=password)
 		if user is not None:
-			if(user.user_role == "NGO/Activist/Mod"):
-				request.session['notifications_for_'+str(user)] = Complaint_Request.objects.filter(requested_user = user).count()
-			else:
-				request.session['notifications_for_'+str(user)] = Contact_Request.objects.filter(requested_user = user).count()
-				print(request.session['notifications_for_'+str(user)])
 			login(request, user)
-			request.session['username'] = request.user.username
 			if nullDetails(request):
 				return redirect('accounts:profile-edit')
 			return redirect('complaints:explore-complaints')
