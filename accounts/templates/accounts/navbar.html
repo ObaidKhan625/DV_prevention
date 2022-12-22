@@ -8,10 +8,10 @@
 /*----------bootstrap-navbar-css------------*/
 .navbar-logo{
 	padding: 15px;
-	color: #fff;
+	color: #EEE2DC;
 }
 .navbar-mainbg{
-	background-color: #5161ce;
+	background-color: #AC3B61;
 	padding: 0px;
 }
 #navbarSupportedContent{
@@ -40,7 +40,7 @@
     position: relative;
 }
 #navbarSupportedContent>ul>li.active>a{
-	color: #5161ce;
+	color: #AC3B61;
 	background-color: transparent;
 	transition: all 0.7s;
 }
@@ -68,7 +68,7 @@
 	left: 0px;
 	transition-duration:0.6s;
 	transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-	background-color: #fff;
+	background-color: #EEE2DC;
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;
 	margin-top: 10px;
@@ -78,7 +78,7 @@
 	position: absolute;
 	width: 25px;
 	height: 25px;
-	background-color: #fff;
+	background-color: #EEE2DC;
 	bottom: 10px;
 }
 .hori-selector .right{
@@ -94,7 +94,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #5161ce;
+    background-color: #AC3B61;
 }
 .hori-selector .right:before{
 	bottom: 0;
@@ -160,7 +160,7 @@
 		left: -25px;
 	}
 	.navbar-mainbg{
-		background-color: #5161ce;
+		background-color: #AC3B61;
 		padding: 0px;
 	}
 }
@@ -182,11 +182,11 @@
 .notification-badge-animation {
 	animation: blinking_notification_animation 1.5s linear infinite;
 	border-radius: 50%;
-	color: #5161ce;
+	color: #AC3B61;
 	/* width: 15px;
 	height: 15px;
 	padding: 10px; */
-	background: #fff;
+	background: #EEE2DC;
 	
 }
 
@@ -196,7 +196,7 @@
 		<i class="fas fa-bars text-white"></i>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<li class="nav-item bg-light ml-4">
+		<li class="nav-item ml-4" style="background-color: #EEE2DC; color: #AC3B61">
 			<a class="nav-link" href="{% url 'user_auth:logout' %}"><i class="fa fa-solid fa-right-from-bracket"></i>Logout</a>
 		</li>
 		<ul class="navbar-nav ml-auto" id="navbar-menu">

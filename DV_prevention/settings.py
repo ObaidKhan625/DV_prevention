@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'DV_Prevention.urls'
+ROOT_URLCONF = 'DV_prevention.urls'
 
 TEMPLATES = [
     {
@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'DV_Prevention.asgi.application'
+ASGI_APPLICATION = 'DV_prevention.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -123,14 +123,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 
 
 # Static files (CSS, JavaScript, Images)
@@ -158,5 +158,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 TAGGIT_CASE_INSENSITIVE = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
