@@ -8,15 +8,15 @@
 <div class="container pt-5">
     <div class="row gutters">
         <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-            <div class="card h-100">
+            <div class="card h-100" style="background-color: #EDC7B7;">
                 <div class="card-body">
                     <div class="account-settings">
                         <div class="user-profile">
                             <div class="user-avatar">
                                 <img src="{% static 'images/' %}{{user.user_profile_image}}">
                             </div>
-                            <h5 class="user-name">{{user.username}}</h5>
-                            <h6 class="user-email">{{user.email}}</h6>
+                            <h5 class="user-name" style="color: #AC3B61">{{user.username}}</h5>
+                            <h6 class="user-email" style="color: #AC3B61">{{user.email}}</h6>
                         </div>
                         <div class="about">
                             <h5>Description</h5>
@@ -27,13 +27,13 @@
             </div>
         </div>
         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-            <div class="card h-100">
+            <div class="card h-100" style="background-color: #EDC7B7;">
                 <div class="card-body">
                     <form action="" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <h6 class="mb-2 text-primary">Personal Details</h6>
+                                <h6 class="mb-2" style="color: #123C69">Personal Details</h6>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="form-group">
@@ -63,7 +63,7 @@
                         </div>
                         <div class="row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <h6 class="mt-3 mb-2 text-primary">Description</h6>
+                                <h6 class="mt-3 mb-2" style="color: #123C69">Description</h6>
                             </div>
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -74,7 +74,7 @@
                         </div>
                         <div class="row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <h6 class="mt-3 mb-2 text-primary">Other</h6>
+                                <h6 class="mt-3 mb-2" style="color: #123C69">Other</h6>
                             </div>
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -85,7 +85,7 @@
                         </div>
                         <div class="row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <h6 class="mt-3 mb-2 text-primary">Profile Image</h6>
+                                <h6 class="mt-3 mb-2" style="color: #123C69">Profile Image</h6>
                             </div>
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
@@ -96,7 +96,8 @@
                         <div class="row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="text-right">
-                                    <button type="submit" id="submit" name="submit" class="btn btn-primary">Update</button>
+                                    <button type="submit" id="submit" name="submit" class="btn" 
+                                    style="background-color: #AC3B61; color: #EDC7B7">Update</button>
                                 </div>
                             </div>
                         </div>
@@ -108,13 +109,6 @@
 </div>
 
     <style>
-        body {
-    margin: 0;
-    color: #2e323c;
-    background: #f5f6fa;
-    position: relative;
-    height: 100%;
-}
 .account-settings .user-profile {
     margin: 0 0 1rem 0;
     padding-bottom: 1rem;
@@ -145,7 +139,7 @@
 }
 .account-settings .about h5 {
     margin: 0 0 15px 0;
-    color: #007ae1;
+    color: #123C69;
 }
 .account-settings .about p {
     font-size: 0.825rem;

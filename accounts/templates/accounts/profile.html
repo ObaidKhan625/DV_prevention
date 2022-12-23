@@ -18,32 +18,32 @@
                       <img src="{% static 'images/profile_backgrounds/normal_users_background.jpg' %}" height="120%" width="140%">
                       {% endif %}
                       </div>
-                      <h3 class="title">{{profile.username}}</h3>
-                      <p class="category">{{profile.user_role}}</p>
+                      <h3 class="title" style="color: #EDC7B7">{{profile.username}}</h3>
+                      <p class="category" style="color: #EDC7B7">{{profile.user_role}}</p>
                       {% if profile.user_role == 'NGO/Activist/Mod' %}
-                      <h5>Activist Rating : </h5>
-                      <h3>{{total_profile_score}}</h3>
+                      <h5 style="color: #EDC7B7">Activist Rating : </h5>
+                      <h3 style="color: #EDC7B7">{{total_profile_score}}</h3>
                       {% endif %}
                     <div class="content">
                     <div class="social-description">
-                        <h2>{{profile.user_complaints_solved}}</h2>
-                        <p>Complaints Solved</p>
+                        <h2 style="color: #EDC7B7">{{profile.user_complaints_solved}}</h2>
+                        <p style="color: #EDC7B7">Complaints Solved</p>
                         <button type="button" class="btn-default btn-circle btn-xl"><i class="fa fa-link"></i>
                     </div>
                     <div class="social-description">
-                        <h2 class="verified-count-{{profile.id}}">{{verifications_count}}</h2>
-                        <p>Verified by</p>
+                        <h2 class="verified-count-{{profile.id}}" style="color: #EDC7B7">{{verifications_count}}</h2>
+                        <p style="color: #EDC7B7">Verified by</p>
                         <button type="button" class="btn-success btn-circle btn-xl verified-count" data-profile="{{profile.id}}"><i class="fa fa-check"></i>
                     </div>
                     <div class="social-description">
-                        <h2 class="reported-count-{{profile.id}}">{{report_count}}</h2>
-                        <p>Reported by</p>
+                        <h2 class="reported-count-{{profile.id}}" style="color: #EDC7B7">{{report_count}}</h2>
+                        <p style="color: #EDC7B7">Reported by</p>
                         <button type="button" class="btn-danger btn-circle btn-xl reported-count" data-profile="{{profile.id}}"><i class="fa fa-times"></i>
                     </div>
                     </div>
                 </div>
                 </div>
-        <div class="section">
+        <div class="section" style="background-color: #EDC7B7">
             <div class="container">
                 <div class="button-container">
                   {% if profile.user_role == 'Normal user/Victim' %}
@@ -73,14 +73,14 @@
                     <div class="p-5">
                         <form action="{% url 'accounts:profile-rate' profile.slug %}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <h1 style="text-align: center;">Rate The Profile</h1>
-                            <hr>
+                            <h3 class="title" style="text-align: center; color: #123C69">Rate This Profile</h3>
                             <div style="display: flex; justify-content: center;">
-                              <input type="range" name="slider-value" class="form-range w-100" min="0" max="10" step="1" id="customRange3" value={{user_current_rating}}>
-                              <div class="score" id="ratingOne">{{user_current_rating}}</div>
+                              <input type="range" name="slider-value" class="form-range w-100" min="0" max="10" step="1" id="customRange3" 
+                              style="color: #AC3B69;" value={{user_current_rating}}>
+                              <div class="score" id="ratingOne" style="background-color: #AC3B69; color: #EDC7B7">{{user_current_rating}}</div>
                             </div>
                             <div style="display: flex; justify-content: center;">
-                              <input type="submit" value="Submit" class="btn" style="background-color: #f96332;">
+                              <input type="submit" value="Submit" class="btn" style="background-color: #AC3B69;">
                             </div>
                         </form>
                     </div>
@@ -98,7 +98,7 @@
                 <!-- Ratings End -->
                 {% endif %}
 
-                <h3 class="title">Contacts</h3>
+                <h3 class="title" style="color: #123C69">Contacts</h3>
                 <h5 class="description">
                     {% if permitted_user == True %}
                     <div>{{user.email}}</div>
@@ -110,7 +110,7 @@
                     <div>Permission Not Availible</div>
                     {% endif %}
                 </h5>
-                <h3 class="title pt-0">About me</h3>
+                <h3 class="title pt-0" style="color: #123C69">About me</h3>
                 {% if permitted_user == True %}
                 <h5 class="description">{{user.user_description}}</h5>
                 {% else %}
@@ -119,7 +119,7 @@
                 {% if profile.user_role == 'NGO/Activist/Mod' %}
                 <div class="row">
                   <div class="col-md-6 ml-auto mr-auto">
-                      <h4 class="title text-center">Verification Docs</h4>
+                      <h4 class="title text-center" style="color: #123C69">Verification Docs</h4>
                       <div class="nav-align-center">
                       {% if profile == request.user %}
                       <ul class="nav nav-pills nav-pills-primary nav-pills-just-icons" role="tablist">
@@ -157,7 +157,9 @@
 
 {% if profile == request.user %}
 <a href="{% url 'accounts:profile-edit' %}">
-    <button id="edit-profile-button" class="btn btn-success">Edit Profile</button>
+    <button id="edit-profile-button" class="btn" style="background-color: #AC3B69;">
+        <i class="fa fa-edit"></i>
+    </button>
 </a>
 {% endif %}
 
@@ -168,8 +170,6 @@
         bottom: 30px; 
         right: 30px; 
         font-size:20px;
-        background-color: #4CAF50;
-        border: 2px solid black;
         color: white; 
         text-align: center; 
         cursor: pointer;
@@ -376,7 +376,7 @@
 }
 
 .btn-primary {
-    background-color: #f96332;
+    background-color: #AC3B69;
     color: #FFFFFF;
 }
 
@@ -407,8 +407,8 @@
 .btn-primary[disabled]:focus,
 .btn-primary[disabled]:active,
 .btn-primary[disabled].active {
-    background-color: #f96332;
-    border-color: #f96332;
+    background-color: #AC3B69;
+    border-color: #AC3B69;
 }
 
 .btn-round {
@@ -436,12 +436,12 @@ h5 {
 }
 
 a {
-    color: #f96332;
+    color: #AC3B69;
 }
 
 a:hover,
 a:focus {
-    color: #f96332;
+    color: #AC3B69;
 }
 
 h2,
@@ -500,7 +500,6 @@ p {
 }
 
 .description {
-    color: #9A9A9A;
     font-weight: 300;
 }
 
@@ -616,7 +615,7 @@ body {
 .nav-pills.nav-pills-primary .nav-item .nav-link.active,
 .nav-pills.nav-pills-primary .nav-item .nav-link.active:focus,
 .nav-pills.nav-pills-primary .nav-item .nav-link.active:hover {
-    background-color: #f96332;
+    background-color: #AC3B69;
 }
 
 .nav-align-center {
@@ -679,7 +678,7 @@ body {
 }
 
 .bg-primary {
-    background-color: #f96332 !important;
+    background-color: #AC3B69 !important;
 }
 
 .dropdown-menu {
@@ -983,11 +982,11 @@ img {
     }
 
     .sidebar-collapse .navbar-collapse:before {
-        background: #f96332;
-        background: -webkit-linear-gradient(#f96332 0%, #000 80%);
-        background: -o-linear-gradient(#f96332 0%, #000 80%);
-        background: -moz-linear-gradient(#f96332 0%, #000 80%);
-        background: linear-gradient(#f96332 0%, #000 80%);
+        background: #AC3B69;
+        background: -webkit-linear-gradient(#AC3B69 0%, #000 80%);
+        background: -o-linear-gradient(#AC3B69 0%, #000 80%);
+        background: -moz-linear-gradient(#AC3B69 0%, #000 80%);
+        background: linear-gradient(#AC3B69 0%, #000 80%);
         opacity: 0.76;
         filter: alpha(opacity=76);
         display: block;

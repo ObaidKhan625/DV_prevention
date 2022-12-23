@@ -28,7 +28,7 @@
     <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
     <style>
       body {
-        color: #404040;
+        color: #123C69;
         font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', sans-serif;
         margin: 0;
         padding: 0;
@@ -69,12 +69,12 @@
       }
 
       a {
-        color: #404040;
+        color: #123C69;
         text-decoration: none;
       }
 
       a:hover {
-        color: #101010;
+        color: #123C69;
       }
 
       .heading {
@@ -83,8 +83,8 @@
         min-height: 60px;
         line-height: 60px;
         padding: 0 10px;
-        background-color: #00853e;
-        color: #fff;
+        background-color: #AC3B61;
+        color: #EDC7B7;
       }
 
       .listings {
@@ -104,7 +104,7 @@
       }
       .listings .item .title {
         display: block;
-        color: #00853e;
+        color: #123C69;
         font-weight: 700;
       }
 
@@ -113,10 +113,10 @@
       }
       .listings .item.active .title,
       .listings .item .title:hover {
-        color: #8cc63f;
+        color: #AC3B81;
       }
       .listings .item.active {
-        background-color: #f8f8f8;
+        color: #AC3B81;
       }
       ::-webkit-scrollbar {
         width: 3px;
@@ -128,7 +128,7 @@
         background: none;
       }
       ::-webkit-scrollbar-thumb {
-        background: #00853e;
+        background: #AC3B61;
         border-radius: 0;
       }
 
@@ -163,8 +163,8 @@
       }
 
       .mapboxgl-popup-content h3 {
-        background: #91c949;
-        color: #fff;
+        background: #AC3B61;
+        color: #EDC7B7;
         margin: -15px 0 0;
         padding: 10px;
         border-radius: 3px 3px 0 0;
@@ -186,7 +186,7 @@
       }
 
       .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
-        border-bottom-color: #91c949;
+        border-bottom-color: #AC3B81;
       }
 
       .mapboxgl-ctrl-geocoder {
@@ -215,7 +215,7 @@
     <script>
       var complaint_long = "{{complaint.complaint_place_geocode.geometry.coordinates.0}}";
       var complaint_lat = "{{complaint.complaint_place_geocode.geometry.coordinates.1}}";
-      mapboxgl.accessToken = 'pk.eyJ1IjoiZXBoaXJhbS1yZW5haXMiLCJhIjoiY2t5ajZ1aTVoMWk4ZTJvcG1nNzRjaWY0MiJ9.ipIanO9ZaafvcgugtuZAFg';
+      mapboxgl.accessToken = 'YOUR_ACCESS_TOKEN';
 
       // navigator.geolocation.getCurrentPosition(position => { 
       //     complaint_lat = "{{complaint.complaint_place_geocode.properties.geometry.coordinates.0}}";

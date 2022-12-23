@@ -4,16 +4,18 @@
 
 <form action="upload/" class="dropzone" method="POST" id="myGreatDropzone">
     {% csrf_token %}
-    <div class="fallback">
+    <div class="fallback" >
         <input name="file" type="file" multiple/>
     </div>
 </form>
-<button type="submit" id="button" class="btn btn-primary mt-5" style="margin: auto; display: block; width: 50%;">Submit</button>
+<button type="submit" id="button" class="btn btn-primary mt-5" style="margin: auto; 
+background-color: #AC3B61; color: #EDC7B7; display: block; width: 50%;">Submit</button>
 
 <script>
 Dropzone.options.myGreatDropzone = { // camelized version of the `id`
     autoProcessQueue: false,
     maxFilesize: 25, // MB
+    parallelUploads: 10, // Number of files process at a time (default 2)
     init: function () {
         var myDropzone = this;
 
