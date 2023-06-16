@@ -23,11 +23,6 @@ Line 218:
 mapboxgl.accessToken = ACCESS_TOKEN_HERE;
 ```
 
-• Finally, run the server, Go to the DV_prevention folder
-```
-cd DV_prevention
-python manage.py runserver
-```
 A few screenshots from some pages:
 
 Complaints:
