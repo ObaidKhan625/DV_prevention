@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      context: ./DV_prevention
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./DV_prevention/:/usr/src/app/
+      - static_files:/usr/src/app/staticfiles
+    # ports:
+    #   - 8000:8000
+    expose:
+      - 8000
+    depends_on:
+      - rdb
+    env_file:
+      - ./.env/dev.env
+  rdb:
+    image: redis:latest  
+  nginx:
+    build:
+      context: ./nginx/
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - static_files:/home/app/staticfiles
+
+volumes:
+  static_files:

@@ -1,0 +1,186 @@
+#logo{
+}
+
+/*   Profile part   */
+.profile-head {
+    transform: translateY(5rem)
+}
+
+.cover {
+    background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
+    background-size: cover;
+    background-repeat: no-repeat
+}
+
+body {
+    background: #FFFAF0;
+}
+
+#profileBody {
+	background-color: #FFFAF0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.button:hover {
+	background-color: black;
+	color: white;
+}
+
+#total-orders{
+	background-color: #4cb4c7;
+}
+
+#orders-delivered{
+	background-color: #7abecc;
+}
+
+#orders-pending{
+	background-color: #7CD1C0;
+}
+
+.Orders-table {
+	padding: 0px 0px 0px 0px;
+	background-color: #FFE4E1;
+	outline-color: #FFE4E1;
+}
+
+#profile-img {
+	border-radius: 50%;
+}
+
+table, th, td {
+	border: 1px solid black;
+	padding: 2px;
+}
+
+table { 
+	border-spacing: 10px;
+	border-collapse: separate;
+}
+
+/*   Explore Complaints   */
+
+.product-image {
+    width: 100%
+}
+
+.spec-1 {
+    color: #938787;
+    font-size: 15px
+}
+
+h5 {
+    font-weight: 400
+}
+
+.para {
+    font-size: 16px
+}
+
+/* Complaint Detail */
+
+
+body {
+    background: #ffc107;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+#complaint-detail .container {
+    background: #fff !important;
+    border: none;
+    border-radius: none;
+}
+
+#complaint-detail .pqr {
+    padding-right: 70px;
+    padding-top: 14px
+}
+
+#complaint-detail .para {
+    float: right;
+    margin-right: 0;
+    padding-left: 80%;
+    top: 0
+}
+
+#complaint-detail .col-md-2 {
+    padding-bottom: 20px;
+    font-weight: bold
+}
+
+#complaint-detail .col-md-2 a {
+    text-decoration: none;
+    color: #000
+}
+
+#complaint-detail .col-md-2.mio {
+    font-size: 12px;
+    padding-top: 7px
+}
+
+#complaint-detail .des::after {
+    content: '.';
+    font-size: 0;
+    display: block;
+    border-radius: 20px;
+    height: 6px;
+    width: 55%;
+    background: yellow;
+    margin: 14px 0
+}
+
+#complaint-detail .r4 {
+    padding-left: 25px
+}
+
+#complaint-detail .btn-outline-warning {
+    border-radius: 0;
+    border: 2px solid yellow;
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    width: 70%
+}
+
+@media screen and (max-width: 620px) {
+    #complaint-detail .container {
+        width: 98%;
+        display: flex;
+        flex-flow: column;
+        text-align: center
+    }
+
+    #complaint-detail .des::after {
+        content: '.';
+        font-size: 0;
+        display: block;
+        border-radius: 20px;
+        height: 6px;
+        width: 35%;
+        background: yellow;
+        margin: 10px auto
+    }
+
+    #complaint-detail .pqr {
+        text-align: center;
+        margin: 0 30px
+    }
+
+    #complaint-detail .para {
+        text-align: center;
+        padding-left: 90px;
+        padding-top: 10px
+    }
+
+    #complaint-detail .klo {
+        display: flex;
+        text-align: center;
+        margin: 0 auto;
+        margin-right: 40px
+    }
+}
+
+/* Complaint Detail start */
+
+/* Complaint Detail end */
