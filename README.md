@@ -4,9 +4,9 @@
 • The project uses Django as the Backend, HTML/CSS/Bootstrap/JS along with JQuery and AJAX for frontend.<br>
 • There’s the MapBox API added for victims to find activsts/NGOs nearest to them(Location restricted only to India).<br>
 • I used daphne as an ASGI server for allowing websockets and django-channels to give notifications to users<br>
-asynchronously, and used Redis to store groups.
-• Also, I recently added NGINX as a reverse proxy and dockerized the entire project.
-• Static files are served using NGINX as well.
+asynchronously, and used Redis to store groups.<br>
+• Also, I recently added NGINX as a reverse proxy and to serve static files. <br>
+• The entire project has been dockerized as well.
 
 # Setup to run on your local system
 
