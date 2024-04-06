@@ -8,5 +8,6 @@ import (
 func initRoutes() (r *mux.Router) {
 	r = mux.NewRouter()
 	r.HandleFunc("/verify-user", controllers.VerifyUser).Methods("GET")
+	r.HandleFunc("/report-user", controllers.ReportUser).Methods("GET")
 	return
 }

@@ -26,17 +26,18 @@ func RequestComplaintAction(w http.ResponseWriter, r *http.Request) {
 	user_requests.ServeRequest(w, r, handler)
 }
 
-func ShowContactRequests(w http.ResponseWriter, r *http.Request) {
-	handler := concrete_handlers.NewShowContactRequestsHandler()
-	user_requests.ServeRequest(w, r, handler)
-}
-
-func ShowComplaintRequests(w http.ResponseWriter, r *http.Request) {
-	handler := concrete_handlers.NewShowComplaintRequestsHandler()
-	user_requests.ServeRequest(w, r, handler)
-}
-
-func RequestContactInfoAction(w http.ResponseWriter, r *http.Request) {
-	handler := concrete_handlers.NewRequestContactInfoActionHandler()
-	user_requests.ServeRequest(w, r, handler)
-}
+//
+//func ShowContactRequests(w http.ResponseWriter, r *http.Request) {
+//	handler := concrete_handlers.NewShowContactRequestsHandler()
+//	user_requests.ServeRequest(w, r, handler)
+//}
+//
+//func ShowComplaintRequests(w http.ResponseWriter, r *http.Request) {
+//	handler := concrete_handlers.NewShowComplaintRequestsHandler()
+//	user_requests.ServeRequest(w, r, handler)
+//}
+//
+//func RequestContactInfoAction(w http.ResponseWriter, r *http.Request) {
+//	handler := concrete_handlers.NewRequestContactInfoActionHandler()
+//	user_requests.ServeRequest(w, r, handler)
+//}

@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/Masterminds/squirrel"
+	sq "github.com/Masterminds/squirrel"
+	"github.com/ObaidKhan625/DV_Prevention/user_requests/internal/app/user_requests/handlers"
+	"github.com/ObaidKhan625/DV_Prevention/user_requests/pkg/postgres"
 	"github.com/jackc/pgx/v5"
 	"net/http"
 )
@@ -14,44 +16,45 @@ type VerifyUser struct {
 }
 
 func (vu VerifyUser) HandleRequest(w http.ResponseWriter, r *http.Request) {
-	vu.setResponseOnWriter(w)
+	vu.SetResponseOnWriter(w)
 
 	userIdToBeVerified := r.URL.Query().Get("user_id")
+
 	// todo: Get from auth service
 	currentUserId := "1"
+
 	if currentUserId == userIdToBeVerified {
-		vu.setUnsuccessfulVerificationOnWriter(w)
+		vu.SetUnsuccessfulResponseOnWriter(w)
 		return
 	}
 
 	conn, err := pgx.Connect(context.Background(), "postgres://postgres:@localhost/user_request")
 	if err != nil {
 		fmt.Printf("Unable to connect to database: %v\n", err)
-		vu.setUnsuccessfulVerificationOnWriter(w)
+		vu.SetUnsuccessfulResponseOnWriter(w)
 		return
 	}
 	defer conn.Close(context.Background())
 
-	verificationExists := vu.verificationExistsInDB(userIdToBeVerified, conn)
+	verificationExists := vu.ExistsInDB(userIdToBeVerified, currentUserId, conn)
 	if verificationExists {
-		vu.setUnsuccessfulVerificationOnWriter(w)
+		vu.SetUnsuccessfulResponseOnWriter(w)
 		return
 	}
 
-	err = vu.addVerificationInDB(userIdToBeVerified, currentUserId, conn)
+	err = vu.AddToDB(userIdToBeVerified, currentUserId, conn)
 	fmt.Println("Insert error : ", err)
-
 }
 
-func (vu VerifyUser) verificationExistsInDB(userIdToBeVerified string, conn *pgx.Conn) bool {
+func (vu VerifyUser) ExistsInDB(userIdToBeVerified string, verifyingUserId string, conn *pgx.Conn) bool {
 	verificationExistsSQL :=
-		squirrel.Select("1").
+		sq.Select("1").
 			From("verification").
-			Where(squirrel.Eq{
+			Where(sq.Eq{
 				"verified_user_id":  userIdToBeVerified,
-				"verifying_user_id": 1,
+				"verifying_user_id": verifyingUserId,
 			}).
-			PlaceholderFormat(squirrel.Dollar).
+			PlaceholderFormat(sq.Dollar).
 			Limit(1)
 
 	sql, args, _ := verificationExistsSQL.ToSql()
@@ -64,18 +67,19 @@ func (vu VerifyUser) verificationExistsInDB(userIdToBeVerified string, conn *pgx
 	return true
 }
 
-func (vu VerifyUser) addVerificationInDB(verifiedUserId string, verifyingUserId string, conn *pgx.Conn) error {
-	insertVerificationSQL := squirrel.Insert("verification").
+func (vu VerifyUser) AddToDB(verifiedUserId string, verifyingUserId string, conn *pgx.Conn) error {
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+	insertVerificationSQL := psql.Insert("verification").
 		Columns("verified_user_id", "verifying_user_id").
 		Values(verifiedUserId, verifyingUserId)
-	sql, args, _ := insertVerificationSQL.ToSql()
-	fmt.Println(sql)
-	fmt.Println(args)
-	_, err := conn.Exec(context.Background(), sql, args...)
-	return err
+	return postgres.ExecQueryFromBuilder(insertVerificationSQL, conn)
 }
 
-func (vu VerifyUser) setUnsuccessfulVerificationOnWriter(w http.ResponseWriter) {
+func (vu VerifyUser) GetFromDB() []handlers.UserRequest {
+	return []handlers.UserRequest{}
+}
+
+func (vu VerifyUser) SetUnsuccessfulResponseOnWriter(w http.ResponseWriter) {
 	responseData := map[string]any{
 		"verification_post": false,
 	}
@@ -83,7 +87,7 @@ func (vu VerifyUser) setUnsuccessfulVerificationOnWriter(w http.ResponseWriter) 
 	_, _ = w.Write(jsonResponse)
 }
 
-func (vu VerifyUser) setResponseOnWriter(w http.ResponseWriter) {
+func (vu VerifyUser) SetResponseOnWriter(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 }
