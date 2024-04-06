@@ -2,7 +2,6 @@ package base
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	sq "github.com/Masterminds/squirrel"
 	"github.com/ObaidKhan625/DV_Prevention/user_requests/internal/app/user_requests/handlers"
@@ -73,11 +72,8 @@ func (b BaseHandler) GetFromDB() []handlers.UserRequest {
 }
 
 func (b BaseHandler) SetUnsuccessfulResponseOnWriter(w http.ResponseWriter) {
-	responseData := map[string]any{
-		b.input.ResponseKey: false,
-	}
-	jsonResponse, _ := json.Marshal(responseData)
-	_, _ = w.Write(jsonResponse)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (b BaseHandler) SetResponseOnWriter(w http.ResponseWriter) {
