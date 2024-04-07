@@ -1,11 +1,11 @@
-package user_requests
+package serve
 
 import (
 	"github.com/ObaidKhan625/DV_Prevention/user_requests/internal/app/user_requests/handlers"
 	"net/http"
 )
 
-func ServeRequest(w http.ResponseWriter, r *http.Request, handler handlers.UserRequest) {
+func ServeRequest(w http.ResponseWriter, r *http.Request, handler handlers.UserRequestHandler) {
 	//body, err := io.ReadAll(r.Body)
 	//if err != nil {
 	//	http.Error(w, "Failed to read request body", http.StatusBadRequest)

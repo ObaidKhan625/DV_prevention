@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	sq "github.com/Masterminds/squirrel"
-	"github.com/ObaidKhan625/DV_Prevention/user_requests/internal/app/user_requests/handlers"
+	"github.com/ObaidKhan625/DV_Prevention/user_requests/internal/app/user_requests/handlers/creation"
 	"github.com/ObaidKhan625/DV_Prevention/user_requests/pkg/postgres"
 	"github.com/jackc/pgx/v5"
 	"net/http"
@@ -19,10 +19,9 @@ func (b BaseHandler) HandleRequest(w http.ResponseWriter, r *http.Request) {
 
 	recipientUserId := r.URL.Query().Get("user_id")
 
-	// todo: Get from auth service
 	currentUserId := "1"
 
-	if currentUserId == recipientUserId {
+	if currentUserId == recipientUserId || b.inputHasInvalidData() {
 		b.SetUnsuccessfulResponseOnWriter(w)
 		return
 	}
@@ -35,40 +34,49 @@ func (b BaseHandler) HandleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close(context.Background())
 
-	reportExists := b.ExistsInDB(recipientUserId, currentUserId, conn)
+	reportExists := b.ExistsInDB(conn)
 	if reportExists {
 		b.SetUnsuccessfulResponseOnWriter(w)
 		return
 	}
 
-	err = b.AddToDB(recipientUserId, currentUserId, conn)
+	err = b.AddToDB(conn)
 	fmt.Println("Insert error : ", err)
 }
 
-func (b BaseHandler) ExistsInDB(recipientUserId string, actorUserId string, conn *pgx.Conn) bool {
+func (b BaseHandler) ExistsInDB(conn *pgx.Conn) bool {
+	queryEq := sq.Eq{}
+	for columnName, columnValue := range b.input.ColumnDataMap {
+		queryEq[columnName] = columnValue
+	}
+
 	reportExistsSQL :=
 		sq.Select("1").
 			From(b.input.TableName).
-			Where(sq.Eq{
-				b.input.RecipientColumnName: recipientUserId,
-				b.input.ActorColumnName:     actorUserId,
-			}).
+			Where(queryEq).
 			PlaceholderFormat(sq.Dollar).
 			Limit(1)
 
 	return postgres.CheckIfRecordsExist(reportExistsSQL, conn)
 }
 
-func (b BaseHandler) AddToDB(recipientUserId string, actorUserId string, conn *pgx.Conn) error {
+func (b BaseHandler) AddToDB(conn *pgx.Conn) error {
+	var columnNames []string
+	var columnValues []any
+	for columnName, columnValue := range b.input.ColumnDataMap {
+		columnNames = append(columnNames, columnName)
+		columnValues = append(columnValues, columnValue)
+	}
+
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 	insertBuilder := psql.Insert(b.input.TableName).
-		Columns(b.input.RecipientColumnName, b.input.ActorColumnName).
-		Values(recipientUserId, actorUserId)
-	return postgres.ExecQueryFromBuilder(insertBuilder, conn)
+		Columns(columnNames...).
+		Values(columnValues...)
+	return postgres.ExecInsertQueryFromBuilder(insertBuilder, conn)
 }
 
-func (b BaseHandler) GetFromDB() []handlers.UserRequest {
-	return []handlers.UserRequest{}
+func (b BaseHandler) GetFromDB() []creation.CreationRequest {
+	return []creation.CreationRequest{}
 }
 
 func (b BaseHandler) SetUnsuccessfulResponseOnWriter(w http.ResponseWriter) {
@@ -79,6 +87,16 @@ func (b BaseHandler) SetUnsuccessfulResponseOnWriter(w http.ResponseWriter) {
 func (b BaseHandler) SetResponseOnWriter(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+}
+
+func (b BaseHandler) inputHasInvalidData() bool {
+	// todo: later on will have to check if something exists in the DB, rather than doing this
+	for _, value := range b.input.ColumnDataMap {
+		if value == "" {
+			return true
+		}
+	}
+	return false
 }
 
 func NewBaseHandler(input Input) *BaseHandler {

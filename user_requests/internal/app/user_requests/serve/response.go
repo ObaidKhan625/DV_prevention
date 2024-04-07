@@ -1,4 +1,4 @@
-package user_requests
+package serve
 
 type credentials struct {
 	Username string `json:"username"`

@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func ExecQueryFromBuilder(insertBuilder sq.InsertBuilder, conn *pgx.Conn) error {
+func ExecInsertQueryFromBuilder(insertBuilder sq.InsertBuilder, conn *pgx.Conn) error {
 	sql, args, _ := insertBuilder.ToSql()
 
 	_, err := conn.Exec(context.Background(),
@@ -26,4 +26,24 @@ func CheckIfRecordsExist(selectBuilder sq.SelectBuilder, conn *pgx.Conn) bool {
 		return false
 	}
 	return true
+}
+
+func GetRowsFromSelectBuilder(selectBuilder sq.SelectBuilder, conn *pgx.Conn) ([]string, error) {
+	sql, args, _ := selectBuilder.ToSql()
+	rows, err := conn.Query(context.Background(), sql, args...)
+	if err != nil {
+		return []string{}, err
+	}
+
+	data := make([]string, 0)
+	for rows.Next() {
+		var val string
+		err = rows.Scan(&val)
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, val)
+	}
+
+	return data, nil
 }
