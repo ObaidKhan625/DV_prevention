@@ -13,7 +13,7 @@ func ProcessRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var creds credentials
+	var creds User
 	err = json.Unmarshal(body, &creds)
 	if err != nil {
 		http.Error(w, "Failed to parse JSON body", http.StatusBadRequest)
