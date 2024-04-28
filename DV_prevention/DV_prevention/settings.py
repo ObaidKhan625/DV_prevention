@@ -72,10 +72,20 @@ ASGI_APPLICATION = 'DV_prevention.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+DATABASE_ROUTERS = ['accounts.router.UserDBRouter']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'dv_prevention',
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'UserDB': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'user',
         'USER': 'postgres',
         'PASSWORD': '',
         'HOST': 'localhost',

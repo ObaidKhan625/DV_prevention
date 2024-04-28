@@ -1,0 +1,5 @@
+service: auth
+secret_key: secret_key
+
+postgres:
+  uri: postgres://postgres:@localhost/user_request

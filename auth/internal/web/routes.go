@@ -7,6 +7,7 @@ import (
 
 func initRoutes() (r *mux.Router) {
 	r = mux.NewRouter()
-	r.HandleFunc("/auth/token", controllers.GenerateToken).Methods("POST")
+	r.HandleFunc("/token", controllers.GenerateToken).Methods("POST")
+	r.HandleFunc("/verify", controllers.VerifyToken).Methods("GET")
 	return
 }
